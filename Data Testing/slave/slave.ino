@@ -1,4 +1,4 @@
-#include <FlexCAN_T4.h>
+    #include <FlexCAN_T4.h>
 #include <Dynamixel2Arduino.h>
 
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can1; //Notice this is CAN1, need to use pins 22,23 on Teensy
@@ -25,6 +25,9 @@ const float DXL_PROTOCOL_VERSION = 1.0;
 
 
 Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN);
+
+int default_encoder_angle;
+int default_dynamixel_angle;
 
 const uint8_t Encoder_pin = 19;
 
@@ -65,6 +68,8 @@ void setup(void)
   dxl.torqueOff(DXL_ID);
   dxl.setOperatingMode(DXL_ID, OP_POSITION);
   dxl.torqueOn(DXL_ID);
+
+  default_encoder_angle = analogRead(Encoder_pin);
 }
 
 
@@ -82,10 +87,11 @@ void loop(void)
 
   //FOR RECEIVING MESSAGES
   while(Can1.read(inMsg) && (inMsg.id == LINK)) {
+    //blink_led();
 
     if(inMsg.buf[1] == 1){
-      Serial.print("Encoder Request Received");
-      int angle = analogRead(Encoder_pin);
+      Serial.print("Encoder Request Received\n");
+      int angle = (analogRead(Encoder_pin)-default_encoder_angle)*360/1024;
       msg.id = 0; //want to send to master
       msg.buf[0] = LINK;
       msg.buf[1] = 1;
@@ -93,7 +99,7 @@ void loop(void)
       Can1.write(msg);
     }
     else if(inMsg.buf[1] == 2){
-      Serial.print("Dynamixel Encoder Request Received");
+      Serial.print("Dynamixel Encoder Request Received\n");
       int angle = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE);
       msg.id = 0; //want to send to master
       msg.buf[0] = LINK;
@@ -102,9 +108,10 @@ void loop(void)
       Can1.write(msg);
     }
     else if(inMsg.buf[1] == 3){
-      Serial.print("Dynamixel Set Poistion Request Received");
+      Serial.print("Dynamixel Set Poistion Request Received\n");
       int pos = inMsg.buf[2];
       dxl.setGoalPosition(DXL_ID, pos);
     } 
   }
+  delay(100);
 }
