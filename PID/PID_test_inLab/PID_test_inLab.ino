@@ -60,7 +60,7 @@ void setup() {
 void loop() {
   time1 = millis();
   t = time1/1000;
-  angle = 30*sin(0.2 *t);
+  angle = 30*sin(0.1 *t);
 //  angle = 30;
 //  if(flag%2 == 0)
 //  {

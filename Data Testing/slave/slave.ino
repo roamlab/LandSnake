@@ -97,6 +97,9 @@ void loop(void)
       msg.buf[1] = 1;
       msg.buf[2] = angle;
       Can1.write(msg);
+      Serial.print("encoder_out_put is:\t");
+      Serial.print(angle);
+      Serial.print("\n");
     }
     else if(inMsg.buf[1] == 2){
       Serial.print("Dynamixel Encoder Request Received\n");
