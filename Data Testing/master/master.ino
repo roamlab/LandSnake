@@ -82,15 +82,17 @@ void loop(void)
 
   //FOR RECEIVING MESSAGES
   while(Can1.read(inMsg) && (inMsg.id == LINK)) {
-
+    
     if(inMsg.buf[1] == 1){
-      Serial.print("Encoder Poistion Received:  " + inMsg.buf[2]);
+      blink_led();
+      Serial.print("Encoder Poistion Received:  ");
+      Serial.print(inMsg.buf[2]);
     }
     else if(inMsg.buf[1] == 2){
       Serial.print("Dynamixel Encoder Position Received:  "+ inMsg.buf[2]);
     } 
   }
-  delay(100);
+  //delay(100);
   //blink_led();
   
   
