@@ -29,6 +29,8 @@ using namespace ControlTableItem ;
 double default_ang;
 double angle;
 float time1, t;
+int link = 0;
+int f = 0.1;
 
 void setup() {
   // put your setup code here, to run once:
@@ -62,7 +64,7 @@ void loop() {
   // set goal posttion
   time1 = millis();
   t = time1/1000;
-  angle = 30*sin(0.3*t);
+  angle = 30*sin(0.3*t+link*3.14/4);
 
   // Set Goal Position in degree value
   dxl.setGoalPosition(DXL_ID, default_ang + angle, UNIT_DEGREE);

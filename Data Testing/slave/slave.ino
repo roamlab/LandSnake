@@ -1,4 +1,4 @@
-    #include <FlexCAN_T4.h>
+#include <FlexCAN_T4.h>
 #include <Dynamixel2Arduino.h>
 
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can1; //Notice this is CAN1, need to use pins 22,23 on Teensy
@@ -26,8 +26,8 @@ const float DXL_PROTOCOL_VERSION = 1.0;
 
 Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN);
 
-int default_encoder_angle;
-int default_dynamixel_angle;
+int default_encoder_angle;//dec
+int default_dynamixel_angle;//dec
 
 const uint8_t Encoder_pin = 19;
 
@@ -83,6 +83,7 @@ void blink_led(){
 // -------------------------------------------------------------
 void loop(void)
 {
+  int encoder_angle;#dec
   
 
   //FOR RECEIVING MESSAGES
@@ -91,8 +92,12 @@ void loop(void)
 
     if(inMsg.buf[1] == 1){
       Serial.print("Encoder Request Received\n");
+<<<<<<< HEAD
       // int angle = (analogRead(Encoder_pin)-default_encoder_angle)*360/1024;
       int angle = 0X03FF;
+=======
+      encoder_angle = 
+>>>>>>> cad6507c9d54671ec067718b307fd75508ea3979
       msg.id = 0; //want to send to master
       msg.buf[0] = LINK;
       msg.buf[1] = 1;
