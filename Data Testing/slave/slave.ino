@@ -1,4 +1,5 @@
 #include <FlexCAN_T4.h>
+//#include <Transfer.h>
 #include <Dynamixel2Arduino.h>
 
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can1; //Notice this is CAN1, need to use pins 22,23 on Teensy
@@ -80,31 +81,35 @@ void blink_led(){
   delay(500); 
 }
 
+void transfer(int angle)
+{
+    msg.buf[3] = angle/256;
+    msg.buf[2] = angle-(msg.buf[2]*256);
+}
+
 // -------------------------------------------------------------
 void loop(void)
-{
-  int encoder_angle;#dec
-  
-
+{ 
   //FOR RECEIVING MESSAGES
   while(Can1.read(inMsg) && (inMsg.id == LINK)) {
     //blink_led();
 
     if(inMsg.buf[1] == 1){
       Serial.print("Encoder Request Received\n");
-<<<<<<< HEAD
       // int angle = (analogRead(Encoder_pin)-default_encoder_angle)*360/1024;
-      int angle = 0X03FF;
-=======
-      encoder_angle = 
->>>>>>> cad6507c9d54671ec067718b307fd75508ea3979
+      int angle = 256;
       msg.id = 0; //want to send to master
       msg.buf[0] = LINK;
       msg.buf[1] = 1;
-      msg.buf[2] = angle;
+      // msg.buf[2] = angle;
+      transfer(angle);
       Can1.write(msg);
       Serial.print("encoder_out_put is:\t");
       Serial.print(angle);
+      Serial.print('\n');
+      Serial.print(msg.buf[3]);
+      Serial.print('\n');
+      Serial.print(msg.buf[2]);
       Serial.print("\n");
     }
     else if(inMsg.buf[1] == 2){

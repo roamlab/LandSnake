@@ -75,7 +75,8 @@ void blink_led(){
 // -------------------------------------------------------------
 void loop(void)
 {
-  
+  int a = 0,b = 0;
+  int test = 0;
   //REQUESTS TO SEND MESSAGES GO HERE
   //request_dynamixel_encoder(1, msg);
   request_encoder(1,msg);
@@ -83,10 +84,19 @@ void loop(void)
   //FOR RECEIVING MESSAGES
   while(Can1.read(inMsg) && (inMsg.id == LINK)) {
     
-    if(inMsg.buf[1] == 1){
+    if(inMsg.buf[1] == 1)
+    {
       blink_led();
+      test = 256*inMsg.buf[3] + inMsg.buf[2];
+      a = inMsg.buf[3];
+      b = inMsg.buf[2];
       Serial.print("Encoder Poistion Received:  ");
-      Serial.print(inMsg.buf[2]);
+//      Serial.print(a);
+//      Serial.print('\n');
+//      Serial.print(b);
+//      Serial.print('\n');
+      Serial.print(test);
+      Serial.print('\n');
     }
     else if(inMsg.buf[1] == 2){
       Serial.print("Dynamixel Encoder Position Received:  "+ inMsg.buf[2]);
