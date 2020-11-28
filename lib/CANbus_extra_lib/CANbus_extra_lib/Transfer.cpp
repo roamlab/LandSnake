@@ -1,5 +1,4 @@
 #include "Transfer.h"
-#include <iostream>
 
 Dec2Bin::Dec2Bin(int encoder_angle)
 {
