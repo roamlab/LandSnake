@@ -97,7 +97,7 @@ void loop(void)
     if(inMsg.buf[1] == 1){
       Serial.print("Encoder Request Received\n");
       // int angle = (analogRead(Encoder_pin)-default_encoder_angle)*360/1024;
-      int angle = 256;
+      int angle = 562;
       msg.id = 0; //want to send to master
       msg.buf[0] = LINK;
       msg.buf[1] = 1;
