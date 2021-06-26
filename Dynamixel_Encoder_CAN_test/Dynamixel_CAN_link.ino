@@ -75,17 +75,17 @@ void setup(void)
 
   // Set Port baudrate to 57600bps. This has to match with DYNAMIXEL baudrate.
   dxl.begin(1000000);
-  dxl.scan();
+  dxl.scan(); //start looking for commands
   // Set Port Protocol Version. This has to match with DYNAMIXEL protocol version.
-  dxl.setPortProtocolVersion(DXL_PROTOCOL_VERSION);
+  dxl.setPortProtocolVersion(DXL_PROTOCOL_VERSION); 
   // Get DYNAMIXEL information
-  dxl.ping(DXL_ID);
+  dxl.ping(DXL_ID); //returns over serial 
 
   // Turn off torque when configuring items in EEPROM area
-  dxl.torqueOff(DXL_ID);
-  dxl.setOperatingMode(DXL_ID, OP_POSITION);
-  dxl.writeControlTableItem(CW_COMPLIANCE_MARGIN, DXL_ID, 2);
-  dxl.writeControlTableItem(CCW_COMPLIANCE_MARGIN, DXL_ID, 2);
+  dxl.torqueOff(DXL_ID); //b/c start writing to control table
+  dxl.setOperatingMode(DXL_ID, OP_POSITION); //which you are talking to, original position 0 in header file
+  dxl.writeControlTableItem(CW_COMPLIANCE_MARGIN, DXL_ID, 2); //is rate at which the position is changed deg/s*s
+  dxl.writeControlTableItem(CCW_COMPLIANCE_MARGIN, DXL_ID, 2); //same as above but for couter clock wise
   dxl.torqueOn(DXL_ID);
 
   myPID.SetOutputLimits(-40, 40);
