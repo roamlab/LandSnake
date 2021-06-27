@@ -99,15 +99,15 @@ void UpdateFeedbackArray(const CAN_message_t &fb_msg) {
     int i = (int)fb_msg.buf[0];
     switch(i){
       case 1: 
-        feedback_angles.sea_angle1 = sea_angle; feedback_angles.dxl_angle1 = dxl_angle;
+        feedback_angles.sea_angle1 = sea_angle; feedback_angles.dxl_angle1 = dxl_angle;break;
       case 2: 
-        feedback_angles.sea_angle2 = sea_angle; feedback_angles.dxl_angle2 = dxl_angle;
+        feedback_angles.sea_angle2 = sea_angle; feedback_angles.dxl_angle2 = dxl_angle;break;
       case 3: 
-        feedback_angles.sea_angle3 = sea_angle; feedback_angles.dxl_angle3 = dxl_angle;
+        feedback_angles.sea_angle3 = sea_angle; feedback_angles.dxl_angle3 = dxl_angle;break;
       case 4: 
-        feedback_angles.sea_angle4 = sea_angle; feedback_angles.dxl_angle4 = dxl_angle;
+        feedback_angles.sea_angle4 = sea_angle; feedback_angles.dxl_angle4 = dxl_angle;break;
       case 5: 
-        feedback_angles.sea_angle5 = sea_angle; feedback_angles.dxl_angle5 = dxl_angle;
+        feedback_angles.sea_angle5 = sea_angle; feedback_angles.dxl_angle5 = dxl_angle;break;
     }
     
     
