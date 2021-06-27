@@ -61,37 +61,25 @@ void SendFeedbackToROS()
 
 void rosCallback(const snake_demo::cmd_angles& cmd_angles){
   // IN NORMAL OPERATION, THIS WOULD ENCODE AND RELAY ALL OF THE COMMANDS TO LINKS
-  // FOR EACH IN THE SET OF ANGLES SENT:
-  /*
-  for(uint8_t i=1;i<NLINKS+1;i++) {
-    CAN_message_t cmd_msg; // CREATES MESSAGE
-    cmd_msg.id = i; // DESTINATION LINK ID 
-    cmd_msg.buf[0] = 0; // ORIGIN LINK ID
-    cmd_msg.buf[i] = int(cmd_angles.angles[i]); //STILL NEED TO FIGURE OUT ENCODING ON THIS END
-    Can0.write(cmd_msg);
-   */
+  // FOR EACH IN THE SET OF ANGLES SENT: MSG.ID IS DESTINATION, BUF0 IS ORIGIN, BUF1:2 IS ENCODED ANGLE, FILL AND WRITE
    CAN_message_t cmd_msg;
-   cmd_msg.id = 1; cmd_msg.buf[0]=0;cmd_msg.buf[1]=int(cmd_angles.angle1);
-   cmd_msg.id = 2; cmd_msg.buf[0]=0;cmd_msg.buf[1]=int(cmd_angles.angle2);
-   cmd_msg.id = 3; cmd_msg.buf[0]=0;cmd_msg.buf[1]=int(cmd_angles.angle3);
-   cmd_msg.id = 4; cmd_msg.buf[0]=0;cmd_msg.buf[1]=int(cmd_angles.angle4);
-   cmd_msg.id = 5; cmd_msg.buf[0]=0;cmd_msg.buf[1]=int(cmd_angles.angle5);
+   cmd_msg.id=1;cmd_msg.buf[0]=0;cmd_msg.buf[1]=(int)cmd_angles.angle1&255;cmd_msg.buf[2]=(int)cmd_angles.angle1>>8;
+   Can0.write(cmd_msg);
 
+   cmd_msg.id=2;cmd_msg.buf[0]=0;cmd_msg.buf[1]=(int)cmd_angles.angle2&255;cmd_msg.buf[2]=(int)cmd_angles.angle2>>8;
+   Can0.write(cmd_msg);
+
+   cmd_msg.id=3;cmd_msg.buf[0]=0;cmd_msg.buf[1]=(int)cmd_angles.angle3&255;cmd_msg.buf[2]=(int)cmd_angles.angle3>>8;
+   Can0.write(cmd_msg);
+
+   cmd_msg.id=4;cmd_msg.buf[0]=0;cmd_msg.buf[1]=(int)cmd_angles.angle4&255;cmd_msg.buf[2]=(int)cmd_angles.angle4>>8;
+   Can0.write(cmd_msg);
+
+   cmd_msg.id=4;cmd_msg.buf[0]=0;cmd_msg.buf[1]=(int)cmd_angles.angle5&255;cmd_msg.buf[2]=(int)cmd_angles.angle5>>8;
+   Can0.write(cmd_msg);
 }
 
 void UpdateFeedbackArray(const CAN_message_t &fb_msg) {
-  /* NEED TO SPECIFY ENCODING RULES. THUS FAR, I HAVE:
-  / MSG.ID IS THE DESTINATION LINK
-  / MSG.BUF[0] IS THE ORIGIN LINK
-  / WHAT DOES THE REST OF THE BUF LOOK LIKE?
-  / EVENTUALLY, THIS FUNCTION SHOULD RECEIVE A CAN MESSAGE AND UPDATE
-  / LOG_ANGLES ACCORDINGLY.
-  / 
-  / DXL ANGLES WILL BE IN THE NTH POSITION IN ARRAY.
-  / SEA ANGLES WILL BE IN THE 2*NTH POSITION IN ARRAY.
-  / 0TH POSITION IS RESERVED FOR TIMESTAMP.
-  */
-  
   // DECODING FUNCTION, COURTESY OF SETH!
   if(fb_msg.id == 0){
     float sea_angle = fb_msg.buf[1]|(fb_msg.buf[2]<<8);
@@ -99,15 +87,15 @@ void UpdateFeedbackArray(const CAN_message_t &fb_msg) {
     int i = (int)fb_msg.buf[0];
     switch(i){
       case 1: 
-        feedback_angles.sea_angle1 = sea_angle; feedback_angles.dxl_angle1 = dxl_angle;break;
+        feedback_angles.sea_angle1 = sea_angle; feedback_angles.dxl_angle1 = dxl_angle; break;
       case 2: 
-        feedback_angles.sea_angle2 = sea_angle; feedback_angles.dxl_angle2 = dxl_angle;break;
+        feedback_angles.sea_angle2 = sea_angle; feedback_angles.dxl_angle2 = dxl_angle; break;
       case 3: 
-        feedback_angles.sea_angle3 = sea_angle; feedback_angles.dxl_angle3 = dxl_angle;break;
+        feedback_angles.sea_angle3 = sea_angle; feedback_angles.dxl_angle3 = dxl_angle; break;
       case 4: 
-        feedback_angles.sea_angle4 = sea_angle; feedback_angles.dxl_angle4 = dxl_angle;break;
+        feedback_angles.sea_angle4 = sea_angle; feedback_angles.dxl_angle4 = dxl_angle; break;
       case 5: 
-        feedback_angles.sea_angle5 = sea_angle; feedback_angles.dxl_angle5 = dxl_angle;break;
+        feedback_angles.sea_angle5 = sea_angle; feedback_angles.dxl_angle5 = dxl_angle; break;
     }
     
     
@@ -116,8 +104,7 @@ void UpdateFeedbackArray(const CAN_message_t &fb_msg) {
 
 void setup()
 { 
-  //Serial.begin(115200);
-  central.getHardware()->setBaud(57600);
+  central.getHardware()->setBaud(57600); // SET BAUD RATE
   central.initNode(); // INITS NODE
   central.subscribe(cmd_angle_topic); // SUBSCRIBES TO SUB
   central.advertise(feedback_angle_topic); // SETS LOG ANGLE TOPIC TO PUBLISH
