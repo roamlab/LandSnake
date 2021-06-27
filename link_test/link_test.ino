@@ -2,7 +2,7 @@
 Columbia University ROAM Lab LandSnake: 
 Link Teensy Firmware Script
 Written by Rich Gedney
-Last Updated June 11, 2021
+Last Updated June 26, 2021
 
 Overview:
 The main libraries are FlexCAN_T4, TeensyTimerInterrupt, and Teensy_ISR_Timer.
@@ -23,6 +23,21 @@ Usage Notes:
 
 */
 
+#include <Dynamixel2Arduino.h>
+const uint8_t DXL_ID=1, DXL_DIR_PIN=2;
+const float DXL_PROTOCOL_VERSION=1.0;
+using namespace ControlTableItem;
+#define DXL_SERIAL Serial1
+Dynamixel2Arduino dxl(DXL_SERIAL,DXL_DIR_PIN);
+
+#include <PID_v1.h>
+const uint8_t Encoder_pin = 19;
+double Setpoint, Input, Output;
+double command_angle;
+double test;
+double maxKp = 0.15, maxKi = 0.15, maxKd = 0.015;
+double Kp = 0.6, Ki = 0.2 , Kd = 0.0004;
+PID myPID(&Input, &Output, &Setpoint, Kp, Ki, Kd, DIRECT);
 unsigned int FBFREQ = 1000; // PERIOD OF FEEDBACK TIMING
 
 #include <FlexCAN_T4.h>
@@ -36,54 +51,39 @@ void SendLog(); // THE REAL ISR: CONTAINS ALL LOGGING CODE
 void executeCommand(const CAN_message_t &cmd); // CONTROLS DXL USING COMMANDS RECEIVED OVER CAN
 void AngleToBuf(float angle); // MAKES AN ANGLE WRITEABLE TO A CAN BUF
 const uint LEDPIN = 23; // ONBOARD LED PIN
-const uint LINKID = 1; // LINK ID
+const uint LINKID = 2; // LINK ID
+float starting_position;
 
-/*
-void AngleToBuf(float sea_angle,float dxl_angle) 
-{ // ANGLE ENCODING FUNCTION, COURTESY OF SETH! SETS BUF TO BE SENT ON CAN
-  fb_msg.id = 0; // SETS DESTINATION OF MESSAGE TO CENTRAL
-  fb_msg.buf[0] = LINKID; // ID OF ORIGIN LINK
-  int sea_first_half = (int)sea_angle & 255; int sea_second_half = (int)sea_angle>>8; // ENCODING SEA
-  int dxl_first_half = (int)dxl_angle & 255; int dxl_second_half = (int)dxl_angle>>8; // ENCODING DXL
-  fb_msg.buf[1]=sea_first_half;fb_msg.buf[2]=sea_second_half; // WRITING TO fb_msg
-  fb_msg.buf[3]=dxl_first_half;fb_msg.buf[4]=dxl_second_half; // WRITING TO fb_msg
-  for(int i = 5; i<8; i++) fb_msg.buf[i] = 0; // CLEARING SUBSEQUENT POSITIONS 
-}*/
 
 void SendLog()  
 {
-  // IN FINAL VERSION, THIS SHOULD:
-  // A) READ DXL AND EXTERNAL ENCODER
-  // B) WRITE BOTH ANGLES TO A CAN MESSAGE
-  // C) PUBLISH THAT MESSAGE TO MAILBOX 0
-  // NEED VARIABLES SEA_ANGLE AND DXL_ANGLE!
-  float sea_angle=random(30.),dxl_angle=random(30.);
+  float ext_angle=89*analogRead(Encoder_pin)/1024;
+  float dxl_angle=dxl.getPresentPosition(DXL_ID, UNIT_DEGREE)-starting_position;
   fb_msg.id = 0; // SETS DESTINATION OF MESSAGE TO CENTRAL
   fb_msg.buf[0] = LINKID; // ID OF ORIGIN LINK
-  int sea_first_half = (int)sea_angle & 255; int sea_second_half = (int)sea_angle>>8; // ENCODING SEA
+  int ext_first_half = (int)ext_angle & 255; int ext_second_half = (int)ext_angle>>8; // ENCODING EXT
   int dxl_first_half = (int)dxl_angle & 255; int dxl_second_half = (int)dxl_angle>>8; // ENCODING DXL
-  fb_msg.buf[1]=sea_first_half;fb_msg.buf[2]=sea_second_half; // WRITING TO fb_msg
+  fb_msg.buf[1]=ext_first_half;fb_msg.buf[2]=ext_second_half; // WRITING TO fb_msg
   fb_msg.buf[3]=dxl_first_half;fb_msg.buf[4]=dxl_second_half; // WRITING TO fb_msg
   for(int i = 5; i<8; i++) fb_msg.buf[i] = 0; // CLEARING SUBSEQUENT POSITIONS 
-  //AngleToBuf(sea_angle,dxl_angle);  
   Can0.write(fb_msg);
-  
-  
-  /* TIMING TEST
-  dtime=micros();
-  int delta=dtime-stime;
-  Serial.print(delta); // CURRENTLY SHOWS TIME ELAPSED BETWEEN INTERRUPTS
-  Serial.println(" microseconds elapsed!"); 
-  stime=dtime;*/
 }
 
+/*
 void PID(){
   //Serial.println("POW");
 }
+*/
 
 void ExecuteCommand(const CAN_message_t &cmd) {
   if(cmd.id==LINKID){
-     // FILL WITH TEENSY CMD/CONTROL LOGIC
+    float angle = cmd.buf[1]|(cmd.buf[2]<<8);
+    test = 89 * (analogRead(Encoder_pin)) / 1024; //transfer to degree
+    Setpoint = angle;
+    Input = test;
+    myPID.Compute();
+    command_angle = Output;
+    dxl.setGoalPosition(DXL_ID, dxl.getPresentPosition(DXL_ID, UNIT_DEGREE) - command_angle , UNIT_DEGREE);
   }
 }
 
@@ -100,6 +100,21 @@ void setup(void) {
   delay(100);
   // Interval in microsecs
   FeedbackTimer.begin(SendLog,FBFREQ);
+  delay(100);
+  dxl.begin(1000000);
+  dxl.scan();
+  dxl.setPortProtocolVersion(DXL_PROTOCOL_VERSION);
+  dxl.ping(DXL_ID);
+  dxl.torqueOff(DXL_ID);
+  dxl.setOperatingMode(DXL_ID,OP_POSITION);
+  dxl.writeControlTableItem(CW_COMPLIANCE_MARGIN,DXL_ID,2);
+  dxl.writeControlTableItem(CW_COMPLIANCE_MARGIN,DXL_ID,2);
+  dxl.torqueOn(DXL_ID);
+  delay(100);
+  myPID.SetOutputLimits(-40, 40);
+  myPID.SetMode(AUTOMATIC);
+  delay(100);
+  starting_position = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE);
 }
 
 void loop() { Can0.events(); }// PUSHES CAN INTERRUPT FRAMES 
