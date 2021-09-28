@@ -26,8 +26,8 @@ float anglim = 89;
 double default_ang;
 double kp = 1.15, ki = 0.0001 , kd = 1.6; 
 double outmin, outmax;
-unsigned int FBFREQ = 10000; // PERIOD OF FEEDBACK TIMING
-unsigned int PIDFREQ = 600;
+unsigned int FBFREQ = 10000; // PERIOD OF FEEDBACK TIMING, in microseconds
+unsigned int PIDFREQ = 600;  // in microseconds
 float angle;
 bool flag = false;
 float goalpoint= (90*analogRead(Encoder_pin)/1024.0)-45.0;//85*sin(0.12*(micros()/1000000));//30;//
