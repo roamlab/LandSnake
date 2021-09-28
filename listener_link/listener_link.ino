@@ -106,7 +106,7 @@ void ExecuteCommand() {
   
   //if(Setpoint<0){Setpoint*=-1;}
   //Serial.println(Setpoint);
-  test = (1-0.915)*((90*analogRead(Encoder_pin)/1024.0)-45.0) + 0.915*test; //transfer to degree
+  test = (1-0.915)*((90*analogRead(Encoder_pin)/1024.0)-45.0) + 0.915*test; //transfer to degree, moving average to eliminate noise
   //Setpoint = abs(85*sin(0.12*(micros()/1000000)));
   Setpoint = goalpoint;
   Input = test;
