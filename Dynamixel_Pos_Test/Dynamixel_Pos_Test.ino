@@ -15,6 +15,10 @@ double angle;
 float time1, t;
 int link = 0;
 int f = 0.1;
+float present;
+float next;
+unsigned long timenow;
+unsigned long finaltime;
 
 void setup() {
   // put your setup code here, to run once:
@@ -48,10 +52,19 @@ void loop() {
   // set goal posttion
   
   DEBUG_SERIAL.print("Present Position(raw) : ");
-  DEBUG_SERIAL.print(dxl.getPresentPosition(DXL_ID, UNIT_DEGREE));
-  DEBUG_SERIAL.print('\n');
+  timenow = micros();
+  present = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE);
+  finaltime = micros()-timenow;
+  DEBUG_SERIAL.println(present);
+  DEBUG_SERIAL.print("GetPresetTime : ");
+  DEBUG_SERIAL.println(finaltime);
+  DEBUG_SERIAL.print("Next Position(raw) : ");
+  timenow = micros();
+  present = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE);
+  finaltime = micros()-timenow;
+  DEBUG_SERIAL.println(present);
+  DEBUG_SERIAL.print("GetPresetTime : ");
+  DEBUG_SERIAL.println(finaltime);
+ 
   
-  DEBUG_SERIAL.print('\n');
-  
-  delay(10);
 }

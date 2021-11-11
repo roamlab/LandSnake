@@ -1,0 +1,2 @@
+snake_demo
+-DCATKIN_DEVEL_PREFIX=/home/user2021/LandSnake/snake_ws_git/devel -DCMAKE_INSTALL_PREFIX=/home/user2021/LandSnake/snake_ws_git/install -G Unix Makefiles

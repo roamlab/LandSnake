@@ -16,18 +16,19 @@ Dynamixel2Arduino dxl(DXL_SERIAL,DXL_DIR_PIN);
 
 const uint8_t Encoder_pin = 19;
 float time1, t1;
-double Setpoint, Input, Output;
-double Iterm, lastInput;
-double command_angle;
-float test = (90*analogRead(Encoder_pin)/1024.0)-45.0;
+double Input, Output; // PID I/O STUFF
+double Iterm, lastInput; // PID 
+double command_angle; // PID OUTPUT SENT TO DXL
+float test = (90*analogRead(Encoder_pin)/1024.0)-45.0; // THIS IS THE FUNCTION FOR READING THE EXTERNAL ENCODER
 float enc_angle = (90*analogRead(Encoder_pin)/1024.0)-45.0;
-float res = 1024;
-float anglim = 89;
+float res = 1024; // ENCODER RESOLUTION
+float anglim = 89; // ENCODER ANGLE LIMIT
 double default_ang;
-double kp = 1.15, ki = 0.0001 , kd = 1.6; 
+double kp = 1.2, ki = 0.00005 , kd = 2; // GAINS 
 double outmin, outmax;
-unsigned int FBFREQ = 10000; // PERIOD OF FEEDBACK TIMING, in microseconds
-unsigned int PIDFREQ = 600;  // in microseconds
+unsigned int FBFREQ = 10000; // PERIOD OF FEEDBACK TIMING
+unsigned int PIDFREQ = 8000; // FREQUENCY OF PID EXECUTION
+unsigned int CANFREQ = 4000; //FREQUENCY OF CAN
 float angle;
 bool flag = false;
 float goalpoint= (90*analogRead(Encoder_pin)/1024.0)-45.0;//85*sin(0.12*(micros()/1000000));//30;//
@@ -38,6 +39,7 @@ FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0; // INIT CAN COMMUNICATION TESTIN
 
 IntervalTimer FeedbackTimer;
 IntervalTimer PIDTimer;
+IntervalTimer CANTimer;
 CAN_message_t fb_msg; // FEEDBACK MESSAGE
 // FUNCTIONS AND VARIABLES
 
@@ -47,10 +49,10 @@ void executeCommand();
 void SetPoint(const CAN_message_t &cmd);
 CAN_message_t cmd;
 const uint LEDPIN = 23; // ONBOARD LED PIN
-const uint LINKID = 4; // LINK ID
+const uint LINKID = 3; // LINK ID
 float starting_position;
 
-
+//FEEDBACK
 void SendLog()  
 {
   //long starttime = micros(); 
@@ -99,15 +101,15 @@ void SetPoint(const CAN_message_t &cmd){
 
 void ExecuteCommand() {
 
-   Setpoint = goalpoint; 
+   //Setpoint = goalpoint; 
   //Serial.print("This is Setpoint");
   //Serial.println(Setpoint);
   
   
   //if(Setpoint<0){Setpoint*=-1;}
   //Serial.println(Setpoint);
-  test = (1-0.915)*((90*analogRead(Encoder_pin)/1024.0)-45.0) + 0.915*test; //transfer to degree, moving average to eliminate noise
-  //Setpoint = abs(85*sin(0.12*(micros()/1000000)));
+  test = (1-0.915)*((90*analogRead(Encoder_pin)/1024.0)-45.0) + 0.915*test; //transfer to degree
+  //Setpoint = 44*sin(1.1*t1);
   Setpoint = goalpoint;
   Input = test;
   double currpos = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE);
@@ -116,7 +118,7 @@ void ExecuteCommand() {
   //noInterrupts();
   //__disable_irq();
   double error = Setpoint - Input;
-  if(abs(error)>=0.4){
+  if(abs(error)>=0){
   
     Iterm+=ki*error;
     if(Iterm>outmax){Iterm=outmax;}
@@ -137,8 +139,19 @@ void ExecuteCommand() {
     
     
     }
-    
+    //Serial.println("Now");
+    //Serial.println(Input);
 }
+
+void CAN(){
+  time1 = micros();
+  t1 = time1/1000000;
+  goalpoint = 44*sin(1*(t1)+3*3.14/2);
+  //Serial.println("goal");
+  //Serial.println(goalpoint);
+  //Can0.events();
+  }
+
 
 
 void setup() {
@@ -156,8 +169,8 @@ void setup() {
   
   dxl.writeControlTableItem(RETURN_DELAY_TIME, DXL_ID, 0);
   dxl.torqueOn(DXL_ID);
-  outmax = 20;
-  outmin = -20;
+  outmax = 2.5;
+  outmin = -2.5;
   //myPID.SetOutputLimits(-60, 60);
   //myPID.SetMode(AUTOMATIC);
   starttime = micros();
@@ -171,6 +184,7 @@ void setup() {
   //delay(100);
   // Interval in microsecs
   //PIDTimer.priority(0);
+  CANTimer.begin(CAN, CANFREQ);
   FeedbackTimer.begin(SendLog,FBFREQ);
   PIDTimer.begin(ExecuteCommand, PIDFREQ);
   //PIDTimer.priority(82);
@@ -184,9 +198,10 @@ void setup() {
 }
 
 void loop() {
-  Can0.events();// PUSHES CAN INTERRUPT FRAMES 
+  //Can0.events();// PUSHES CAN INTERRUPT FRAMES 
   //SendLog();
   //Serial.print("Hello");
+  
   
  
     

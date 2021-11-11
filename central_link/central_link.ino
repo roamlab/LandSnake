@@ -11,6 +11,7 @@ const uint LEDPIN = 13; // ONBOARD LED PIN FOR DEBUGGING
 const uint NLINKS = 1; // NUMBER OF LINKS IN SNAKE
 unsigned long ZERO_TIME = 0; // WILL EVENTUALLY BE CALLED AT START OF EPOCH IN MICROS
 unsigned int FBFREQ = 10000; // PERIOD OF FEEDBACK TIMING
+unsigned int CANFREQ = 4000;
 int this_ang, sec_ang, third_ang, fourth_ang, fifth_ang;
 
 // ******************************************ROS PREPROCESSING*************************************************************************
@@ -34,6 +35,7 @@ FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0; // CREATING CAN0 FOR USE
 
 // ******************************************INTERRUPT PREPROCESSING***************************************************************************
 IntervalTimer FeedbackTimer;
+IntervalTimer CANTimer;
 
 void SendFeedbackToROS()
 {
@@ -60,7 +62,7 @@ void rosCallback(const snake_demo::cmd_angles& cmd_angles){
    cmd_msg.buf[2]=(int)this_ang%100;//1000%10=0
    for(int i = 4; i<8; i++) cmd_msg.buf[i] = 0;
    Can0.write(cmd_msg);
-
+   
    cmd_msg.id=2;
    cmd_msg.buf[0]=0;
    if(cmd_angles.angle2<0){
@@ -109,6 +111,7 @@ void rosCallback(const snake_demo::cmd_angles& cmd_angles){
    cmd_msg.buf[2]=(int)fifth_ang%100;
    for(int i = 4; i<8; i++) cmd_msg.buf[i] = 0;
    Can0.write(cmd_msg);
+   
 }
 
 void UpdateFeedbackArray(const CAN_message_t &fb_msg) {
@@ -159,15 +162,23 @@ void setup()
   //Can0.enableFIFOInterrupt();
   Can0.onReceive(UpdateFeedbackArray); // LINK CAN INTERRUPT TO FUNCTION
   //delay(100);
+  CANTimer.begin(CAN,CANFREQ);
   FeedbackTimer.begin(SendFeedbackToROS,FBFREQ);
   //delay(100);
   ZERO_TIME=micros(); // SETS ZERO TIME AT START OF EPOCH
   //delay(100);
 }
 
-void loop(){  
+void CAN(){
+  
   central.spinOnce();
   Can0.events();
+  }
+
+void loop(){  
+  
+  //central.spinOnce();
+  //Can0.events();
 
 
   

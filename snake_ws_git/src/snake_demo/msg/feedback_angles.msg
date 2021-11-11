@@ -1,9 +1,9 @@
 uint64 timestamp
-float32 sea_angle1
-float32 sea_angle2
-float32 sea_angle3
-float32 sea_angle4
-float32 sea_angle5
+float32 enc_angle1
+float32 enc_angle2
+float32 enc_angle3
+float32 enc_angle4
+float32 enc_angle5
 float32 dxl_angle1
 float32 dxl_angle2
 float32 dxl_angle3
