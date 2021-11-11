@@ -1,8 +1,8 @@
 /*
 Columbia University ROAM LandSnake: 
 Central Teensy with added PID/Dynamixel/Encoder Firmware Script
-Updated by Jobin Binoy George
-Last Updated June 27, 2021
+Updated by Rich Gedney
+Last Updated November 11th, 2021
 
 */
 
@@ -158,9 +158,9 @@ void setup()
   Can0.setBaudRate(1000000); //115200 SET BAUDRATE
   Can0.setMaxMB(16); // SET MAX MAILBOX SIZE
   Can0.enableMBInterrupts(); // ENABLE CAN INTERRUPT ON
-  //Can0.enableFIFO();
-  //Can0.enableFIFOInterrupt();
-  Can0.onReceive(UpdateFeedbackArray); // LINK CAN INTERRUPT TO FUNCTION
+  Can0.setMBFilter(MB0,0);
+  Can0.enhanceFilter(MB0);
+  Can0.onReceive(MB0,UpdateFeedbackArray); // LINK CAN INTERRUPT TO FUNCTION
   //delay(100);
   CANTimer.begin(CAN,CANFREQ);
   FeedbackTimer.begin(SendFeedbackToROS,FBFREQ);

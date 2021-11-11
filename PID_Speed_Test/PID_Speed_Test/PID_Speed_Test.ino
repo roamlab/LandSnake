@@ -10,7 +10,6 @@ const uint8_t DXL_ID=1, DXL_DIR_PIN=2; // DXL MOTOR ID AND DIRECTION
 const float DXL_PROTOCOL_VERSION=1.0; // DXL COMM PROTOCOL
 using namespace ControlTableItem; // DXL CONTROL TABLE
 #define DXL_SERIAL Serial1 // SERIAL COMMS
-#define DEBUG_SERIAL Serial // DEBUG SERIAL (NOT NEEDED)
 #include <FlexCAN_T4.h> // CAN COMMUNICATION HEADER FILE
 
 
@@ -29,7 +28,7 @@ int this_ang; // INTERMEDIATE VAR FOR ENCODING ANGLE ON CANBUF
 
 // PID RELATED
 unsigned int FBPERIOD_US = 10000; // PERIOD OF FEEDBACK TIMING
-unsigned int PIDPERIOD_US = 20000; // PERIOD OF PID TIMING
+unsigned int PIDPERIOD_US = 5000; // PERIOD OF PID TIMING
 unsigned int PID_Count=0;
 
 double error; // CONTROLLER ERROR, RELATIVE TO CMD
@@ -90,22 +89,17 @@ void SendLog()
 
 // STORES DESIRED ANGLE COMMANDED FROM CAN
 void UpdateSetPoint(const CAN_message_t &cmd){
-  if(cmd.id==LINKID){
-    goalpoint = (cmd.buf[1]*100 + cmd.buf[2])/100.0; // GOAL POINT TO BE PID'D
-    if(cmd.buf[3]==1){goalpoint*=-1;} // NEGATIVE ANGLE
-  } 
+  goalpoint = (cmd.buf[1]*100 + cmd.buf[2])/100.0; // GOAL POINT TO BE PID'D
+  if(cmd.buf[3]==1){goalpoint*=-1;} // NEGATIVE ANGLE
 }
 
 // PID FUNCTION: ATTENUATES ERROR BETWEEN MOST RECENT COMMAND POINT AND CURRENT ANGLE
 void ExecuteCommand() {
-  //Debugging Section
-  if(PID_Count%)
-
-
-
-
-
   
+  //Debugging Section: Toggles Teensy LED Every 10s
+  //if(PID_Count%(2000)==0){digitalWrite(LEDPIN,HIGH); PID_Count=0;}
+  //else{PID_Count=PID_Count+1;}
+
   damped_enc_angle = (1-0.915)*((90*analogRead(Encoder_pin)/1024.0)-45.0) + 0.915*damped_enc_angle; // DENOISED CURRENT ANGLE OF ENCODER PIN, IN DEGREES
   error = goalpoint - damped_enc_angle; // COMPUTING ANGLE ERROR, GOALPOINT COMES OFF OF CAN
 
@@ -125,13 +119,13 @@ void ExecuteCommand() {
     
     } // TO THIS POINT, COMMAND ANGLE IS EITHER THE 
     
-    dxl.setGoalPosition(DXL_ID, current_dxl_angle - command_angle , UNIT_DEGREE); // SHOULD THIS BE IN OR OUT OF THE CONDITIONAL?
-    
+    dxl.setGoalPosition(DXL_ID, current_dxl_angle - command_angle , UNIT_DEGREE); // SHOULD THIS BE IN OR OUT OF THE CONDITIONAL?  
 }
 
 
 void setup() {
   pinMode(6, OUTPUT); digitalWrite(6, LOW); // CAN TRANSCEIVER ENABLE
+  pinMode(LEDPIN, OUTPUT); digitalWrite(LEDPIN, LOW); 
   dxl.begin(1000000); // BEGIN DYNAMIXEL AT BAUD RATE
   dxl.setPortProtocolVersion(DXL_PROTOCOL_VERSION);
   dxl.ping(DXL_ID);
@@ -144,10 +138,13 @@ void setup() {
   Can0.begin(); // BEGIN CAN0
   Can0.setBaudRate(1000000); // SET BAUDRATE
   Can0.setMaxMB(16); // SET MAX MAILBOX SIZE... COULD BE USEFUL TO PLAY WITH THIS?
+  Can0.setMBFilter(MB0,LINKID);
+  Can0.enhanceFilter(MB0);
   Can0.enableMBInterrupts(); // ENABLE CAN INTERRUPT ON
-  Can0.onReceive(UpdateSetPoint); // LINK CAN INTERRUPT TO FUNCTION
+  Can0.onReceive(MB0, UpdateSetPoint); // LINK CAN INTERRUPT TO FUNCTION
   FeedbackTimer.begin(SendLog,FBPERIOD_US); // SETS INTERVAL OF FEEDBACK
   PIDTimer.begin(ExecuteCommand, PIDPERIOD_US); // SETS INTERVAL OF CONTROL
+  PIDTimer.priority(1);
 }
 
 void loop() {}
