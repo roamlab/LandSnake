@@ -18,7 +18,7 @@ using namespace ControlTableItem; // DXL CONTROL TABLE
 // HARDWARE RELATED
 const uint Encoder_pin = 19; // ENCODER PINOUT
 const uint LEDPIN = 23; // ONBOARD LED PIN
-const uint LINKID = 1; // LINK ID
+const uint LINKID = 3; // LINK ID
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0; // INIT CAN COMMUNICATION
 CAN_message_t fb_msg; // FEEDBACK MESSAGE
 CAN_message_t cmd; // COMMAND MESSAGE
@@ -27,8 +27,8 @@ Dynamixel2Arduino dxl(DXL_SERIAL,DXL_DIR_PIN); // DXL MOTOR OBJECT
 int this_ang; // INTERMEDIATE VAR FOR ENCODING ANGLE ON CANBUF
 
 // PID RELATED
-unsigned int FBPERIOD_US = 10000; // PERIOD OF FEEDBACK TIMING
-unsigned int PIDPERIOD_US = 5000; // PERIOD OF PID TIMING
+unsigned int FBPERIOD_US = 2000; // PERIOD OF FEEDBACK TIMING
+unsigned int PIDPERIOD_US = 2000; // PERIOD OF PID TIMING
 unsigned int PID_Count=0;
 
 double error; // CONTROLLER ERROR, RELATIVE TO CMD
@@ -95,31 +95,32 @@ void UpdateSetPoint(const CAN_message_t &cmd){
 
 // PID FUNCTION: ATTENUATES ERROR BETWEEN MOST RECENT COMMAND POINT AND CURRENT ANGLE
 void ExecuteCommand() {
-  
-  //Debugging Section: Toggles Teensy LED Every 10s
-  //if(PID_Count%(2000)==0){digitalWrite(LEDPIN,HIGH); PID_Count=0;}
-  //else{PID_Count=PID_Count+1;}
-
-  damped_enc_angle = (1-0.915)*((90*analogRead(Encoder_pin)/1024.0)-45.0) + 0.915*damped_enc_angle; // DENOISED CURRENT ANGLE OF ENCODER PIN, IN DEGREES
-  error = goalpoint - damped_enc_angle; // COMPUTING ANGLE ERROR, GOALPOINT COMES OFF OF CAN
-
-  current_dxl_angle = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE); // CURRENT DXL ANGLE, SHOULD NOT BE NEEDED?
-
-  if(abs(error)>=0.4){ // CONSIDER CHANGING TO ">= RESOLUTION" ?
-  
-    errorsum+=error; // INTEGRAL ERROR
+//  
+// 
+//  //Debugging Section: Toggles Teensy LED Every 10s
+//  //if(PID_Count%(2000)==0){digitalWrite(LEDPIN,HIGH); PID_Count=0;}
+//  //else{PID_Count=PID_Count+1;}
+//
+//  damped_enc_angle = (1-0.915)*((90*analogRead(Encoder_pin)/1024.0)-45.0) + 0.915*damped_enc_angle; // DENOISED CURRENT ANGLE OF ENCODER PIN, IN DEGREES
+//  error = goalpoint - damped_enc_angle; // COMPUTING ANGLE ERROR, GOALPOINT COMES OFF OF CAN
+//
+//  current_dxl_angle = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE); // CURRENT DXL ANGLE, SHOULD NOT BE NEEDED?
+//
+//  if(abs(error)>=0.4){ // CONSIDER CHANGING TO ">= RESOLUTION" ?
+//  
+//    errorsum+=error; // INTEGRAL ERROR
+//    
+//    dAngle = damped_enc_angle - last_damped_enc_angle; // DERIVATIVE OF ERROR
+//    last_damped_enc_angle = damped_enc_angle; // STORING ANGLE FOR NEXT ITERATION
+//
+//    command_angle = kp*error + ki*errorsum - kd*dAngle; // TUNED ERROR SIGNAL
+//
+//    if(command_angle>outmax){command_angle=outmax;} // CAPPING MAXIMUM OUTPUT
+//    else if (command_angle<outmin){command_angle=outmin;} // CAPPING MINIMUM OUTPUT
+//    
+//    } // TO THIS POINT, COMMAND ANGLE IS EITHER THE 
     
-    dAngle = damped_enc_angle - last_damped_enc_angle; // DERIVATIVE OF ERROR
-    last_damped_enc_angle = damped_enc_angle; // STORING ANGLE FOR NEXT ITERATION
-
-    command_angle = kp*error + ki*errorsum - kd*dAngle; // TUNED ERROR SIGNAL
-
-    if(command_angle>outmax){command_angle=outmax;} // CAPPING MAXIMUM OUTPUT
-    else if (command_angle<outmin){command_angle=outmin;} // CAPPING MINIMUM OUTPUT
-    
-    } // TO THIS POINT, COMMAND ANGLE IS EITHER THE 
-    
-    dxl.setGoalPosition(DXL_ID, current_dxl_angle - command_angle , UNIT_DEGREE); // SHOULD THIS BE IN OR OUT OF THE CONDITIONAL?  
+    dxl.setGoalPosition(DXL_ID, dxl.getPresentPosition(DXL_ID, UNIT_DEGREE) - goalpoint , UNIT_DEGREE); // SHOULD THIS BE IN OR OUT OF THE CONDITIONAL?  
 }
 
 
@@ -144,7 +145,8 @@ void setup() {
   Can0.onReceive(MB0, UpdateSetPoint); // LINK CAN INTERRUPT TO FUNCTION
   FeedbackTimer.begin(SendLog,FBPERIOD_US); // SETS INTERVAL OF FEEDBACK
   PIDTimer.begin(ExecuteCommand, PIDPERIOD_US); // SETS INTERVAL OF CONTROL
-  PIDTimer.priority(1);
+  //PIDTimer.priority(1);
+  //FeedbackTimer.priority(1);
 }
 
 void loop() {}
