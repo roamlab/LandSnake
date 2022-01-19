@@ -24,7 +24,7 @@ void setup() {
   // put your setup code here, to run once:
   
   // Use UART port of DYNAMIXEL Shield to debug.
-  DEBUG_SERIAL.begin(115200);
+  DEBUG_SERIAL.begin(57600);
 
   // Set Port baudrate to 57600bps. This has to match with DYNAMIXEL baudrate.
   dxl.begin(1000000);
@@ -50,21 +50,15 @@ void setup() {
 
 void loop() {
   // set goal posttion
+
   
-  DEBUG_SERIAL.print("Present Position(raw) : ");
+  
   timenow = micros();
   present = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE);
+  dxl.setGoalPosition(DXL_ID,present +10 , UNIT_DEGREE);
   finaltime = micros()-timenow;
-  DEBUG_SERIAL.println(present);
-  DEBUG_SERIAL.print("GetPresetTime : ");
+  DEBUG_SERIAL.print("SetGoalTimeCumulative : ");
   DEBUG_SERIAL.println(finaltime);
-  DEBUG_SERIAL.print("Next Position(raw) : ");
-  timenow = micros();
-  present = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE);
-  finaltime = micros()-timenow;
-  DEBUG_SERIAL.println(present);
-  DEBUG_SERIAL.print("GetPresetTime : ");
-  DEBUG_SERIAL.println(finaltime);
- 
+  delay(5000);
   
 }

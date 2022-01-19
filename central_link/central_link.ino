@@ -11,7 +11,7 @@ const uint LEDPIN = 13; // ONBOARD LED PIN FOR DEBUGGING
 const uint NLINKS = 1; // NUMBER OF LINKS IN SNAKE
 unsigned long ZERO_TIME = 0; // WILL EVENTUALLY BE CALLED AT START OF EPOCH IN MICROS
 unsigned int FBFREQ = 10000; // PERIOD OF FEEDBACK TIMING
-unsigned int CANFREQ = 4000;
+unsigned int CANFREQ = 950;
 int this_ang, sec_ang, third_ang, fourth_ang, fifth_ang;
 
 // ******************************************ROS PREPROCESSING*************************************************************************
@@ -143,7 +143,7 @@ void UpdateFeedbackArray(const CAN_message_t &fb_msg) {
 void setup()
 { 
   //Serial.begin(115200);
-  central.getHardware()->setBaud(115200); // SET BAUD RATE
+  central.getHardware()->setBaud(57600); // SET BAUD RATE
   central.initNode(); // INITS NODE
   central.subscribe(cmd_angle_topic); // SUBSCRIBES TO SUB
   central.advertise(feedback_angle_topic); // SETS LOG ANGLE TOPIC TO PUBLISH

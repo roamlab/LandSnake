@@ -11,9 +11,9 @@ def cmd_publisher():
     rate = rospy.Rate(100) # 1 Hz
     while not rospy.is_shutdown():
         angles=cmd_angles()
-        angles.angle1=10.
-        angles.angle2=10.
-        angles.angle3=10.
+        angles.angle1=0.
+        angles.angle2=0.
+        angles.angle3=0.
         angles.angle4=0.
         angles.angle5=0
         pub.publish(angles)

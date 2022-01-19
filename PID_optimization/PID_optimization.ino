@@ -1,22 +1,21 @@
 IntervalTimer PIDTimer;
 
 unsigned int PIDT = 800000;
-float Encoder_pin = 512;
+float Encoder_pin = 522;
+float goalpoint = 12;
 float Dxl_val = 600;
 float test; 
-
-float goalpoint=10;
 float default_ang;
-float kp = 1, ki = 0.0001 , kd =0.0001; // GAINS 
+float kp = 1, ki = 0, kd =0.000000001; // GAINS 
 float outmin, outmax;
 float Input, Output; // PID I/O STUFF
-float Iterm, lastInput, derror; // PID 
+float Iterm=0, lastInput=0, derror=0; // PID 
 float command_angle; // PID OUTPUT SENT TO DXL
 float error;
-float lasterror;
-unsigned long timenow;
-unsigned long dt=0;
-unsigned long lasttime=0;
+float lasterror=0;
+float timenow;
+float dt=0;
+float lasttime=0;
 
 
 void ExecuteCommand() {
@@ -39,8 +38,6 @@ void ExecuteCommand() {
  
   //Setpoint = 44*sin(1.1*t1);
   Input = test;
-  Serial.print("Input");
-  Serial.print(Input);
   
   //double currpos = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE);
   //myPID.Compute();
@@ -54,8 +51,8 @@ void ExecuteCommand() {
   
     Iterm+=ki*error*dt;
     derror = error-lasterror;
-
-    Output = kp*error+Iterm+kd*derror/dt;
+    Output = (kp*error)+Iterm+(kd*derror)/dt;
+    //Serial.print(Output);
     if(Output>outmax){Output=outmax;}
     else if (Output<outmin){Output=outmin;}
 
@@ -67,10 +64,11 @@ void ExecuteCommand() {
     Serial.print("DXLOutPut");
     Serial.println(Output);
 
-    Encoder_pin=1024.0*(((Output-0.915*Output)/(1-0.915))+45.0)/90.0;
+    Encoder_pin=1024.0*(((Input+Output-0.915*(Input+Output))/(1-0.915))+45.0)/90.0;
     Serial.println("Encoder_Pin");
     Serial.println(Encoder_pin);
     //dxl.setGoalPosition(DXL_ID, currpos - command_angle , UNIT_DEGREE);
+    
     
     
     

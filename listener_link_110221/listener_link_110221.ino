@@ -29,23 +29,25 @@ int this_ang; // INTERMEDIATE VAR FOR ENCODING ANGLE ON CANBUF
 
 // PID RELATED
 unsigned int FBPERIOD_US = 10000; // PERIOD OF FEEDBACK TIMING
-unsigned int PIDPERIOD_US = 1000; // PERIOD OF PID TIMING
-unsigned int CANPERIOD_US = 500;
+unsigned int PIDPERIOD_US = 950; // PERIOD OF PID TIMING
+unsigned int CANPERIOD_US = 800;
 
-double error; // CONTROLLER ERROR, RELATIVE TO CMD
-double errorsum; // INTEGRAL TERM IN CONTROLLER
-double last_damped_enc_angle;
-double dAngle; // RATE OF CHANGE OF ERROR (ANGLE - LAST ANGLE)
-double current_dxl_angle; // CURRENT DYNAMIXEL ANGLE
-double command_angle; // ANGLE TO BE SENT TO DXL
-double damped_enc_angle;
+float damped_enc_angle = (90*Encoder_pin/1024.0)-45.0;; 
+float default_ang;
+float kp = 0.6, ki = 0, kd =8; // GAINS 
+float outmin, outmax;
+float Input, Output; // PID I/O STUFF
+float Iterm=0, lastInput=0, derror=0; // PID 
+float command_angle; // PID OUTPUT SENT TO DXL
+float error;
+float lasterror=0;
+float timenow;
+float dt=0;
+float lasttime=0;
+float current_dxl_angle; // CURRENT DYNAMIXEL ANGLE
 
-double kp = 1.0, ki = 0.00002 , kd = 1.6; // CONTROLLER GAINS
-double outmin=-20, outmax=20; // MAX MOTOR DISPLACEMENTS
 
-float angle;
-bool flag = false;
-float goalpoint= (90*analogRead(Encoder_pin)/1024.0)-45.0; // GOAL POINT, COMMANDED FROM CENTRAL PERIODICALLY, UPDATED BY EXECUTECOMMAND()
+float goalpoint = (1-0.915)*((90*analogRead(Encoder_pin)/1024.0)-45.0) + 0.915*(90*analogRead(Encoder_pin)/1024.0)-45.0; // GOAL POINT, COMMANDED FROM CENTRAL PERIODICALLY, UPDATED BY EXECUTECOMMAND()
 float starttime;
 
 float starting_position;
@@ -60,6 +62,7 @@ IntervalTimer CANTimer;
 void SendLog(); // STREAMS FEEDBACK -> CAN -> CENTRAL -> ROS
 void UpdateSetPoint(const CAN_message_t &cmd); // READS COMMAND FROM CAN, UPDATES SET POINT
 void ExecuteCommand(); // PERIODICALLY SENDS SET POINT TO MOTOR
+bool received = false;
 
 
 //******************************************************************************************FUNCTIONS*************************************************************************************************
@@ -90,43 +93,54 @@ void SendLog()
 //CAN
 void CAN(){
   Can0.events();
+  //float time1 = micros();
+  //float t1 = time1/1000000;
+  //goalpoint = 35*sin(2*(t1));
   }
 
 
 
 // STORES DESIRED ANGLE COMMANDED FROM CAN
 void UpdateSetPoint(const CAN_message_t &cmd){
-  if(cmd.id==LINKID){
+ 
     goalpoint = (cmd.buf[1]*100 + cmd.buf[2])/100.0; // GOAL POINT TO BE PID'D
     if(cmd.buf[3]==1){goalpoint*=-1;} // NEGATIVE ANGLE
-  } 
+  
 }
 
 // PID FUNCTION: ATTENUATES ERROR BETWEEN MOST RECENT COMMAND POINT AND CURRENT ANGLE
 void ExecuteCommand() {
 
+  timenow = micros();
+  if(dt <= 0 || lasttime==0 ){dt = 1e-6; }
+  else{dt = timenow-lasttime;}
+
   
-  damped_enc_angle = (90*analogRead(Encoder_pin)/1024.0)-45.0;
-  damped_enc_angle = (1-0.915)*((90*analogRead(Encoder_pin)/1024.0)-45.0) + 0.915*damped_enc_angle; // DENOISED CURRENT ANGLE OF ENCODER PIN, IN DEGREES
-  error = goalpoint - damped_enc_angle; // COMPUTING ANGLE ERROR, GOALPOINT COMES OFF OF CAN
+  damped_enc_angle = (1-0.915)*((90*analogRead(Encoder_pin)/1024.0)-45.0) + 0.915*(90*analogRead(Encoder_pin)/1024.0)-45.0;// DENOISED CURRENT ANGLE OF ENCODER PIN, IN DEGREES
+    
+  
+  Input = damped_enc_angle;
+  
+  error = goalpoint - Input; // COMPUTING ANGLE ERROR, GOALPOINT COMES OFF OF CAN
 
   current_dxl_angle = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE); // CURRENT DXL ANGLE, SHOULD NOT BE NEEDED?
 
-  if(abs(error)>=0.4){ // CONSIDER CHANGING TO ">= RESOLUTION" ?
+  if(abs(error)>0.3){ // CONSIDER CHANGING TO ">= RESOLUTION" ?
   
-    errorsum+=error; // INTEGRAL ERROR
-    
-    dAngle = damped_enc_angle - last_damped_enc_angle; // DERIVATIVE OF ERROR
-    last_damped_enc_angle = damped_enc_angle; // STORING ANGLE FOR NEXT ITERATION
+    Iterm+=ki*error*dt;
+    derror = error-lasterror;
+    Output = (kp*error)+Iterm+(kd*derror)/dt;
+    //Serial.print(Output);
+    if(Output>outmax){Output=outmax;}
+    else if (Output<outmin){Output=outmin;}
 
-    command_angle = kp*error + ki*errorsum - kd*dAngle; // TUNED ERROR SIGNAL
-
-    if(command_angle>outmax){command_angle=outmax;} // CAPPING MAXIMUM OUTPUT
-    else if (command_angle<outmin){command_angle=outmin;} // CAPPING MINIMUM OUTPUT
+    lastInput = Input;
+    lasttime = timenow;
+    lasterror = error;
     
     } // TO THIS POINT, COMMAND ANGLE IS EITHER THE 
     
-    dxl.setGoalPosition(DXL_ID, current_dxl_angle - command_angle , UNIT_DEGREE); // SHOULD THIS BE IN OR OUT OF THE CONDITIONAL?
+    dxl.setGoalPosition(DXL_ID, current_dxl_angle - Output , UNIT_DEGREE); // SHOULD THIS BE IN OR OUT OF THE CONDITIONAL?
     
 }
 
@@ -145,11 +159,15 @@ void setup() {
   Can0.begin(); // BEGIN CAN0
   Can0.setBaudRate(1000000); // SET BAUDRATE
   Can0.setMaxMB(16); // SET MAX MAILBOX SIZE... COULD BE USEFUL TO PLAY WITH THIS?
+  Can0.setMBFilter(MB0, LINKID);
+  Can0.enhanceFilter(MB0);
   Can0.enableMBInterrupts(); // ENABLE CAN INTERRUPT ON
-  Can0.onReceive(UpdateSetPoint); // LINK CAN INTERRUPT TO FUNCTION
+  Can0.onReceive(MB0, UpdateSetPoint); // LINK CAN INTERRUPT TO FUNCTION
   FeedbackTimer.begin(SendLog,FBPERIOD_US); // SETS INTERVAL OF FEEDBACK
   PIDTimer.begin(ExecuteCommand, PIDPERIOD_US); // SETS INTERVAL OF CONTROL
   CANTimer.begin(CAN,CANPERIOD_US); //SETS INTERVAL OF CAN
+  outmax = 90;
+  outmin = -90;
 }
 
 void loop() {}
