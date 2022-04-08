@@ -44,9 +44,9 @@ CAN_message_t cmd_msg;
 // ******************************************INTERRUPT PREPROCESSING***************************************************************************
 
 
-int SETANGLEFREQ = 10000; //100 Hz total, 20 Hz per link
-int FBFREQ = 10000; //100 Hz
-int CANFREQ = 950;
+int SETANGLEFREQ = 20000; //500 Hz
+int FBFREQ = 1800; //500 Hz
+int CANFREQ = 100;
 
 IntervalTimer angletimer;
 IntervalTimer CANTimer;
@@ -69,7 +69,7 @@ void setup()
   angle3 = 0;
   angle4 = 0;
   angle5 = 0;
-
+  
   anglecount = 0;
 
   central.getHardware()->setBaud(57600); // SET BAUD RATE
@@ -87,8 +87,9 @@ void setup()
   Can0.setBaudRate(1000000); //115200 SET BAUDRATE
   Can0.setMaxMB(16); // SET MAX MAILBOX SIZE
   Can0.enableMBInterrupts(); // ENABLE CAN INTERRUPT ON
-  Can0.setMBFilter(MB0, 0);
+  Can0.setMBFilter(MB0, 0); //set to only Rx from peripherals
   Can0.enhanceFilter(MB0);
+  Can0.setClock(CLK_60MHz);
   Can0.onReceive(MB0, UpdateFeedbackArray);
   angletimer.begin(setnextAngle, SETANGLEFREQ);
   CANTimer.begin(CAN, CANFREQ);
@@ -104,21 +105,26 @@ void CAN() {
 
 void UpdateFeedbackArray(const CAN_message_t &fb_msg) {
   if (fb_msg.id == 0) {
-    int i = (int) fb_msg.buf[0];
-    int enc_angle = fb_msg.buf[1] * 100 + fb_msg.buf[2] - 256 * fb_msg.buf[5]; // last term for sign correction
-    int dxl_angle = fb_msg.buf[3] * 100 + fb_msg.buf[4] - 256 * fb_msg.buf[6];
+    volatile int i = (int) fb_msg.buf[0];
+    volatile int enc_angle = fb_msg.buf[1] * 100 + fb_msg.buf[2] - 256 * fb_msg.buf[5]; // last term for sign correction
+    volatile int dxl_angle = fb_msg.buf[3] * 100 + fb_msg.buf[4] - 256 * fb_msg.buf[6];
 
     switch (i) {
       case 1:
-        feedback_angles.enc_angle1 = enc_angle; feedback_angles.dxl_angle1 = dxl_angle; break;
+//        feedback_angles.enc_angle1 = enc_angle; feedback_angles.dxl_angle1 = dxl_angle; break;
+          feedback_angles.enc_angle1 = fb_msg.buf[1]; break;
       case 2:
-        feedback_angles.enc_angle2 = enc_angle; feedback_angles.dxl_angle2 = dxl_angle; break;
+//        feedback_angles.enc_angle2 = enc_angle; feedback_angles.dxl_angle2 = dxl_angle; break;
+          feedback_angles.enc_angle2 = fb_msg.buf[1]; break;
+          
       case 3:
-        feedback_angles.enc_angle3 = enc_angle; feedback_angles.dxl_angle3 = dxl_angle; break;
-      case 4:
-        feedback_angles.enc_angle4 = enc_angle; feedback_angles.dxl_angle4 = dxl_angle; break;
-      case 5:
-        feedback_angles.enc_angle5 = enc_angle; feedback_angles.dxl_angle5 = dxl_angle; break;
+//        feedback_angles.enc_angle3 = enc_angle; feedback_angles.dxl_angle3 = dxl_angle; break;
+          feedback_angles.enc_angle3 = fb_msg.buf[1]; break;
+
+//      case 4:
+//        feedback_angles.enc_angle4 = enc_angle; feedback_angles.dxl_angle4 = dxl_angle; break;
+//      case 5:
+//        feedback_angles.enc_angle5 = enc_angle; feedback_angles.dxl_angle5 = dxl_angle; break;
     }
 
   }
@@ -131,39 +137,17 @@ void SendFeedbackToROS() {
 }
 
 void setnextAngle() {
-  switch (anglecount) { //flip through each link for each interrupt
-    case 0:
-      cmd_msg.id = 1;
-      cmd_msg.buf[1] = trunc(angle1) + 150;
-      Can0.write(cmd_msg);
-      break;
-    case 1:
-      cmd_msg.id = 2;
-      cmd_msg.buf[1] = trunc(angle2) + 150;
-      Can0.write(cmd_msg);
-      break;
-    case 2:
-      cmd_msg.id = 3;
-      cmd_msg.buf[1] = trunc(angle3) + 150;
-      Can0.write(cmd_msg);
-      break;
-    case 3:
-      cmd_msg.id = 4;
-      cmd_msg.buf[1] = trunc(angle4) + 150;
-      Can0.write(cmd_msg);
-      break;
-    case 4:
-      cmd_msg.id = 5;
-      cmd_msg.buf[1] = trunc(angle5) + 150;
-      Can0.write(cmd_msg);
-      break;
-  }
-  anglecount = (anglecount + 1) % 5;
 
+    cmd_msg.id = 1;
+    cmd_msg.buf[1] = trunc(angle1)+150;
+    cmd_msg.buf[2] = trunc(angle2)+150;
+    cmd_msg.buf[3] = trunc(angle3)+150;
+    cmd_msg.buf[4] = trunc(angle4)+150;
+    cmd_msg.buf[5] = trunc(angle5)+150;
+    Can0.write(cmd_msg);
+      
 }
 
 void loop() {
 
 }
-
-//NOTE: ***CAN bus gets crowded when two links write sequentially - need to stagger writebacks***
