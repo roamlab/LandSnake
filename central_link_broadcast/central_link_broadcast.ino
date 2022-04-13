@@ -44,14 +44,15 @@ CAN_message_t cmd_msg;
 // ******************************************INTERRUPT PREPROCESSING***************************************************************************
 
 
-int SETANGLEFREQ = 20000; //500 Hz
-int FBFREQ = 1800; //500 Hz
-int CANFREQ = 100;
+int SETANGLEFREQ = 10000; 
+int FBFREQ = 1500; //~ (750 Hz Max: 1300 us)
+int CANFREQ = 100; //10kHz
+int SPINONCEFREQ = 100; //10kHz
 
 IntervalTimer angletimer;
 IntervalTimer CANTimer;
-IntervalTimer ROSTimer;
-
+IntervalTimer ROSFeedbackTimer;
+IntervalTimer SpinOnceTimer;
 
 void rosCallback(const snake_demo::cmd_angles& cmd_angles) {
   angle1 = cmd_angles.angle1;
@@ -93,38 +94,39 @@ void setup()
   Can0.onReceive(MB0, UpdateFeedbackArray);
   angletimer.begin(setnextAngle, SETANGLEFREQ);
   CANTimer.begin(CAN, CANFREQ);
-  ROSTimer.begin(SendFeedbackToROS, FBFREQ);
+  ROSFeedbackTimer.begin(SendFeedbackToROS, FBFREQ);
+  SpinOnceTimer.begin(spinOnce, SPINONCEFREQ);
   ZERO_TIME = micros(); // SETS ZERO TIME AT START OF EPOCH
 
 }
 
 void CAN() {
-  central.spinOnce();
   Can0.events();
+}
+
+void spinOnce(){
+  central.spinOnce();
 }
 
 void UpdateFeedbackArray(const CAN_message_t &fb_msg) {
   if (fb_msg.id == 0) {
     volatile int i = (int) fb_msg.buf[0];
-    volatile int enc_angle = fb_msg.buf[1] * 100 + fb_msg.buf[2] - 256 * fb_msg.buf[5]; // last term for sign correction
-    volatile int dxl_angle = fb_msg.buf[3] * 100 + fb_msg.buf[4] - 256 * fb_msg.buf[6];
+    volatile int enc_angle = fb_msg.buf[1] - 256 * fb_msg.buf[5]; // last term for sign correction
+    volatile int dxl_angle = fb_msg.buf[2] - 256 * fb_msg.buf[6];
 
     switch (i) {
       case 1:
-//        feedback_angles.enc_angle1 = enc_angle; feedback_angles.dxl_angle1 = dxl_angle; break;
-          feedback_angles.enc_angle1 = fb_msg.buf[1]; break;
+        feedback_angles.enc_angle1 = enc_angle;
+        feedback_angles.dxl_angle1 = dxl_angle;
+        break;
       case 2:
-//        feedback_angles.enc_angle2 = enc_angle; feedback_angles.dxl_angle2 = dxl_angle; break;
-          feedback_angles.enc_angle2 = fb_msg.buf[1]; break;
-          
+        feedback_angles.enc_angle2 = enc_angle;
+        feedback_angles.dxl_angle2 = dxl_angle;
+        break;
       case 3:
-//        feedback_angles.enc_angle3 = enc_angle; feedback_angles.dxl_angle3 = dxl_angle; break;
-          feedback_angles.enc_angle3 = fb_msg.buf[1]; break;
-
-//      case 4:
-//        feedback_angles.enc_angle4 = enc_angle; feedback_angles.dxl_angle4 = dxl_angle; break;
-//      case 5:
-//        feedback_angles.enc_angle5 = enc_angle; feedback_angles.dxl_angle5 = dxl_angle; break;
+        feedback_angles.enc_angle3 = enc_angle;
+        feedback_angles.dxl_angle3 = dxl_angle;
+        break;
     }
 
   }

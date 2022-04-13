@@ -17,7 +17,10 @@ volatile int dxlangle = 150;
 volatile bool updated;
 
 IntervalTimer updateangle;
-IntervalTimer FeedbackTimer;
+IntervalTimer FeedbackTimerDxl;
+IntervalTimer FeedbackTimerEnc;
+IntervalTimer SendFeedback;
+IntervalTimer CANTimer;
 
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0; // INIT CAN COMMUNICATION
 CAN_message_t fb_msg;
@@ -25,8 +28,11 @@ Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN); // DXL MOTOR OBJECT
 
 void UpdateSetPoint(const CAN_message_t &cmd); // READS COMMAND FROM CAN, UPDATES SET POINT
 
-unsigned int PIDPERIOD_US = 20000;// PERIOD OF PID TIMING
-unsigned int FBPERIOD_US = 1800;
+unsigned int PIDPERIOD_US = 10000;// 100 Hz
+unsigned int READ_DXL = 1500; //~670 Hz
+unsigned int READ_ENC = 1500; //~670 Hz
+unsigned int FBTOCENTRAL = 1500; //~670 Hz
+unsigned int CANFREQ = 100; //10kHz
 
 void setup() {
   updated = false;
@@ -50,41 +56,54 @@ void setup() {
   Can0.setClock(CLK_60MHz);
   Can0.onReceive(MB0,rxAngle);
   updateangle.begin(setAngle, PIDPERIOD_US);
-  updateangle.priority(255);
-  FeedbackTimer.begin(sendLog, FBPERIOD_US);
-  FeedbackTimer.priority(90);
+  CANTimer.begin(CAN, CANFREQ);
+//  FeedbackTimerDxl.begin(read_DXL, READ_DXL);
+  FeedbackTimerEnc.begin(read_ENC, READ_ENC); 
+  SendFeedback.begin(sendFeedback, FBTOCENTRAL);
   
+}
+
+void CAN(){
+  Can0.events();
 }
 
 void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
   dxlangle = cmd.buf[LINKID];
 }
 
-void sendLog() {
-  volatile int dxl_angle_read = trunc(dxl.getPresentPosition(DXL_ID, UNIT_DEGREE)) - 150; //PRESENT POSITION OF DXL
-  volatile int enc_angle = trunc((90 * analogRead(Encoder_pin) / 1024) - 45) * -1;
+void read_ENC() {
+  volatile int enc_angle_read = trunc((90 * analogRead(Encoder_pin) / 1024) - 45) * -1;
+  fb_msg.buf[1] = enc_angle_read;
+  if(enc_angle_read < 0){
+    fb_msg.buf[5] = 1;
+  } else{
+    fb_msg.buf[5] = 0;
+  }
 
+}
+
+
+void read_DXL() {
+  volatile int dxl_angle_read = trunc(dxl.getPresentPosition(DXL_ID, UNIT_DEGREE)) - 150; //PRESENT POSITION OF DXL
+  fb_msg.buf[2] = dxl_angle_read;
+  if(dxl_angle_read < 0){
+    fb_msg.buf[6] = 1;
+  } else{
+    fb_msg.buf[6] = 0;
+  }
+  
+
+}
+
+void sendFeedback(){
   fb_msg.id = 0;
   fb_msg.buf[0] = LINKID;
-//  fb_msg.buf[5] = 0;
-//  fb_msg.buf[6] = 0;
-//
-//  if (enc_angle < 0) fb_msg.buf[5] = 1; //indicate negative
-//  if (dxl_angle_read < 0) fb_msg.buf[6] = 1;
-//
-//  fb_msg.buf[1] = enc_angle / 100;
-//  fb_msg.buf[2] = enc_angle % 100;
-//  fb_msg.buf[3] = dxl_angle_read / 100;
-//  fb_msg.buf[4] = dxl_angle_read % 100;
-  fb_msg.buf[1] = dxlangle;
-  
   Can0.write(fb_msg);
-
 }
 
 void setAngle() {
 
-  //dxl.setGoalPosition(DXL_ID, dxlangle,UNIT_DEGREE);
+  dxl.setGoalPosition(DXL_ID, dxlangle,UNIT_DEGREE);
 
 }
 
