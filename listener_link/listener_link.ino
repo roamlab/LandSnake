@@ -28,10 +28,9 @@ Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN); // DXL MOTOR OBJECT
 
 void UpdateSetPoint(const CAN_message_t &cmd); // READS COMMAND FROM CAN, UPDATES SET POINT
 
-unsigned int PIDPERIOD_US = 10000;// 100 Hz
-unsigned int READ_DXL = 1500; //~670 Hz
-unsigned int READ_ENC = 1500; //~670 Hz
-unsigned int FBTOCENTRAL = 1500; //~670 Hz
+unsigned int READ_DXL = 1300; //~750 Hz
+unsigned int READ_ENC_WRITE_DXL = 1300; //~750 Hz
+unsigned int FBTOCENTRAL = 1300; //~750 Hz
 unsigned int CANFREQ = 100; //10kHz
 
 void setup() {
@@ -55,10 +54,9 @@ void setup() {
   Can0.enableMBInterrupts(); // ENABLE CAN INTERRUPT ON
   Can0.setClock(CLK_60MHz);
   Can0.onReceive(MB0,rxAngle);
-  updateangle.begin(setAngle, PIDPERIOD_US);
   CANTimer.begin(CAN, CANFREQ);
-//  FeedbackTimerDxl.begin(read_DXL, READ_DXL);
-  FeedbackTimerEnc.begin(read_ENC, READ_ENC); 
+  FeedbackTimerDxl.begin(read_DXL, READ_DXL);
+  FeedbackTimerEnc.begin(read_ENC_write_DXL, READ_ENC_WRITE_DXL); 
   SendFeedback.begin(sendFeedback, FBTOCENTRAL);
   
 }
@@ -71,8 +69,9 @@ void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
   dxlangle = cmd.buf[LINKID];
 }
 
-void read_ENC() {
+void read_ENC_write_DXL() {
   volatile int enc_angle_read = trunc((90 * analogRead(Encoder_pin) / 1024) - 45) * -1;
+  dxl.setGoalPosition(DXL_ID, dxlangle,UNIT_DEGREE);
   fb_msg.buf[1] = enc_angle_read;
   if(enc_angle_read < 0){
     fb_msg.buf[5] = 1;
@@ -101,11 +100,6 @@ void sendFeedback(){
   Can0.write(fb_msg);
 }
 
-void setAngle() {
-
-  dxl.setGoalPosition(DXL_ID, dxlangle,UNIT_DEGREE);
-
-}
 
 
 void loop() {
