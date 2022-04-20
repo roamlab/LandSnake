@@ -45,7 +45,7 @@ CAN_message_t cmd_msg;
 
 
 int SETANGLEFREQ = 10000; //100 Hz
-int FBFREQ = 1000; //~750 Hz
+int FBFREQ = 1300; //~750 Hz
 int CANFREQ = 100; //10kHz
 int SPINONCEFREQ = 100; //10kHz
 
@@ -54,7 +54,7 @@ IntervalTimer CANTimer;
 IntervalTimer ROSFeedbackTimer;
 IntervalTimer SpinOnceTimer;
 
-void rosCallback(const snake_demo::cmd_angles& cmd_angles) {
+void rosCallback(const snake_demo::cmd_angles& cmd_angles) { //update command angle array
   angle1 = cmd_angles.angle1;
   angle2 = cmd_angles.angle2;
   angle3 = cmd_angles.angle3;
@@ -100,15 +100,15 @@ void setup()
 
 }
 
-void CAN() {
+void CAN() { //update CAN
   Can0.events();
 }
 
-void spinOnce(){
+void spinOnce(){ //refresh ROS
   central.spinOnce();
 }
 
-void UpdateFeedbackArray(const CAN_message_t &fb_msg) {
+void UpdateFeedbackArray(const CAN_message_t &fb_msg) { //update feedback angle array
   if (fb_msg.id == 0) {
     volatile int i = (int) fb_msg.buf[0];
     volatile int enc_angle = fb_msg.buf[1] - 256 * fb_msg.buf[5]; // last term for sign correction
@@ -133,12 +133,12 @@ void UpdateFeedbackArray(const CAN_message_t &fb_msg) {
 
 }
 
-void SendFeedbackToROS() {
+void SendFeedbackToROS() { //send feedback angles over ROSSERIAL
   feedback_angles.timestamp = float(micros() - ZERO_TIME); // TIMESTAMPING DATA
   feedback_angle_topic.publish(&feedback_angles);
 }
 
-void setnextAngle() {
+void setnextAngle() { //broadcast angles to all teensys
 
     cmd_msg.id = 1;
     cmd_msg.buf[1] = trunc(angle1)+150;

@@ -16,7 +16,6 @@ const uint LINKID = 3; // LINK ID
 volatile int dxlangle = 150;
 volatile bool updated;
 
-IntervalTimer updateangle;
 IntervalTimer FeedbackTimerDxl;
 IntervalTimer FeedbackTimerEnc;
 IntervalTimer SendFeedback;
@@ -61,7 +60,7 @@ void setup() {
   
 }
 
-void CAN(){
+void CAN(){ //update CAN
   Can0.events();
 }
 
@@ -70,7 +69,7 @@ void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
   updated = true;
 }
 
-void read_ENC_write_DXL() {
+void read_ENC_write_DXL() { //read the encoder and write angle to DXL (if new one has been recv'd)
   volatile int enc_angle_read = trunc((90 * analogRead(Encoder_pin) / 1024) - 45) * -1;
   if(updated){
     dxl.setGoalPosition(DXL_ID, dxlangle,UNIT_DEGREE);
@@ -78,7 +77,7 @@ void read_ENC_write_DXL() {
   }
   fb_msg.buf[1] = enc_angle_read;
   if(enc_angle_read < 0){
-    fb_msg.buf[5] = 1;
+    fb_msg.buf[5] = 1; //indicates negative
   } else{
     fb_msg.buf[5] = 0;
   }
@@ -86,7 +85,7 @@ void read_ENC_write_DXL() {
 }
 
 
-void read_DXL() {
+void read_DXL() { //read dynamixel angle
   volatile int dxl_angle_read = trunc(dxl.getPresentPosition(DXL_ID, UNIT_DEGREE)) - 150; //PRESENT POSITION OF DXL
   fb_msg.buf[2] = dxl_angle_read;
   if(dxl_angle_read < 0){
@@ -98,7 +97,7 @@ void read_DXL() {
 
 }
 
-void sendFeedback(){
+void sendFeedback(){ //send feedback angles over CAN to central
   fb_msg.id = 0;
   fb_msg.buf[0] = LINKID;
   Can0.write(fb_msg);
