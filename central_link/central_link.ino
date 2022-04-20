@@ -45,7 +45,7 @@ CAN_message_t cmd_msg;
 
 
 int SETANGLEFREQ = 10000; //100 Hz
-int FBFREQ = 1300; //~750 Hz
+int FBFREQ = 1000; //~750 Hz
 int CANFREQ = 100; //10kHz
 int SPINONCEFREQ = 100; //10kHz
 

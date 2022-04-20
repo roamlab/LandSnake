@@ -12,7 +12,7 @@ using namespace ControlTableItem; // DXL CONTROL TABLE
 
 // HARDWARE RELATED
 const uint Encoder_pin = 19; // ENCODER PINOUT
-const uint LINKID = 2; // LINK ID
+const uint LINKID = 3; // LINK ID
 volatile int dxlangle = 150;
 volatile bool updated;
 
@@ -67,11 +67,15 @@ void CAN(){
 
 void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
   dxlangle = cmd.buf[LINKID];
+  updated = true;
 }
 
 void read_ENC_write_DXL() {
   volatile int enc_angle_read = trunc((90 * analogRead(Encoder_pin) / 1024) - 45) * -1;
-  dxl.setGoalPosition(DXL_ID, dxlangle,UNIT_DEGREE);
+  if(updated){
+    dxl.setGoalPosition(DXL_ID, dxlangle,UNIT_DEGREE);
+    updated = false;
+  }
   fb_msg.buf[1] = enc_angle_read;
   if(enc_angle_read < 0){
     fb_msg.buf[5] = 1;
