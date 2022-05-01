@@ -45,7 +45,7 @@ CAN_message_t cmd_msg;
 
 
 int SETANGLEFREQ = 10000; //100 Hz
-int FBFREQ = 1300; //~750 Hz
+int FBFREQ = 1500; //~670 Hz
 int CANFREQ = 100; //10kHz
 int SPINONCEFREQ = 100; //10kHz
 
@@ -112,8 +112,8 @@ void UpdateFeedbackArray(const CAN_message_t &fb_msg) { //update feedback angle 
   if (fb_msg.id == 0) {
     volatile int i = (int) fb_msg.buf[0];
     
-    uint16_t decoded_enc = (int16_t)(fb_msg.buf[2]<<8)+fb_msg.buf[1];
-    uint16_t decoded_dxl = (int16_t)(fb_msg.buf[4]<<8)+fb_msg.buf[3];
+    unsigned short decoded_enc = ((unsigned short)fb_msg.buf[2]<<8)|fb_msg.buf[1];
+    unsigned short decoded_dxl = ((unsigned short)fb_msg.buf[4]<<8)|fb_msg.buf[3];
 
     float enc_angle = (((float)decoded_enc*120)/65535) - 60;
     float dxl_angle = (((float)decoded_dxl*120)/65535) - 60;

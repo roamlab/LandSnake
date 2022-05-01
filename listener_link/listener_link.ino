@@ -28,9 +28,9 @@ Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN); // DXL MOTOR OBJECT
 
 void UpdateSetPoint(const CAN_message_t &cmd); // READS COMMAND FROM CAN, UPDATES SET POINT
 
-unsigned int READ_DXL = 1300; //~750 Hz
-unsigned int READ_ENC_WRITE_DXL = 1300; //~750 Hz
-unsigned int FBTOCENTRAL = 1300; //~750 Hz
+unsigned int READ_DXL = 1500; //~670 Hz
+unsigned int READ_ENC_WRITE_DXL = 1500; //~670 Hz
+unsigned int FBTOCENTRAL = 1500; //~670 Hz
 unsigned int CANFREQ = 100; //10kHz
 
 void setup() {
@@ -71,26 +71,29 @@ void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
 }
 
 void read_ENC_write_DXL() { //read the encoder and write angle to DXL (if new one has been recv'd)
-  volatile float enc_angle_read = ((90 * analogRead(Encoder_pin) / 1024) - 45) * -1;
+  volatile float enc_angle_read = ((90 * (float) analogRead(Encoder_pin) / 1024) - 45) * -1;
   if(updated){
     dxl.setGoalPosition(DXL_ID, dxlangle,UNIT_DEGREE);
     updated = false;
   }
   //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of information)
-  int16_t enc_angle_mapped = (int16_t) (enc_angle_read + 60) * (65535)/120;
-  
-  fb_msg.buf[1] = enc_angle_mapped & 0xFF;
-  fb_msg.buf[2] = enc_angle_mapped >> 8;
+  unsigned short enc_angle_mapped = (unsigned short) ((enc_angle_read + 60) * (65535)/120);
+  unsigned char c1 = enc_angle_mapped & 0xFF;
+  unsigned char c2 = enc_angle_mapped >> 8;
+  fb_msg.buf[1] = c1;
+  fb_msg.buf[2] = c2;
 
 }
 
 
 void read_DXL() { //read dynamixel angle
-  volatile float dxl_angle_read = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE) - 150; //PRESENT POSITION OF DXL
+  volatile float dxl_angle_read = (float) dxl.getPresentPosition(DXL_ID, UNIT_DEGREE) - 150; //PRESENT POSITION OF DXL
   //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of info)
-  int16_t dxl_angle_mapped = (int16_t) (dxl_angle_read + 60) * (65535/120);
-  fb_msg.buf[3] = dxl_angle_mapped & 0xFF;
-  fb_msg.buf[4] = dxl_angle_mapped >> 8;
+  unsigned short dxl_angle_mapped = (unsigned short) ((dxl_angle_read + 60) * (65535)/120);
+  unsigned char c1 = dxl_angle_mapped & 0xFF;
+  unsigned char c2 = dxl_angle_mapped >> 8;
+  fb_msg.buf[3] = c1;
+  fb_msg.buf[4] = c2;
   
 
 }
