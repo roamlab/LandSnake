@@ -111,8 +111,12 @@ void spinOnce(){ //refresh ROS
 void UpdateFeedbackArray(const CAN_message_t &fb_msg) { //update feedback angle array
   if (fb_msg.id == 0) {
     volatile int i = (int) fb_msg.buf[0];
-    volatile int enc_angle = fb_msg.buf[1] - 256 * fb_msg.buf[5]; // last term for sign correction
-    volatile int dxl_angle = fb_msg.buf[2] - 256 * fb_msg.buf[6];
+    
+    uint16_t decoded_enc = (int16_t)(fb_msg.buf[2]<<8)+fb_msg.buf[1];
+    uint16_t decoded_dxl = (int16_t)(fb_msg.buf[4]<<8)+fb_msg.buf[3];
+
+    float enc_angle = (((float)decoded_enc*120)/65535) - 60;
+    float dxl_angle = (((float)decoded_dxl*120)/65535) - 60;
 
     switch (i) {
       case 1:

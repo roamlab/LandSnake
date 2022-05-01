@@ -13,6 +13,7 @@ using namespace ControlTableItem; // DXL CONTROL TABLE
 // HARDWARE RELATED
 const uint Encoder_pin = 19; // ENCODER PINOUT
 const uint LINKID = 3; // LINK ID
+int anglemapmax = 60;
 volatile int dxlangle = 150;
 volatile bool updated;
 
@@ -70,29 +71,26 @@ void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
 }
 
 void read_ENC_write_DXL() { //read the encoder and write angle to DXL (if new one has been recv'd)
-  volatile int enc_angle_read = trunc((90 * analogRead(Encoder_pin) / 1024) - 45) * -1;
+  volatile float enc_angle_read = ((90 * analogRead(Encoder_pin) / 1024) - 45) * -1;
   if(updated){
     dxl.setGoalPosition(DXL_ID, dxlangle,UNIT_DEGREE);
     updated = false;
   }
-  fb_msg.buf[1] = enc_angle_read;
-  if(enc_angle_read < 0){
-    fb_msg.buf[5] = 1; //indicates negative
-  } else{
-    fb_msg.buf[5] = 0;
-  }
+  //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of information)
+  int16_t enc_angle_mapped = (int16_t) (enc_angle_read + 60) * (65535)/120;
+  
+  fb_msg.buf[1] = enc_angle_mapped & 0xFF;
+  fb_msg.buf[2] = enc_angle_mapped >> 8;
 
 }
 
 
 void read_DXL() { //read dynamixel angle
-  volatile int dxl_angle_read = trunc(dxl.getPresentPosition(DXL_ID, UNIT_DEGREE)) - 150; //PRESENT POSITION OF DXL
-  fb_msg.buf[2] = dxl_angle_read;
-  if(dxl_angle_read < 0){
-    fb_msg.buf[6] = 1;
-  } else{
-    fb_msg.buf[6] = 0;
-  }
+  volatile float dxl_angle_read = dxl.getPresentPosition(DXL_ID, UNIT_DEGREE) - 150; //PRESENT POSITION OF DXL
+  //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of info)
+  int16_t dxl_angle_mapped = (int16_t) (dxl_angle_read + 60) * (65535/120);
+  fb_msg.buf[3] = dxl_angle_mapped & 0xFF;
+  fb_msg.buf[4] = dxl_angle_mapped >> 8;
   
 
 }
