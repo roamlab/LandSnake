@@ -8,11 +8,11 @@
 
 // ******************************************GLOBAL VARIABLES***************************************************************************
 
-int angle1;
-int angle2;
-int angle3;
-int angle4;
-int angle5;
+float angle1;
+float angle2;
+float angle3;
+float angle4;
+float angle5;
 int anglecount;
 
 unsigned long ZERO_TIME = 0;
@@ -144,12 +144,18 @@ void SendFeedbackToROS() { //send feedback angles over ROSSERIAL
 
 void setnextAngle() { //broadcast angles to all teensys
 
+    unsigned char angle1_char = (char)((angle1 + 60)*255/120);
+    unsigned char angle2_char = (char)((angle2 + 60)*255/120);
+    unsigned char angle3_char = (char)((angle3 + 60)*255/120);
+    unsigned char angle4_char = (char)((angle4 + 60)*255/120);
+    unsigned char angle5_char = (char)((angle5 + 60)*255/120);
+
     cmd_msg.id = 1;
-    cmd_msg.buf[1] = trunc(angle1)+150;
-    cmd_msg.buf[2] = trunc(angle2)+150;
-    cmd_msg.buf[3] = trunc(angle3)+150;
-    cmd_msg.buf[4] = trunc(angle4)+150;
-    cmd_msg.buf[5] = trunc(angle5)+150;
+    cmd_msg.buf[1] = angle1_char;
+    cmd_msg.buf[2] = angle2_char;
+    cmd_msg.buf[3] = angle3_char;
+    cmd_msg.buf[4] = angle4_char;
+    cmd_msg.buf[5] = angle5_char;
     Can0.write(cmd_msg);
       
 }
