@@ -12,7 +12,7 @@ using namespace ControlTableItem; // DXL CONTROL TABLE
 
 // HARDWARE RELATED
 const uint Encoder_pin = 19; // ENCODER PINOUT
-const uint LINKID = 1; // LINK ID
+const uint LINKID = 3; // LINK ID
 int anglemapmax = 60;
 volatile float dxlangle = 150;
 volatile float dxl_angle_read;
@@ -21,6 +21,7 @@ volatile bool updated;
 IntervalTimer FeedbackTimerDxl;
 IntervalTimer FeedbackTimerEnc;
 IntervalTimer SendFeedback;
+IntervalTimer WriteAngle;
 IntervalTimer CANTimer;
 
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0; // INIT CAN COMMUNICATION
@@ -29,10 +30,10 @@ Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN); // DXL MOTOR OBJECT
 
 void UpdateSetPoint(const CAN_message_t &cmd); // READS COMMAND FROM CAN, UPDATES SET POINT
 
-unsigned int READ_DXL = 1500; //~670 Hz
-unsigned int READ_ENC_WRITE_DXL = 1500; //~670 Hz
-unsigned int FBTOCENTRAL = 1500; //~670 Hz
-unsigned int CANFREQ = 100; //10kHz
+unsigned int READ_DXL = 1400; //~700 Hz
+unsigned int READ_ENC = 1400; //~700 Hz
+unsigned int WRITE_DXL = 1400; //~700 Hz
+unsigned int FBTOCENTRAL = 1400; //~700 Hz
 
 void setup() {
   updated = false;
@@ -55,9 +56,9 @@ void setup() {
   Can0.enableMBInterrupts(); // ENABLE CAN INTERRUPT ON
   Can0.setClock(CLK_60MHz);
   Can0.onReceive(MB0,rxAngle);
-  CANTimer.begin(CAN, CANFREQ);
   FeedbackTimerDxl.begin(read_DXL, READ_DXL);
-  FeedbackTimerEnc.begin(read_ENC_write_DXL, READ_ENC_WRITE_DXL); 
+  FeedbackTimerEnc.begin(read_ENC, READ_ENC); 
+  WriteAngle.begin(write_DXL, WRITE_DXL);
   SendFeedback.begin(sendFeedback, FBTOCENTRAL);
   
 }
@@ -69,15 +70,10 @@ void CAN(){ //update CAN
 void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
   unsigned int encoded_angle = (int) cmd.buf[LINKID];
   dxlangle = (((float) encoded_angle * 120)/255) - 60 + 150; //scale the angle back into range, and add 150 to calibrate to dxls
-  updated = true;
 }
 
-void read_ENC_write_DXL() { //read the encoder and write angle to DXL (if new one has been recv'd)
+void read_ENC() { //read the encoder and write angle to DXL (if new one has been recv'd)
   volatile float enc_angle_read = ((90 * (float) analogRead(Encoder_pin) / 1024) - 45) * -1;
-  //if(updated){
-    dxl.setGoalPosition(DXL_ID, (dxl_angle_read+150) + (dxlangle-(dxl_angle_read+150))*0.6 ,UNIT_DEGREE);
-    updated = false;
-  //}
   //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of information)
   unsigned short enc_angle_mapped = (unsigned short) ((enc_angle_read + 60) * (65535)/120);
   unsigned char c1 = enc_angle_mapped & 0xFF;
@@ -85,6 +81,10 @@ void read_ENC_write_DXL() { //read the encoder and write angle to DXL (if new on
   fb_msg.buf[1] = c1;
   fb_msg.buf[2] = c2;
 
+}
+
+void write_DXL(){
+    dxl.setGoalPosition(DXL_ID, (dxl_angle_read+150) + (dxlangle-(dxl_angle_read+150))*0.6 ,UNIT_DEGREE);
 }
 
 
