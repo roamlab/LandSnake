@@ -13,7 +13,7 @@ using namespace ControlTableItem; // DXL CONTROL TABLE
 // HARDWARE RELATED
 const uint Encoder_pin = 19; // ENCODER PINOUT
 const uint LINKID = 3; // LINK ID
-int anglemapmax = 60;
+unsigned int encoded_angle;
 volatile float dxlangle = 150;
 volatile float dxl_angle_read;
 volatile bool updated;
@@ -68,8 +68,9 @@ void CAN(){ //update CAN
 }
 
 void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
-  unsigned int encoded_angle = (int) cmd.buf[LINKID];
+  encoded_angle = (int) cmd.buf[LINKID];
   dxlangle = (((float) encoded_angle * 120)/255) - 60 + 150; //scale the angle back into range, and add 150 to calibrate to dxls
+  fb_msg.buf[5] = encoded_angle;
 }
 
 void read_ENC() { //read the encoder and write angle to DXL (if new one has been recv'd)

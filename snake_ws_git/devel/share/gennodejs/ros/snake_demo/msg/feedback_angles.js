@@ -19,16 +19,21 @@ class feedback_angles {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
       this.timestamp = null;
-      this.sea_angle1 = null;
-      this.sea_angle2 = null;
-      this.sea_angle3 = null;
-      this.sea_angle4 = null;
-      this.sea_angle5 = null;
+      this.enc_angle1 = null;
+      this.enc_angle2 = null;
+      this.enc_angle3 = null;
+      this.enc_angle4 = null;
+      this.enc_angle5 = null;
       this.dxl_angle1 = null;
       this.dxl_angle2 = null;
       this.dxl_angle3 = null;
       this.dxl_angle4 = null;
       this.dxl_angle5 = null;
+      this.cmd_angle1 = null;
+      this.cmd_angle2 = null;
+      this.cmd_angle3 = null;
+      this.cmd_angle4 = null;
+      this.cmd_angle5 = null;
     }
     else {
       if (initObj.hasOwnProperty('timestamp')) {
@@ -37,35 +42,35 @@ class feedback_angles {
       else {
         this.timestamp = 0;
       }
-      if (initObj.hasOwnProperty('sea_angle1')) {
-        this.sea_angle1 = initObj.sea_angle1
+      if (initObj.hasOwnProperty('enc_angle1')) {
+        this.enc_angle1 = initObj.enc_angle1
       }
       else {
-        this.sea_angle1 = 0.0;
+        this.enc_angle1 = 0.0;
       }
-      if (initObj.hasOwnProperty('sea_angle2')) {
-        this.sea_angle2 = initObj.sea_angle2
-      }
-      else {
-        this.sea_angle2 = 0.0;
-      }
-      if (initObj.hasOwnProperty('sea_angle3')) {
-        this.sea_angle3 = initObj.sea_angle3
+      if (initObj.hasOwnProperty('enc_angle2')) {
+        this.enc_angle2 = initObj.enc_angle2
       }
       else {
-        this.sea_angle3 = 0.0;
+        this.enc_angle2 = 0.0;
       }
-      if (initObj.hasOwnProperty('sea_angle4')) {
-        this.sea_angle4 = initObj.sea_angle4
-      }
-      else {
-        this.sea_angle4 = 0.0;
-      }
-      if (initObj.hasOwnProperty('sea_angle5')) {
-        this.sea_angle5 = initObj.sea_angle5
+      if (initObj.hasOwnProperty('enc_angle3')) {
+        this.enc_angle3 = initObj.enc_angle3
       }
       else {
-        this.sea_angle5 = 0.0;
+        this.enc_angle3 = 0.0;
+      }
+      if (initObj.hasOwnProperty('enc_angle4')) {
+        this.enc_angle4 = initObj.enc_angle4
+      }
+      else {
+        this.enc_angle4 = 0.0;
+      }
+      if (initObj.hasOwnProperty('enc_angle5')) {
+        this.enc_angle5 = initObj.enc_angle5
+      }
+      else {
+        this.enc_angle5 = 0.0;
       }
       if (initObj.hasOwnProperty('dxl_angle1')) {
         this.dxl_angle1 = initObj.dxl_angle1
@@ -97,6 +102,36 @@ class feedback_angles {
       else {
         this.dxl_angle5 = 0.0;
       }
+      if (initObj.hasOwnProperty('cmd_angle1')) {
+        this.cmd_angle1 = initObj.cmd_angle1
+      }
+      else {
+        this.cmd_angle1 = 0.0;
+      }
+      if (initObj.hasOwnProperty('cmd_angle2')) {
+        this.cmd_angle2 = initObj.cmd_angle2
+      }
+      else {
+        this.cmd_angle2 = 0.0;
+      }
+      if (initObj.hasOwnProperty('cmd_angle3')) {
+        this.cmd_angle3 = initObj.cmd_angle3
+      }
+      else {
+        this.cmd_angle3 = 0.0;
+      }
+      if (initObj.hasOwnProperty('cmd_angle4')) {
+        this.cmd_angle4 = initObj.cmd_angle4
+      }
+      else {
+        this.cmd_angle4 = 0.0;
+      }
+      if (initObj.hasOwnProperty('cmd_angle5')) {
+        this.cmd_angle5 = initObj.cmd_angle5
+      }
+      else {
+        this.cmd_angle5 = 0.0;
+      }
     }
   }
 
@@ -104,16 +139,16 @@ class feedback_angles {
     // Serializes a message object of type feedback_angles
     // Serialize message field [timestamp]
     bufferOffset = _serializer.uint64(obj.timestamp, buffer, bufferOffset);
-    // Serialize message field [sea_angle1]
-    bufferOffset = _serializer.float32(obj.sea_angle1, buffer, bufferOffset);
-    // Serialize message field [sea_angle2]
-    bufferOffset = _serializer.float32(obj.sea_angle2, buffer, bufferOffset);
-    // Serialize message field [sea_angle3]
-    bufferOffset = _serializer.float32(obj.sea_angle3, buffer, bufferOffset);
-    // Serialize message field [sea_angle4]
-    bufferOffset = _serializer.float32(obj.sea_angle4, buffer, bufferOffset);
-    // Serialize message field [sea_angle5]
-    bufferOffset = _serializer.float32(obj.sea_angle5, buffer, bufferOffset);
+    // Serialize message field [enc_angle1]
+    bufferOffset = _serializer.float32(obj.enc_angle1, buffer, bufferOffset);
+    // Serialize message field [enc_angle2]
+    bufferOffset = _serializer.float32(obj.enc_angle2, buffer, bufferOffset);
+    // Serialize message field [enc_angle3]
+    bufferOffset = _serializer.float32(obj.enc_angle3, buffer, bufferOffset);
+    // Serialize message field [enc_angle4]
+    bufferOffset = _serializer.float32(obj.enc_angle4, buffer, bufferOffset);
+    // Serialize message field [enc_angle5]
+    bufferOffset = _serializer.float32(obj.enc_angle5, buffer, bufferOffset);
     // Serialize message field [dxl_angle1]
     bufferOffset = _serializer.float32(obj.dxl_angle1, buffer, bufferOffset);
     // Serialize message field [dxl_angle2]
@@ -124,6 +159,16 @@ class feedback_angles {
     bufferOffset = _serializer.float32(obj.dxl_angle4, buffer, bufferOffset);
     // Serialize message field [dxl_angle5]
     bufferOffset = _serializer.float32(obj.dxl_angle5, buffer, bufferOffset);
+    // Serialize message field [cmd_angle1]
+    bufferOffset = _serializer.float32(obj.cmd_angle1, buffer, bufferOffset);
+    // Serialize message field [cmd_angle2]
+    bufferOffset = _serializer.float32(obj.cmd_angle2, buffer, bufferOffset);
+    // Serialize message field [cmd_angle3]
+    bufferOffset = _serializer.float32(obj.cmd_angle3, buffer, bufferOffset);
+    // Serialize message field [cmd_angle4]
+    bufferOffset = _serializer.float32(obj.cmd_angle4, buffer, bufferOffset);
+    // Serialize message field [cmd_angle5]
+    bufferOffset = _serializer.float32(obj.cmd_angle5, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -133,16 +178,16 @@ class feedback_angles {
     let data = new feedback_angles(null);
     // Deserialize message field [timestamp]
     data.timestamp = _deserializer.uint64(buffer, bufferOffset);
-    // Deserialize message field [sea_angle1]
-    data.sea_angle1 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [sea_angle2]
-    data.sea_angle2 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [sea_angle3]
-    data.sea_angle3 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [sea_angle4]
-    data.sea_angle4 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [sea_angle5]
-    data.sea_angle5 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [enc_angle1]
+    data.enc_angle1 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [enc_angle2]
+    data.enc_angle2 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [enc_angle3]
+    data.enc_angle3 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [enc_angle4]
+    data.enc_angle4 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [enc_angle5]
+    data.enc_angle5 = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [dxl_angle1]
     data.dxl_angle1 = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [dxl_angle2]
@@ -153,11 +198,21 @@ class feedback_angles {
     data.dxl_angle4 = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [dxl_angle5]
     data.dxl_angle5 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [cmd_angle1]
+    data.cmd_angle1 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [cmd_angle2]
+    data.cmd_angle2 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [cmd_angle3]
+    data.cmd_angle3 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [cmd_angle4]
+    data.cmd_angle4 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [cmd_angle5]
+    data.cmd_angle5 = _deserializer.float32(buffer, bufferOffset);
     return data;
   }
 
   static getMessageSize(object) {
-    return 48;
+    return 68;
   }
 
   static datatype() {
@@ -167,24 +222,28 @@ class feedback_angles {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '2e66b029179d9b1560650234dca943c0';
+    return 'de147108c73c5ee162b8e21c32f2c9e6';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
     uint64 timestamp
-    float32 sea_angle1
-    float32 sea_angle2
-    float32 sea_angle3
-    float32 sea_angle4
-    float32 sea_angle5
+    float32 enc_angle1
+    float32 enc_angle2
+    float32 enc_angle3
+    float32 enc_angle4
+    float32 enc_angle5
     float32 dxl_angle1
     float32 dxl_angle2
     float32 dxl_angle3
     float32 dxl_angle4
     float32 dxl_angle5
-    
+    float32 cmd_angle1
+    float32 cmd_angle2
+    float32 cmd_angle3
+    float32 cmd_angle4
+    float32 cmd_angle5
     
     `;
   }
@@ -202,39 +261,39 @@ class feedback_angles {
       resolved.timestamp = 0
     }
 
-    if (msg.sea_angle1 !== undefined) {
-      resolved.sea_angle1 = msg.sea_angle1;
+    if (msg.enc_angle1 !== undefined) {
+      resolved.enc_angle1 = msg.enc_angle1;
     }
     else {
-      resolved.sea_angle1 = 0.0
+      resolved.enc_angle1 = 0.0
     }
 
-    if (msg.sea_angle2 !== undefined) {
-      resolved.sea_angle2 = msg.sea_angle2;
+    if (msg.enc_angle2 !== undefined) {
+      resolved.enc_angle2 = msg.enc_angle2;
     }
     else {
-      resolved.sea_angle2 = 0.0
+      resolved.enc_angle2 = 0.0
     }
 
-    if (msg.sea_angle3 !== undefined) {
-      resolved.sea_angle3 = msg.sea_angle3;
+    if (msg.enc_angle3 !== undefined) {
+      resolved.enc_angle3 = msg.enc_angle3;
     }
     else {
-      resolved.sea_angle3 = 0.0
+      resolved.enc_angle3 = 0.0
     }
 
-    if (msg.sea_angle4 !== undefined) {
-      resolved.sea_angle4 = msg.sea_angle4;
+    if (msg.enc_angle4 !== undefined) {
+      resolved.enc_angle4 = msg.enc_angle4;
     }
     else {
-      resolved.sea_angle4 = 0.0
+      resolved.enc_angle4 = 0.0
     }
 
-    if (msg.sea_angle5 !== undefined) {
-      resolved.sea_angle5 = msg.sea_angle5;
+    if (msg.enc_angle5 !== undefined) {
+      resolved.enc_angle5 = msg.enc_angle5;
     }
     else {
-      resolved.sea_angle5 = 0.0
+      resolved.enc_angle5 = 0.0
     }
 
     if (msg.dxl_angle1 !== undefined) {
@@ -270,6 +329,41 @@ class feedback_angles {
     }
     else {
       resolved.dxl_angle5 = 0.0
+    }
+
+    if (msg.cmd_angle1 !== undefined) {
+      resolved.cmd_angle1 = msg.cmd_angle1;
+    }
+    else {
+      resolved.cmd_angle1 = 0.0
+    }
+
+    if (msg.cmd_angle2 !== undefined) {
+      resolved.cmd_angle2 = msg.cmd_angle2;
+    }
+    else {
+      resolved.cmd_angle2 = 0.0
+    }
+
+    if (msg.cmd_angle3 !== undefined) {
+      resolved.cmd_angle3 = msg.cmd_angle3;
+    }
+    else {
+      resolved.cmd_angle3 = 0.0
+    }
+
+    if (msg.cmd_angle4 !== undefined) {
+      resolved.cmd_angle4 = msg.cmd_angle4;
+    }
+    else {
+      resolved.cmd_angle4 = 0.0
+    }
+
+    if (msg.cmd_angle5 !== undefined) {
+      resolved.cmd_angle5 = msg.cmd_angle5;
+    }
+    else {
+      resolved.cmd_angle5 = 0.0
     }
 
     return resolved;

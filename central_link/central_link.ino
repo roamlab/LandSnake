@@ -114,22 +114,27 @@ void UpdateFeedbackArray(const CAN_message_t &fb_msg) { //update feedback angle 
     
     unsigned short decoded_enc = ((unsigned short)fb_msg.buf[2]<<8)|fb_msg.buf[1];
     unsigned short decoded_dxl = ((unsigned short)fb_msg.buf[4]<<8)|fb_msg.buf[3];
+    unsigned int encoded_command = (int) fb_msg.buf[5];
 
     float enc_angle = (((float)decoded_enc*120)/65535) - 60;
     float dxl_angle = (((float)decoded_dxl*120)/65535) - 60;
+    float cmd_angle = (((float) encoded_command * 120)/255) - 60;
 
     switch (i) {
       case 1:
         feedback_angles.enc_angle1 = enc_angle;
         feedback_angles.dxl_angle1 = dxl_angle;
+        feedback_angles.cmd_angle1 = cmd_angle;
         break;
       case 2:
         feedback_angles.enc_angle2 = enc_angle;
         feedback_angles.dxl_angle2 = dxl_angle;
+        feedback_angles.cmd_angle2 = cmd_angle;
         break;
       case 3:
         feedback_angles.enc_angle3 = enc_angle;
         feedback_angles.dxl_angle3 = dxl_angle;
+        feedback_angles.cmd_angle3 = cmd_angle;
         break;
     }
 

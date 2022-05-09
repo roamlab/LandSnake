@@ -8,24 +8,28 @@ import struct
 
 
 class feedback_angles(genpy.Message):
-  _md5sum = "2e66b029179d9b1560650234dca943c0"
+  _md5sum = "de147108c73c5ee162b8e21c32f2c9e6"
   _type = "snake_demo/feedback_angles"
   _has_header = False  # flag to mark the presence of a Header object
   _full_text = """uint64 timestamp
-float32 sea_angle1
-float32 sea_angle2
-float32 sea_angle3
-float32 sea_angle4
-float32 sea_angle5
+float32 enc_angle1
+float32 enc_angle2
+float32 enc_angle3
+float32 enc_angle4
+float32 enc_angle5
 float32 dxl_angle1
 float32 dxl_angle2
 float32 dxl_angle3
 float32 dxl_angle4
 float32 dxl_angle5
-
+float32 cmd_angle1
+float32 cmd_angle2
+float32 cmd_angle3
+float32 cmd_angle4
+float32 cmd_angle5
 """
-  __slots__ = ['timestamp','sea_angle1','sea_angle2','sea_angle3','sea_angle4','sea_angle5','dxl_angle1','dxl_angle2','dxl_angle3','dxl_angle4','dxl_angle5']
-  _slot_types = ['uint64','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32']
+  __slots__ = ['timestamp','enc_angle1','enc_angle2','enc_angle3','enc_angle4','enc_angle5','dxl_angle1','dxl_angle2','dxl_angle3','dxl_angle4','dxl_angle5','cmd_angle1','cmd_angle2','cmd_angle3','cmd_angle4','cmd_angle5']
+  _slot_types = ['uint64','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32']
 
   def __init__(self, *args, **kwds):
     """
@@ -35,7 +39,7 @@ float32 dxl_angle5
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       timestamp,sea_angle1,sea_angle2,sea_angle3,sea_angle4,sea_angle5,dxl_angle1,dxl_angle2,dxl_angle3,dxl_angle4,dxl_angle5
+       timestamp,enc_angle1,enc_angle2,enc_angle3,enc_angle4,enc_angle5,dxl_angle1,dxl_angle2,dxl_angle3,dxl_angle4,dxl_angle5,cmd_angle1,cmd_angle2,cmd_angle3,cmd_angle4,cmd_angle5
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -46,16 +50,16 @@ float32 dxl_angle5
       # message fields cannot be None, assign default values for those that are
       if self.timestamp is None:
         self.timestamp = 0
-      if self.sea_angle1 is None:
-        self.sea_angle1 = 0.
-      if self.sea_angle2 is None:
-        self.sea_angle2 = 0.
-      if self.sea_angle3 is None:
-        self.sea_angle3 = 0.
-      if self.sea_angle4 is None:
-        self.sea_angle4 = 0.
-      if self.sea_angle5 is None:
-        self.sea_angle5 = 0.
+      if self.enc_angle1 is None:
+        self.enc_angle1 = 0.
+      if self.enc_angle2 is None:
+        self.enc_angle2 = 0.
+      if self.enc_angle3 is None:
+        self.enc_angle3 = 0.
+      if self.enc_angle4 is None:
+        self.enc_angle4 = 0.
+      if self.enc_angle5 is None:
+        self.enc_angle5 = 0.
       if self.dxl_angle1 is None:
         self.dxl_angle1 = 0.
       if self.dxl_angle2 is None:
@@ -66,18 +70,33 @@ float32 dxl_angle5
         self.dxl_angle4 = 0.
       if self.dxl_angle5 is None:
         self.dxl_angle5 = 0.
+      if self.cmd_angle1 is None:
+        self.cmd_angle1 = 0.
+      if self.cmd_angle2 is None:
+        self.cmd_angle2 = 0.
+      if self.cmd_angle3 is None:
+        self.cmd_angle3 = 0.
+      if self.cmd_angle4 is None:
+        self.cmd_angle4 = 0.
+      if self.cmd_angle5 is None:
+        self.cmd_angle5 = 0.
     else:
       self.timestamp = 0
-      self.sea_angle1 = 0.
-      self.sea_angle2 = 0.
-      self.sea_angle3 = 0.
-      self.sea_angle4 = 0.
-      self.sea_angle5 = 0.
+      self.enc_angle1 = 0.
+      self.enc_angle2 = 0.
+      self.enc_angle3 = 0.
+      self.enc_angle4 = 0.
+      self.enc_angle5 = 0.
       self.dxl_angle1 = 0.
       self.dxl_angle2 = 0.
       self.dxl_angle3 = 0.
       self.dxl_angle4 = 0.
       self.dxl_angle5 = 0.
+      self.cmd_angle1 = 0.
+      self.cmd_angle2 = 0.
+      self.cmd_angle3 = 0.
+      self.cmd_angle4 = 0.
+      self.cmd_angle5 = 0.
 
   def _get_types(self):
     """
@@ -92,7 +111,7 @@ float32 dxl_angle5
     """
     try:
       _x = self
-      buff.write(_get_struct_Q10f().pack(_x.timestamp, _x.sea_angle1, _x.sea_angle2, _x.sea_angle3, _x.sea_angle4, _x.sea_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5))
+      buff.write(_get_struct_Q15f().pack(_x.timestamp, _x.enc_angle1, _x.enc_angle2, _x.enc_angle3, _x.enc_angle4, _x.enc_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5, _x.cmd_angle1, _x.cmd_angle2, _x.cmd_angle3, _x.cmd_angle4, _x.cmd_angle5))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -107,8 +126,8 @@ float32 dxl_angle5
       end = 0
       _x = self
       start = end
-      end += 48
-      (_x.timestamp, _x.sea_angle1, _x.sea_angle2, _x.sea_angle3, _x.sea_angle4, _x.sea_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5,) = _get_struct_Q10f().unpack(str[start:end])
+      end += 68
+      (_x.timestamp, _x.enc_angle1, _x.enc_angle2, _x.enc_angle3, _x.enc_angle4, _x.enc_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5, _x.cmd_angle1, _x.cmd_angle2, _x.cmd_angle3, _x.cmd_angle4, _x.cmd_angle5,) = _get_struct_Q15f().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -122,7 +141,7 @@ float32 dxl_angle5
     """
     try:
       _x = self
-      buff.write(_get_struct_Q10f().pack(_x.timestamp, _x.sea_angle1, _x.sea_angle2, _x.sea_angle3, _x.sea_angle4, _x.sea_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5))
+      buff.write(_get_struct_Q15f().pack(_x.timestamp, _x.enc_angle1, _x.enc_angle2, _x.enc_angle3, _x.enc_angle4, _x.enc_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5, _x.cmd_angle1, _x.cmd_angle2, _x.cmd_angle3, _x.cmd_angle4, _x.cmd_angle5))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -138,8 +157,8 @@ float32 dxl_angle5
       end = 0
       _x = self
       start = end
-      end += 48
-      (_x.timestamp, _x.sea_angle1, _x.sea_angle2, _x.sea_angle3, _x.sea_angle4, _x.sea_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5,) = _get_struct_Q10f().unpack(str[start:end])
+      end += 68
+      (_x.timestamp, _x.enc_angle1, _x.enc_angle2, _x.enc_angle3, _x.enc_angle4, _x.enc_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5, _x.cmd_angle1, _x.cmd_angle2, _x.cmd_angle3, _x.cmd_angle4, _x.cmd_angle5,) = _get_struct_Q15f().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -148,9 +167,9 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_Q10f = None
-def _get_struct_Q10f():
-    global _struct_Q10f
-    if _struct_Q10f is None:
-        _struct_Q10f = struct.Struct("<Q10f")
-    return _struct_Q10f
+_struct_Q15f = None
+def _get_struct_Q15f():
+    global _struct_Q15f
+    if _struct_Q15f is None:
+        _struct_Q15f = struct.Struct("<Q15f")
+    return _struct_Q15f

@@ -9,4 +9,8 @@ float32 dxl_angle2
 float32 dxl_angle3
 float32 dxl_angle4
 float32 dxl_angle5
-
+float32 cmd_angle1
+float32 cmd_angle2
+float32 cmd_angle3
+float32 cmd_angle4
+float32 cmd_angle5
