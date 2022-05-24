@@ -12,7 +12,7 @@ using namespace ControlTableItem; // DXL CONTROL TABLE
 
 // HARDWARE RELATED
 const uint Encoder_pin = 19; // ENCODER PINOUT
-const uint LINKID = 3; // LINK ID
+const uint LINKID = 1; // LINK ID
 unsigned int encoded_angle;
 volatile float dxlangle = 150;
 volatile float dxl_angle_read;
@@ -47,6 +47,9 @@ void setup() {
   dxl.writeControlTableItem(CW_COMPLIANCE_MARGIN, DXL_ID, 1);
   dxl.writeControlTableItem(CCW_COMPLIANCE_MARGIN, DXL_ID, 1);
   dxl.writeControlTableItem(RETURN_DELAY_TIME, DXL_ID, 0);
+  dxl.writeControlTableItem(CW_COMPLIANCE_SLOPE, DXL_ID, 128);
+  dxl.writeControlTableItem(CCW_COMPLIANCE_SLOPE, DXL_ID, 128);
+  dxl.writeControlTableItem(VELOCITY_LIMIT, DXL_ID,1000); 
   dxl.torqueOn(DXL_ID);
   Can0.begin(); // BEGIN CAN0
   Can0.setBaudRate(1000000); // SET BAUDRATE
@@ -68,6 +71,7 @@ void CAN(){ //update CAN
 }
 
 void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
+  updated = true;
   encoded_angle = (int) cmd.buf[LINKID];
   dxlangle = (((float) encoded_angle * 120)/255) - 60 + 150; //scale the angle back into range, and add 150 to calibrate to dxls
   fb_msg.buf[5] = encoded_angle;
@@ -85,12 +89,15 @@ void read_ENC() { //read the encoder and write angle to DXL (if new one has been
 }
 
 void write_DXL(){
-    dxl.setGoalPosition(DXL_ID, (dxl_angle_read+150) + (dxlangle-(dxl_angle_read+150))*0.6 ,UNIT_DEGREE);
+   if(updated){
+    dxl.setGoalPosition(DXL_ID, dxlangle ,UNIT_DEGREE);
+    updated = false;
+   }
 }
 
 
 void read_DXL() { //read dynamixel angle
-  dxl_angle_read = (float) dxl.getPresentPosition(DXL_ID, UNIT_DEGREE) - 150; //PRESENT POSITION OF DXL
+  dxl_angle_read = ((float) dxl.getPresentPosition(DXL_ID, UNIT_DEGREE)) - 150; //PRESENT POSITION OF DXL
   //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of info)
   unsigned short dxl_angle_mapped = (unsigned short) ((dxl_angle_read + 60) * (65535)/120);
   unsigned char c1 = dxl_angle_mapped & 0xFF;
