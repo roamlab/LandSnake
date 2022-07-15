@@ -34,6 +34,16 @@ class feedback_angles {
       this.cmd_angle3 = null;
       this.cmd_angle4 = null;
       this.cmd_angle5 = null;
+      this.xvel1 = null;
+      this.yvel1 = null;
+      this.xvel2 = null;
+      this.yvel2 = null;
+      this.xvel3 = null;
+      this.yvel3 = null;
+      this.xvel4 = null;
+      this.yvel4 = null;
+      this.xvel5 = null;
+      this.yvel5 = null;
     }
     else {
       if (initObj.hasOwnProperty('timestamp')) {
@@ -132,6 +142,66 @@ class feedback_angles {
       else {
         this.cmd_angle5 = 0.0;
       }
+      if (initObj.hasOwnProperty('xvel1')) {
+        this.xvel1 = initObj.xvel1
+      }
+      else {
+        this.xvel1 = 0;
+      }
+      if (initObj.hasOwnProperty('yvel1')) {
+        this.yvel1 = initObj.yvel1
+      }
+      else {
+        this.yvel1 = 0;
+      }
+      if (initObj.hasOwnProperty('xvel2')) {
+        this.xvel2 = initObj.xvel2
+      }
+      else {
+        this.xvel2 = 0;
+      }
+      if (initObj.hasOwnProperty('yvel2')) {
+        this.yvel2 = initObj.yvel2
+      }
+      else {
+        this.yvel2 = 0;
+      }
+      if (initObj.hasOwnProperty('xvel3')) {
+        this.xvel3 = initObj.xvel3
+      }
+      else {
+        this.xvel3 = 0;
+      }
+      if (initObj.hasOwnProperty('yvel3')) {
+        this.yvel3 = initObj.yvel3
+      }
+      else {
+        this.yvel3 = 0;
+      }
+      if (initObj.hasOwnProperty('xvel4')) {
+        this.xvel4 = initObj.xvel4
+      }
+      else {
+        this.xvel4 = 0;
+      }
+      if (initObj.hasOwnProperty('yvel4')) {
+        this.yvel4 = initObj.yvel4
+      }
+      else {
+        this.yvel4 = 0;
+      }
+      if (initObj.hasOwnProperty('xvel5')) {
+        this.xvel5 = initObj.xvel5
+      }
+      else {
+        this.xvel5 = 0;
+      }
+      if (initObj.hasOwnProperty('yvel5')) {
+        this.yvel5 = initObj.yvel5
+      }
+      else {
+        this.yvel5 = 0;
+      }
     }
   }
 
@@ -169,6 +239,26 @@ class feedback_angles {
     bufferOffset = _serializer.float32(obj.cmd_angle4, buffer, bufferOffset);
     // Serialize message field [cmd_angle5]
     bufferOffset = _serializer.float32(obj.cmd_angle5, buffer, bufferOffset);
+    // Serialize message field [xvel1]
+    bufferOffset = _serializer.int16(obj.xvel1, buffer, bufferOffset);
+    // Serialize message field [yvel1]
+    bufferOffset = _serializer.int16(obj.yvel1, buffer, bufferOffset);
+    // Serialize message field [xvel2]
+    bufferOffset = _serializer.int16(obj.xvel2, buffer, bufferOffset);
+    // Serialize message field [yvel2]
+    bufferOffset = _serializer.int16(obj.yvel2, buffer, bufferOffset);
+    // Serialize message field [xvel3]
+    bufferOffset = _serializer.int16(obj.xvel3, buffer, bufferOffset);
+    // Serialize message field [yvel3]
+    bufferOffset = _serializer.int16(obj.yvel3, buffer, bufferOffset);
+    // Serialize message field [xvel4]
+    bufferOffset = _serializer.int16(obj.xvel4, buffer, bufferOffset);
+    // Serialize message field [yvel4]
+    bufferOffset = _serializer.int16(obj.yvel4, buffer, bufferOffset);
+    // Serialize message field [xvel5]
+    bufferOffset = _serializer.int16(obj.xvel5, buffer, bufferOffset);
+    // Serialize message field [yvel5]
+    bufferOffset = _serializer.int16(obj.yvel5, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -208,11 +298,31 @@ class feedback_angles {
     data.cmd_angle4 = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [cmd_angle5]
     data.cmd_angle5 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [xvel1]
+    data.xvel1 = _deserializer.int16(buffer, bufferOffset);
+    // Deserialize message field [yvel1]
+    data.yvel1 = _deserializer.int16(buffer, bufferOffset);
+    // Deserialize message field [xvel2]
+    data.xvel2 = _deserializer.int16(buffer, bufferOffset);
+    // Deserialize message field [yvel2]
+    data.yvel2 = _deserializer.int16(buffer, bufferOffset);
+    // Deserialize message field [xvel3]
+    data.xvel3 = _deserializer.int16(buffer, bufferOffset);
+    // Deserialize message field [yvel3]
+    data.yvel3 = _deserializer.int16(buffer, bufferOffset);
+    // Deserialize message field [xvel4]
+    data.xvel4 = _deserializer.int16(buffer, bufferOffset);
+    // Deserialize message field [yvel4]
+    data.yvel4 = _deserializer.int16(buffer, bufferOffset);
+    // Deserialize message field [xvel5]
+    data.xvel5 = _deserializer.int16(buffer, bufferOffset);
+    // Deserialize message field [yvel5]
+    data.yvel5 = _deserializer.int16(buffer, bufferOffset);
     return data;
   }
 
   static getMessageSize(object) {
-    return 68;
+    return 88;
   }
 
   static datatype() {
@@ -222,7 +332,7 @@ class feedback_angles {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return 'de147108c73c5ee162b8e21c32f2c9e6';
+    return '398a4320accb356b44c73b5b07d88507';
   }
 
   static messageDefinition() {
@@ -244,7 +354,16 @@ class feedback_angles {
     float32 cmd_angle3
     float32 cmd_angle4
     float32 cmd_angle5
-    
+    int16 xvel1
+    int16 yvel1
+    int16 xvel2
+    int16 yvel2
+    int16 xvel3
+    int16 yvel3
+    int16 xvel4
+    int16 yvel4
+    int16 xvel5
+    int16 yvel5
     
     `;
   }
@@ -365,6 +484,76 @@ class feedback_angles {
     }
     else {
       resolved.cmd_angle5 = 0.0
+    }
+
+    if (msg.xvel1 !== undefined) {
+      resolved.xvel1 = msg.xvel1;
+    }
+    else {
+      resolved.xvel1 = 0
+    }
+
+    if (msg.yvel1 !== undefined) {
+      resolved.yvel1 = msg.yvel1;
+    }
+    else {
+      resolved.yvel1 = 0
+    }
+
+    if (msg.xvel2 !== undefined) {
+      resolved.xvel2 = msg.xvel2;
+    }
+    else {
+      resolved.xvel2 = 0
+    }
+
+    if (msg.yvel2 !== undefined) {
+      resolved.yvel2 = msg.yvel2;
+    }
+    else {
+      resolved.yvel2 = 0
+    }
+
+    if (msg.xvel3 !== undefined) {
+      resolved.xvel3 = msg.xvel3;
+    }
+    else {
+      resolved.xvel3 = 0
+    }
+
+    if (msg.yvel3 !== undefined) {
+      resolved.yvel3 = msg.yvel3;
+    }
+    else {
+      resolved.yvel3 = 0
+    }
+
+    if (msg.xvel4 !== undefined) {
+      resolved.xvel4 = msg.xvel4;
+    }
+    else {
+      resolved.xvel4 = 0
+    }
+
+    if (msg.yvel4 !== undefined) {
+      resolved.yvel4 = msg.yvel4;
+    }
+    else {
+      resolved.yvel4 = 0
+    }
+
+    if (msg.xvel5 !== undefined) {
+      resolved.xvel5 = msg.xvel5;
+    }
+    else {
+      resolved.xvel5 = 0
+    }
+
+    if (msg.yvel5 !== undefined) {
+      resolved.yvel5 = msg.yvel5;
+    }
+    else {
+      resolved.yvel5 = 0
     }
 
     return resolved;

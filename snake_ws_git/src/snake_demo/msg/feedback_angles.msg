@@ -14,4 +14,13 @@ float32 cmd_angle2
 float32 cmd_angle3
 float32 cmd_angle4
 float32 cmd_angle5
-
+int16 xvel1
+int16 yvel1
+int16 xvel2
+int16 yvel2
+int16 xvel3
+int16 yvel3
+int16 xvel4
+int16 yvel4
+int16 xvel5
+int16 yvel5

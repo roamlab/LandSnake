@@ -31,4 +31,24 @@
           CMD_ANGLE4
           CMD_ANGLE5-VAL
           CMD_ANGLE5
+          XVEL1-VAL
+          XVEL1
+          YVEL1-VAL
+          YVEL1
+          XVEL2-VAL
+          XVEL2
+          YVEL2-VAL
+          YVEL2
+          XVEL3-VAL
+          XVEL3
+          YVEL3-VAL
+          YVEL3
+          XVEL4-VAL
+          XVEL4
+          YVEL4-VAL
+          YVEL4
+          XVEL5-VAL
+          XVEL5
+          YVEL5-VAL
+          YVEL5
 ))

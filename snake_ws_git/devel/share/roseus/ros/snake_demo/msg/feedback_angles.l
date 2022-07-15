@@ -14,7 +14,7 @@
 
 (defclass snake_demo::feedback_angles
   :super ros::object
-  :slots (_timestamp _enc_angle1 _enc_angle2 _enc_angle3 _enc_angle4 _enc_angle5 _dxl_angle1 _dxl_angle2 _dxl_angle3 _dxl_angle4 _dxl_angle5 _cmd_angle1 _cmd_angle2 _cmd_angle3 _cmd_angle4 _cmd_angle5 ))
+  :slots (_timestamp _enc_angle1 _enc_angle2 _enc_angle3 _enc_angle4 _enc_angle5 _dxl_angle1 _dxl_angle2 _dxl_angle3 _dxl_angle4 _dxl_angle5 _cmd_angle1 _cmd_angle2 _cmd_angle3 _cmd_angle4 _cmd_angle5 _xvel1 _yvel1 _xvel2 _yvel2 _xvel3 _yvel3 _xvel4 _yvel4 _xvel5 _yvel5 ))
 
 (defmethod snake_demo::feedback_angles
   (:init
@@ -35,6 +35,16 @@
     ((:cmd_angle3 __cmd_angle3) 0.0)
     ((:cmd_angle4 __cmd_angle4) 0.0)
     ((:cmd_angle5 __cmd_angle5) 0.0)
+    ((:xvel1 __xvel1) 0)
+    ((:yvel1 __yvel1) 0)
+    ((:xvel2 __xvel2) 0)
+    ((:yvel2 __yvel2) 0)
+    ((:xvel3 __xvel3) 0)
+    ((:yvel3 __yvel3) 0)
+    ((:xvel4 __xvel4) 0)
+    ((:yvel4 __yvel4) 0)
+    ((:xvel5 __xvel5) 0)
+    ((:yvel5 __yvel5) 0)
     )
    (send-super :init)
    (setq _timestamp (round __timestamp))
@@ -53,6 +63,16 @@
    (setq _cmd_angle3 (float __cmd_angle3))
    (setq _cmd_angle4 (float __cmd_angle4))
    (setq _cmd_angle5 (float __cmd_angle5))
+   (setq _xvel1 (round __xvel1))
+   (setq _yvel1 (round __yvel1))
+   (setq _xvel2 (round __xvel2))
+   (setq _yvel2 (round __yvel2))
+   (setq _xvel3 (round __xvel3))
+   (setq _yvel3 (round __yvel3))
+   (setq _xvel4 (round __xvel4))
+   (setq _yvel4 (round __yvel4))
+   (setq _xvel5 (round __xvel5))
+   (setq _yvel5 (round __yvel5))
    self)
   (:timestamp
    (&optional __timestamp)
@@ -102,6 +122,36 @@
   (:cmd_angle5
    (&optional __cmd_angle5)
    (if __cmd_angle5 (setq _cmd_angle5 __cmd_angle5)) _cmd_angle5)
+  (:xvel1
+   (&optional __xvel1)
+   (if __xvel1 (setq _xvel1 __xvel1)) _xvel1)
+  (:yvel1
+   (&optional __yvel1)
+   (if __yvel1 (setq _yvel1 __yvel1)) _yvel1)
+  (:xvel2
+   (&optional __xvel2)
+   (if __xvel2 (setq _xvel2 __xvel2)) _xvel2)
+  (:yvel2
+   (&optional __yvel2)
+   (if __yvel2 (setq _yvel2 __yvel2)) _yvel2)
+  (:xvel3
+   (&optional __xvel3)
+   (if __xvel3 (setq _xvel3 __xvel3)) _xvel3)
+  (:yvel3
+   (&optional __yvel3)
+   (if __yvel3 (setq _yvel3 __yvel3)) _yvel3)
+  (:xvel4
+   (&optional __xvel4)
+   (if __xvel4 (setq _xvel4 __xvel4)) _xvel4)
+  (:yvel4
+   (&optional __yvel4)
+   (if __yvel4 (setq _yvel4 __yvel4)) _yvel4)
+  (:xvel5
+   (&optional __xvel5)
+   (if __xvel5 (setq _xvel5 __xvel5)) _xvel5)
+  (:yvel5
+   (&optional __yvel5)
+   (if __yvel5 (setq _yvel5 __yvel5)) _yvel5)
   (:serialization-length
    ()
    (+
@@ -137,6 +187,26 @@
     4
     ;; float32 _cmd_angle5
     4
+    ;; int16 _xvel1
+    2
+    ;; int16 _yvel1
+    2
+    ;; int16 _xvel2
+    2
+    ;; int16 _yvel2
+    2
+    ;; int16 _xvel3
+    2
+    ;; int16 _yvel3
+    2
+    ;; int16 _xvel4
+    2
+    ;; int16 _yvel4
+    2
+    ;; int16 _xvel5
+    2
+    ;; int16 _yvel5
+    2
     ))
   (:serialize
    (&optional strm)
@@ -184,6 +254,26 @@
        (sys::poke _cmd_angle4 (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
      ;; float32 _cmd_angle5
        (sys::poke _cmd_angle5 (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+     ;; int16 _xvel1
+       (write-word _xvel1 s)
+     ;; int16 _yvel1
+       (write-word _yvel1 s)
+     ;; int16 _xvel2
+       (write-word _xvel2 s)
+     ;; int16 _yvel2
+       (write-word _yvel2 s)
+     ;; int16 _xvel3
+       (write-word _xvel3 s)
+     ;; int16 _yvel3
+       (write-word _yvel3 s)
+     ;; int16 _xvel4
+       (write-word _xvel4 s)
+     ;; int16 _yvel4
+       (write-word _yvel4 s)
+     ;; int16 _xvel5
+       (write-word _xvel5 s)
+     ;; int16 _yvel5
+       (write-word _yvel5 s)
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
@@ -231,11 +321,31 @@
      (setq _cmd_angle4 (sys::peek buf ptr- :float)) (incf ptr- 4)
    ;; float32 _cmd_angle5
      (setq _cmd_angle5 (sys::peek buf ptr- :float)) (incf ptr- 4)
+   ;; int16 _xvel1
+     (setq _xvel1 (sys::peek buf ptr- :short)) (incf ptr- 2)
+   ;; int16 _yvel1
+     (setq _yvel1 (sys::peek buf ptr- :short)) (incf ptr- 2)
+   ;; int16 _xvel2
+     (setq _xvel2 (sys::peek buf ptr- :short)) (incf ptr- 2)
+   ;; int16 _yvel2
+     (setq _yvel2 (sys::peek buf ptr- :short)) (incf ptr- 2)
+   ;; int16 _xvel3
+     (setq _xvel3 (sys::peek buf ptr- :short)) (incf ptr- 2)
+   ;; int16 _yvel3
+     (setq _yvel3 (sys::peek buf ptr- :short)) (incf ptr- 2)
+   ;; int16 _xvel4
+     (setq _xvel4 (sys::peek buf ptr- :short)) (incf ptr- 2)
+   ;; int16 _yvel4
+     (setq _yvel4 (sys::peek buf ptr- :short)) (incf ptr- 2)
+   ;; int16 _xvel5
+     (setq _xvel5 (sys::peek buf ptr- :short)) (incf ptr- 2)
+   ;; int16 _yvel5
+     (setq _yvel5 (sys::peek buf ptr- :short)) (incf ptr- 2)
    ;;
    self)
   )
 
-(setf (get snake_demo::feedback_angles :md5sum-) "de147108c73c5ee162b8e21c32f2c9e6")
+(setf (get snake_demo::feedback_angles :md5sum-) "398a4320accb356b44c73b5b07d88507")
 (setf (get snake_demo::feedback_angles :datatype-) "snake_demo/feedback_angles")
 (setf (get snake_demo::feedback_angles :definition-)
       "uint64 timestamp
@@ -254,12 +364,21 @@ float32 cmd_angle2
 float32 cmd_angle3
 float32 cmd_angle4
 float32 cmd_angle5
-
+int16 xvel1
+int16 yvel1
+int16 xvel2
+int16 yvel2
+int16 xvel3
+int16 yvel3
+int16 xvel4
+int16 yvel4
+int16 xvel5
+int16 yvel5
 
 ")
 
 
 
-(provide :snake_demo/feedback_angles "de147108c73c5ee162b8e21c32f2c9e6")
+(provide :snake_demo/feedback_angles "398a4320accb356b44c73b5b07d88507")
 
 

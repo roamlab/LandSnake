@@ -8,7 +8,7 @@ import struct
 
 
 class feedback_angles(genpy.Message):
-  _md5sum = "de147108c73c5ee162b8e21c32f2c9e6"
+  _md5sum = "398a4320accb356b44c73b5b07d88507"
   _type = "snake_demo/feedback_angles"
   _has_header = False  # flag to mark the presence of a Header object
   _full_text = """uint64 timestamp
@@ -27,10 +27,19 @@ float32 cmd_angle2
 float32 cmd_angle3
 float32 cmd_angle4
 float32 cmd_angle5
-
+int16 xvel1
+int16 yvel1
+int16 xvel2
+int16 yvel2
+int16 xvel3
+int16 yvel3
+int16 xvel4
+int16 yvel4
+int16 xvel5
+int16 yvel5
 """
-  __slots__ = ['timestamp','enc_angle1','enc_angle2','enc_angle3','enc_angle4','enc_angle5','dxl_angle1','dxl_angle2','dxl_angle3','dxl_angle4','dxl_angle5','cmd_angle1','cmd_angle2','cmd_angle3','cmd_angle4','cmd_angle5']
-  _slot_types = ['uint64','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32']
+  __slots__ = ['timestamp','enc_angle1','enc_angle2','enc_angle3','enc_angle4','enc_angle5','dxl_angle1','dxl_angle2','dxl_angle3','dxl_angle4','dxl_angle5','cmd_angle1','cmd_angle2','cmd_angle3','cmd_angle4','cmd_angle5','xvel1','yvel1','xvel2','yvel2','xvel3','yvel3','xvel4','yvel4','xvel5','yvel5']
+  _slot_types = ['uint64','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','int16','int16','int16','int16','int16','int16','int16','int16','int16','int16']
 
   def __init__(self, *args, **kwds):
     """
@@ -40,7 +49,7 @@ float32 cmd_angle5
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       timestamp,enc_angle1,enc_angle2,enc_angle3,enc_angle4,enc_angle5,dxl_angle1,dxl_angle2,dxl_angle3,dxl_angle4,dxl_angle5,cmd_angle1,cmd_angle2,cmd_angle3,cmd_angle4,cmd_angle5
+       timestamp,enc_angle1,enc_angle2,enc_angle3,enc_angle4,enc_angle5,dxl_angle1,dxl_angle2,dxl_angle3,dxl_angle4,dxl_angle5,cmd_angle1,cmd_angle2,cmd_angle3,cmd_angle4,cmd_angle5,xvel1,yvel1,xvel2,yvel2,xvel3,yvel3,xvel4,yvel4,xvel5,yvel5
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -81,6 +90,26 @@ float32 cmd_angle5
         self.cmd_angle4 = 0.
       if self.cmd_angle5 is None:
         self.cmd_angle5 = 0.
+      if self.xvel1 is None:
+        self.xvel1 = 0
+      if self.yvel1 is None:
+        self.yvel1 = 0
+      if self.xvel2 is None:
+        self.xvel2 = 0
+      if self.yvel2 is None:
+        self.yvel2 = 0
+      if self.xvel3 is None:
+        self.xvel3 = 0
+      if self.yvel3 is None:
+        self.yvel3 = 0
+      if self.xvel4 is None:
+        self.xvel4 = 0
+      if self.yvel4 is None:
+        self.yvel4 = 0
+      if self.xvel5 is None:
+        self.xvel5 = 0
+      if self.yvel5 is None:
+        self.yvel5 = 0
     else:
       self.timestamp = 0
       self.enc_angle1 = 0.
@@ -98,6 +127,16 @@ float32 cmd_angle5
       self.cmd_angle3 = 0.
       self.cmd_angle4 = 0.
       self.cmd_angle5 = 0.
+      self.xvel1 = 0
+      self.yvel1 = 0
+      self.xvel2 = 0
+      self.yvel2 = 0
+      self.xvel3 = 0
+      self.yvel3 = 0
+      self.xvel4 = 0
+      self.yvel4 = 0
+      self.xvel5 = 0
+      self.yvel5 = 0
 
   def _get_types(self):
     """
@@ -112,7 +151,7 @@ float32 cmd_angle5
     """
     try:
       _x = self
-      buff.write(_get_struct_Q15f().pack(_x.timestamp, _x.enc_angle1, _x.enc_angle2, _x.enc_angle3, _x.enc_angle4, _x.enc_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5, _x.cmd_angle1, _x.cmd_angle2, _x.cmd_angle3, _x.cmd_angle4, _x.cmd_angle5))
+      buff.write(_get_struct_Q15f10h().pack(_x.timestamp, _x.enc_angle1, _x.enc_angle2, _x.enc_angle3, _x.enc_angle4, _x.enc_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5, _x.cmd_angle1, _x.cmd_angle2, _x.cmd_angle3, _x.cmd_angle4, _x.cmd_angle5, _x.xvel1, _x.yvel1, _x.xvel2, _x.yvel2, _x.xvel3, _x.yvel3, _x.xvel4, _x.yvel4, _x.xvel5, _x.yvel5))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -127,8 +166,8 @@ float32 cmd_angle5
       end = 0
       _x = self
       start = end
-      end += 68
-      (_x.timestamp, _x.enc_angle1, _x.enc_angle2, _x.enc_angle3, _x.enc_angle4, _x.enc_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5, _x.cmd_angle1, _x.cmd_angle2, _x.cmd_angle3, _x.cmd_angle4, _x.cmd_angle5,) = _get_struct_Q15f().unpack(str[start:end])
+      end += 88
+      (_x.timestamp, _x.enc_angle1, _x.enc_angle2, _x.enc_angle3, _x.enc_angle4, _x.enc_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5, _x.cmd_angle1, _x.cmd_angle2, _x.cmd_angle3, _x.cmd_angle4, _x.cmd_angle5, _x.xvel1, _x.yvel1, _x.xvel2, _x.yvel2, _x.xvel3, _x.yvel3, _x.xvel4, _x.yvel4, _x.xvel5, _x.yvel5,) = _get_struct_Q15f10h().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -142,7 +181,7 @@ float32 cmd_angle5
     """
     try:
       _x = self
-      buff.write(_get_struct_Q15f().pack(_x.timestamp, _x.enc_angle1, _x.enc_angle2, _x.enc_angle3, _x.enc_angle4, _x.enc_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5, _x.cmd_angle1, _x.cmd_angle2, _x.cmd_angle3, _x.cmd_angle4, _x.cmd_angle5))
+      buff.write(_get_struct_Q15f10h().pack(_x.timestamp, _x.enc_angle1, _x.enc_angle2, _x.enc_angle3, _x.enc_angle4, _x.enc_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5, _x.cmd_angle1, _x.cmd_angle2, _x.cmd_angle3, _x.cmd_angle4, _x.cmd_angle5, _x.xvel1, _x.yvel1, _x.xvel2, _x.yvel2, _x.xvel3, _x.yvel3, _x.xvel4, _x.yvel4, _x.xvel5, _x.yvel5))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -158,8 +197,8 @@ float32 cmd_angle5
       end = 0
       _x = self
       start = end
-      end += 68
-      (_x.timestamp, _x.enc_angle1, _x.enc_angle2, _x.enc_angle3, _x.enc_angle4, _x.enc_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5, _x.cmd_angle1, _x.cmd_angle2, _x.cmd_angle3, _x.cmd_angle4, _x.cmd_angle5,) = _get_struct_Q15f().unpack(str[start:end])
+      end += 88
+      (_x.timestamp, _x.enc_angle1, _x.enc_angle2, _x.enc_angle3, _x.enc_angle4, _x.enc_angle5, _x.dxl_angle1, _x.dxl_angle2, _x.dxl_angle3, _x.dxl_angle4, _x.dxl_angle5, _x.cmd_angle1, _x.cmd_angle2, _x.cmd_angle3, _x.cmd_angle4, _x.cmd_angle5, _x.xvel1, _x.yvel1, _x.xvel2, _x.yvel2, _x.xvel3, _x.yvel3, _x.xvel4, _x.yvel4, _x.xvel5, _x.yvel5,) = _get_struct_Q15f10h().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -168,9 +207,9 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_Q15f = None
-def _get_struct_Q15f():
-    global _struct_Q15f
-    if _struct_Q15f is None:
-        _struct_Q15f = struct.Struct("<Q15f")
-    return _struct_Q15f
+_struct_Q15f10h = None
+def _get_struct_Q15f10h():
+    global _struct_Q15f10h
+    if _struct_Q15f10h is None:
+        _struct_Q15f10h = struct.Struct("<Q15f10h")
+    return _struct_Q15f10h

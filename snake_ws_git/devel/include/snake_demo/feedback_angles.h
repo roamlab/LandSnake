@@ -39,7 +39,17 @@ struct feedback_angles_
     , cmd_angle2(0.0)
     , cmd_angle3(0.0)
     , cmd_angle4(0.0)
-    , cmd_angle5(0.0)  {
+    , cmd_angle5(0.0)
+    , xvel1(0)
+    , yvel1(0)
+    , xvel2(0)
+    , yvel2(0)
+    , xvel3(0)
+    , yvel3(0)
+    , xvel4(0)
+    , yvel4(0)
+    , xvel5(0)
+    , yvel5(0)  {
     }
   feedback_angles_(const ContainerAllocator& _alloc)
     : timestamp(0)
@@ -57,7 +67,17 @@ struct feedback_angles_
     , cmd_angle2(0.0)
     , cmd_angle3(0.0)
     , cmd_angle4(0.0)
-    , cmd_angle5(0.0)  {
+    , cmd_angle5(0.0)
+    , xvel1(0)
+    , yvel1(0)
+    , xvel2(0)
+    , yvel2(0)
+    , xvel3(0)
+    , yvel3(0)
+    , xvel4(0)
+    , yvel4(0)
+    , xvel5(0)
+    , yvel5(0)  {
   (void)_alloc;
     }
 
@@ -111,6 +131,36 @@ struct feedback_angles_
    typedef float _cmd_angle5_type;
   _cmd_angle5_type cmd_angle5;
 
+   typedef int16_t _xvel1_type;
+  _xvel1_type xvel1;
+
+   typedef int16_t _yvel1_type;
+  _yvel1_type yvel1;
+
+   typedef int16_t _xvel2_type;
+  _xvel2_type xvel2;
+
+   typedef int16_t _yvel2_type;
+  _yvel2_type yvel2;
+
+   typedef int16_t _xvel3_type;
+  _xvel3_type xvel3;
+
+   typedef int16_t _yvel3_type;
+  _yvel3_type yvel3;
+
+   typedef int16_t _xvel4_type;
+  _xvel4_type xvel4;
+
+   typedef int16_t _yvel4_type;
+  _yvel4_type yvel4;
+
+   typedef int16_t _xvel5_type;
+  _xvel5_type xvel5;
+
+   typedef int16_t _yvel5_type;
+  _yvel5_type yvel5;
+
 
 
 
@@ -155,7 +205,17 @@ bool operator==(const ::snake_demo::feedback_angles_<ContainerAllocator1> & lhs,
     lhs.cmd_angle2 == rhs.cmd_angle2 &&
     lhs.cmd_angle3 == rhs.cmd_angle3 &&
     lhs.cmd_angle4 == rhs.cmd_angle4 &&
-    lhs.cmd_angle5 == rhs.cmd_angle5;
+    lhs.cmd_angle5 == rhs.cmd_angle5 &&
+    lhs.xvel1 == rhs.xvel1 &&
+    lhs.yvel1 == rhs.yvel1 &&
+    lhs.xvel2 == rhs.xvel2 &&
+    lhs.yvel2 == rhs.yvel2 &&
+    lhs.xvel3 == rhs.xvel3 &&
+    lhs.yvel3 == rhs.yvel3 &&
+    lhs.xvel4 == rhs.xvel4 &&
+    lhs.yvel4 == rhs.yvel4 &&
+    lhs.xvel5 == rhs.xvel5 &&
+    lhs.yvel5 == rhs.yvel5;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -212,12 +272,12 @@ struct MD5Sum< ::snake_demo::feedback_angles_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "de147108c73c5ee162b8e21c32f2c9e6";
+    return "398a4320accb356b44c73b5b07d88507";
   }
 
   static const char* value(const ::snake_demo::feedback_angles_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xde147108c73c5ee1ULL;
-  static const uint64_t static_value2 = 0x62b8e21c32f2c9e6ULL;
+  static const uint64_t static_value1 = 0x398a4320accb356bULL;
+  static const uint64_t static_value2 = 0x44c73b5b07d88507ULL;
 };
 
 template<class ContainerAllocator>
@@ -252,7 +312,16 @@ struct Definition< ::snake_demo::feedback_angles_<ContainerAllocator> >
 "float32 cmd_angle3\n"
 "float32 cmd_angle4\n"
 "float32 cmd_angle5\n"
-"\n"
+"int16 xvel1\n"
+"int16 yvel1\n"
+"int16 xvel2\n"
+"int16 yvel2\n"
+"int16 xvel3\n"
+"int16 yvel3\n"
+"int16 xvel4\n"
+"int16 yvel4\n"
+"int16 xvel5\n"
+"int16 yvel5\n"
 ;
   }
 
@@ -287,6 +356,16 @@ namespace serialization
       stream.next(m.cmd_angle3);
       stream.next(m.cmd_angle4);
       stream.next(m.cmd_angle5);
+      stream.next(m.xvel1);
+      stream.next(m.yvel1);
+      stream.next(m.xvel2);
+      stream.next(m.yvel2);
+      stream.next(m.xvel3);
+      stream.next(m.yvel3);
+      stream.next(m.xvel4);
+      stream.next(m.yvel4);
+      stream.next(m.xvel5);
+      stream.next(m.yvel5);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -337,6 +416,26 @@ struct Printer< ::snake_demo::feedback_angles_<ContainerAllocator> >
     Printer<float>::stream(s, indent + "  ", v.cmd_angle4);
     s << indent << "cmd_angle5: ";
     Printer<float>::stream(s, indent + "  ", v.cmd_angle5);
+    s << indent << "xvel1: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.xvel1);
+    s << indent << "yvel1: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.yvel1);
+    s << indent << "xvel2: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.xvel2);
+    s << indent << "yvel2: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.yvel2);
+    s << indent << "xvel3: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.xvel3);
+    s << indent << "yvel3: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.yvel3);
+    s << indent << "xvel4: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.xvel4);
+    s << indent << "yvel4: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.yvel4);
+    s << indent << "xvel5: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.xvel5);
+    s << indent << "yvel5: ";
+    Printer<int16_t>::stream(s, indent + "  ", v.yvel5);
   }
 };
 
