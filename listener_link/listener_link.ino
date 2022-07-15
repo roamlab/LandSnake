@@ -69,7 +69,7 @@ void setup() {
   Can0.enableMBInterrupts(); // ENABLE CAN INTERRUPT ON
   Can0.setClock(CLK_60MHz);
   Can0.onReceive(MB0,rxAngle);
-  FeedbackTimerDxl.begin(read_DXL, READ_DXL);
+  //FeedbackTimerDxl.begin(read_DXL, READ_DXL);
   FeedbackTimerEnc.begin(read_ENC, READ_ENC); 
   WriteAngle.begin(write_DXL, WRITE_DXL);
   SendFeedback.begin(sendFeedback, FBTOCENTRAL);
@@ -84,7 +84,7 @@ void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
   updated = true;
   encoded_angle = (int) cmd.buf[LINKID];
   dxlangle = (((float) encoded_angle * 120)/255) - 60 + neutralangle; //scale the angle back into range, and add neutralangle to calibrate to dxls
-  fb_msg.buf[5] = encoded_angle;
+  //fb_msg.buf[5] = encoded_angle;
 }
 
 void read_ENC() { //read the encoder and write angle to DXL (if new one has been recv'd)
@@ -98,6 +98,11 @@ void read_ENC() { //read the encoder and write angle to DXL (if new one has been
   unsigned char xv2 = (xyvelocity[0] >> 8) & 0xFF;
   unsigned char yv1 = xyvelocity[1] & 0xFF;
   unsigned char yv2 = (xyvelocity[1] >> 8) & 0xFF;
+
+  fb_msg.buf[3] = xv1;
+  fb_msg.buf[4] = xv2;
+  fb_msg.buf[5] = yv1;
+  fb_msg.buf[6] = yv2;
   
   //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of information)
   unsigned short enc_angle_mapped = (unsigned short) ((enc_angle_read + 60) * (65535)/120);
@@ -118,7 +123,6 @@ void write_DXL(){
 
 void read_DXL() { //read dynamixel angle
   dxl_angle_read = ((float) dxl.getPresentPosition(DXL_ID, UNIT_DEGREE)) - neutralangle; //PRESENT POSITION OF DXL manually offset by 4 deg
-  //dxl_velocity_read = ((float) dxl.getPresentVelocity(DXL_ID, UNIT_RAW));
   
   //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of info)
   unsigned short dxl_angle_mapped = (unsigned short) ((dxl_angle_read + 60) * (65535)/120);
