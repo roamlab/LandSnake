@@ -55,12 +55,7 @@ IntervalTimer ROSFeedbackTimer;
 IntervalTimer SpinOnceTimer;
 
 
-/*Angle Adjustments
-dxl_angle1:  0 deg
-enc_angle1:  0 deg
-dxl_angle2:  4 deg
-enc_angle2:  5 deg
-Angle Adjustments */
+
 
 float offsetarr[10] = {0.9402618408203125,-0.35,0.6509513854980469,-1.55,0.9402618408203125,0}; //angle offsets for feedback
 
@@ -123,34 +118,32 @@ void UpdateFeedbackArray(const CAN_message_t &fb_msg) { //update feedback angle 
     volatile int i = (int) fb_msg.buf[0];
     
     unsigned short decoded_enc = ((unsigned short)fb_msg.buf[2]<<8)|fb_msg.buf[1];
-    unsigned short decoded_dxl = ((unsigned short)fb_msg.buf[4]<<8)|fb_msg.buf[3];
-    unsigned int encoded_command = (int) fb_msg.buf[5];
-
+    signed short decoded_xvel = (signed short) (fb_msg.buf[4]<<8|fb_msg.buf[3]);
+    signed short decoded_yvel = (signed short) (fb_msg.buf[6]<<8|fb_msg.buf[5]);
+    
     float enc_angle = (((float)decoded_enc*120)/65535) - 60 + offsetarr[2*(i-1) + 1]; //add adjustment
-    float dxl_angle = (((float)decoded_dxl*120)/65535) - 60 + offsetarr[2*(i-1)]; //add adjustment
-    float cmd_angle = (((float) encoded_command * 120)/255) - 60;
 
     switch (i) {
       case 1:
         feedback_angles.enc_angle1 = enc_angle;
-        feedback_angles.dxl_angle1 = dxl_angle;
-        feedback_angles.cmd_angle1 = cmd_angle;
+        feedback_angles.xvel1 = decoded_xvel;
+        feedback_angles.yvel1 = decoded_yvel;
         break;
       case 2:
         feedback_angles.enc_angle2 = enc_angle;
-        feedback_angles.dxl_angle2 = dxl_angle;
-        feedback_angles.cmd_angle2 = cmd_angle;
+        feedback_angles.xvel2 = decoded_xvel;
+        feedback_angles.yvel2 = decoded_yvel;
 
         break;
       case 3:
         feedback_angles.enc_angle3 = enc_angle;
-        feedback_angles.dxl_angle3 = dxl_angle;
-        feedback_angles.cmd_angle3 = cmd_angle;
+        feedback_angles.xvel3 = decoded_xvel;
+        feedback_angles.yvel3 = decoded_yvel;
         break;
       case 4:
         feedback_angles.enc_angle4 = enc_angle;
-        feedback_angles.dxl_angle4 = dxl_angle;
-        feedback_angles.cmd_angle4 = cmd_angle;
+        feedback_angles.xvel4 = decoded_xvel;
+        feedback_angles.yvel4 = decoded_yvel;
         break;
     }
 
