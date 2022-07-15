@@ -54,6 +54,16 @@ IntervalTimer CANTimer;
 IntervalTimer ROSFeedbackTimer;
 IntervalTimer SpinOnceTimer;
 
+
+/*Angle Adjustments
+dxl_angle1:  0 deg
+enc_angle1:  0 deg
+dxl_angle2:  4 deg
+enc_angle2:  5 deg
+Angle Adjustments */
+
+float offsetarr[10] = {0.9402618408203125,-0.35,0.6509513854980469,-1.55,0.9402618408203125,0}; //angle offsets for feedback
+
 void rosCallback(const snake_demo::cmd_angles& cmd_angles) { //update command angle array
   angle1 = cmd_angles.angle1;
   angle2 = cmd_angles.angle2;
@@ -116,8 +126,8 @@ void UpdateFeedbackArray(const CAN_message_t &fb_msg) { //update feedback angle 
     unsigned short decoded_dxl = ((unsigned short)fb_msg.buf[4]<<8)|fb_msg.buf[3];
     unsigned int encoded_command = (int) fb_msg.buf[5];
 
-    float enc_angle = (((float)decoded_enc*120)/65535) - 60;
-    float dxl_angle = (((float)decoded_dxl*120)/65535) - 60;
+    float enc_angle = (((float)decoded_enc*120)/65535) - 60 + offsetarr[2*(i-1) + 1]; //add adjustment
+    float dxl_angle = (((float)decoded_dxl*120)/65535) - 60 + offsetarr[2*(i-1)]; //add adjustment
     float cmd_angle = (((float) encoded_command * 120)/255) - 60;
 
     switch (i) {
@@ -130,11 +140,17 @@ void UpdateFeedbackArray(const CAN_message_t &fb_msg) { //update feedback angle 
         feedback_angles.enc_angle2 = enc_angle;
         feedback_angles.dxl_angle2 = dxl_angle;
         feedback_angles.cmd_angle2 = cmd_angle;
+
         break;
       case 3:
         feedback_angles.enc_angle3 = enc_angle;
         feedback_angles.dxl_angle3 = dxl_angle;
         feedback_angles.cmd_angle3 = cmd_angle;
+        break;
+      case 4:
+        feedback_angles.enc_angle4 = enc_angle;
+        feedback_angles.dxl_angle4 = dxl_angle;
+        feedback_angles.cmd_angle4 = cmd_angle;
         break;
     }
 

@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "snake_demo: 2 messages, 0 services")
+message(STATUS "snake_demo: 3 messages, 0 services")
 
 set(MSG_I_FLAGS "-Isnake_demo:/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg;-Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg")
 
@@ -27,6 +27,11 @@ add_custom_target(_snake_demo_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "snake_demo" "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg" ""
 )
 
+get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg" NAME_WE)
+add_custom_target(_snake_demo_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "snake_demo" "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg" ""
+)
+
 #
 #  langs = gencpp;geneus;genlisp;gennodejs;genpy
 #
@@ -41,6 +46,12 @@ _generate_msg_cpp(snake_demo
 )
 _generate_msg_cpp(snake_demo
   "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/snake_demo
+)
+_generate_msg_cpp(snake_demo
+  "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/snake_demo
@@ -64,6 +75,8 @@ get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snak
 add_dependencies(snake_demo_generate_messages_cpp _snake_demo_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg" NAME_WE)
 add_dependencies(snake_demo_generate_messages_cpp _snake_demo_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg" NAME_WE)
+add_dependencies(snake_demo_generate_messages_cpp _snake_demo_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(snake_demo_gencpp)
@@ -82,6 +95,12 @@ _generate_msg_eus(snake_demo
 )
 _generate_msg_eus(snake_demo
   "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/snake_demo
+)
+_generate_msg_eus(snake_demo
+  "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/snake_demo
@@ -105,6 +124,8 @@ get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snak
 add_dependencies(snake_demo_generate_messages_eus _snake_demo_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg" NAME_WE)
 add_dependencies(snake_demo_generate_messages_eus _snake_demo_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg" NAME_WE)
+add_dependencies(snake_demo_generate_messages_eus _snake_demo_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(snake_demo_geneus)
@@ -123,6 +144,12 @@ _generate_msg_lisp(snake_demo
 )
 _generate_msg_lisp(snake_demo
   "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/snake_demo
+)
+_generate_msg_lisp(snake_demo
+  "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/snake_demo
@@ -146,6 +173,8 @@ get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snak
 add_dependencies(snake_demo_generate_messages_lisp _snake_demo_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg" NAME_WE)
 add_dependencies(snake_demo_generate_messages_lisp _snake_demo_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg" NAME_WE)
+add_dependencies(snake_demo_generate_messages_lisp _snake_demo_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(snake_demo_genlisp)
@@ -164,6 +193,12 @@ _generate_msg_nodejs(snake_demo
 )
 _generate_msg_nodejs(snake_demo
   "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/snake_demo
+)
+_generate_msg_nodejs(snake_demo
+  "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/snake_demo
@@ -187,6 +222,8 @@ get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snak
 add_dependencies(snake_demo_generate_messages_nodejs _snake_demo_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg" NAME_WE)
 add_dependencies(snake_demo_generate_messages_nodejs _snake_demo_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg" NAME_WE)
+add_dependencies(snake_demo_generate_messages_nodejs _snake_demo_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
 add_custom_target(snake_demo_gennodejs)
@@ -209,6 +246,12 @@ _generate_msg_py(snake_demo
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/snake_demo
 )
+_generate_msg_py(snake_demo
+  "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/snake_demo
+)
 
 ### Generating Services
 
@@ -227,6 +270,8 @@ add_dependencies(snake_demo_generate_messages snake_demo_generate_messages_py)
 get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/cmd_angles.msg" NAME_WE)
 add_dependencies(snake_demo_generate_messages_py _snake_demo_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg" NAME_WE)
+add_dependencies(snake_demo_generate_messages_py _snake_demo_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg" NAME_WE)
 add_dependencies(snake_demo_generate_messages_py _snake_demo_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility

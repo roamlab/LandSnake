@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 from numpy import sin as sin
@@ -8,7 +8,7 @@ import random
 from snake_demo.msg import cmd_angles
 import GS_timing as timing
 import numpy as np
-amplitude=25
+amplitude=35
 frequency=2
 phase_offset=.05
 

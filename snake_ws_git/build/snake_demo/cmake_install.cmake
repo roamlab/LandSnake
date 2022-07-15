@@ -41,6 +41,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/snake_demo/msg" TYPE FILE FILES
     "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/cmd_angles.msg"
     "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg"
+    "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg"
     )
 endif()
 

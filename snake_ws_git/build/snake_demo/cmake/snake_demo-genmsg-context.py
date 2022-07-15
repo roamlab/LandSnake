@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/cmd_angles.msg;/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg"
+messages_str = "/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/cmd_angles.msg;/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg;/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg"
 services_str = ""
 pkg_name = "snake_demo"
 dependencies_str = "std_msgs"

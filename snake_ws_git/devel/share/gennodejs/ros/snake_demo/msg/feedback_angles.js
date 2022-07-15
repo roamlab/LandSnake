@@ -245,6 +245,7 @@ class feedback_angles {
     float32 cmd_angle4
     float32 cmd_angle5
     
+    
     `;
   }
 

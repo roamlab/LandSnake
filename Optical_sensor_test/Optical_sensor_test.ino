@@ -1,7 +1,7 @@
 
 #include"PMW.h"
 PMW pmw;
-int xycounts[2];
+signed int xycounts[2];
 byte testctr=0;
 unsigned long currTime;
 unsigned long timer;

@@ -1,5 +1,6 @@
 #include<Dynamixel2Arduino.h> // DXL COMMS HEADER FILE
 #include<TeensyThreads.h>
+#include "PMW.h"
 const uint8_t DXL_ID = 1, DXL_DIR_PIN = 2; // DXL MOTOR ID AND DIRECTION
 const float DXL_PROTOCOL_VERSION = 1.0; // DXL COMM PROTOCOL
 using namespace ControlTableItem; // DXL CONTROL TABLE
@@ -12,10 +13,12 @@ using namespace ControlTableItem; // DXL CONTROL TABLE
 
 // HARDWARE RELATED
 const uint Encoder_pin = 19; // ENCODER PINOUT
-const uint LINKID = 1; // LINK ID
+const uint LINKID = 2; // LINK ID
 unsigned int encoded_angle;
-volatile float dxlangle = 150;
+volatile float neutralangle = 150;
+volatile float dxlangle = neutralangle;
 volatile float dxl_angle_read;
+volatile float dxl_velocity_read;
 volatile bool updated;
 
 IntervalTimer FeedbackTimerDxl;
@@ -23,6 +26,8 @@ IntervalTimer FeedbackTimerEnc;
 IntervalTimer SendFeedback;
 IntervalTimer WriteAngle;
 IntervalTimer CANTimer;
+
+PMW pmw;
 
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0; // INIT CAN COMMUNICATION
 CAN_message_t fb_msg;
@@ -35,8 +40,14 @@ unsigned int READ_ENC = 1400; //~700 Hz
 unsigned int WRITE_DXL = 1400; //~700 Hz
 unsigned int FBTOCENTRAL = 1400; //~700 Hz
 
+int xyvelocity[2];
+
 void setup() {
+  
   updated = false;
+
+  pmw.set_firmware(PMW3360_firmware_length, PMW3360_firmware_data);
+  pmw.startup();
 
   pinMode(6, OUTPUT); digitalWrite(6, LOW); // CAN TRANSCEIVER ENABLE
   dxl.begin(1000000); // BEGIN DYNAMIXEL AT BAUD RATE
@@ -47,9 +58,8 @@ void setup() {
   dxl.writeControlTableItem(CW_COMPLIANCE_MARGIN, DXL_ID, 1);
   dxl.writeControlTableItem(CCW_COMPLIANCE_MARGIN, DXL_ID, 1);
   dxl.writeControlTableItem(RETURN_DELAY_TIME, DXL_ID, 0);
-  dxl.writeControlTableItem(CW_COMPLIANCE_SLOPE, DXL_ID, 128);
-  dxl.writeControlTableItem(CCW_COMPLIANCE_SLOPE, DXL_ID, 128);
-  dxl.writeControlTableItem(VELOCITY_LIMIT, DXL_ID,1000); 
+  dxl.writeControlTableItem(CW_COMPLIANCE_SLOPE,DXL_ID, 128);
+  dxl.writeControlTableItem(CCW_COMPLIANCE_SLOPE,DXL_ID, 128);
   dxl.torqueOn(DXL_ID);
   Can0.begin(); // BEGIN CAN0
   Can0.setBaudRate(1000000); // SET BAUDRATE
@@ -73,12 +83,22 @@ void CAN(){ //update CAN
 void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
   updated = true;
   encoded_angle = (int) cmd.buf[LINKID];
-  dxlangle = (((float) encoded_angle * 120)/255) - 60 + 150; //scale the angle back into range, and add 150 to calibrate to dxls
+  dxlangle = (((float) encoded_angle * 120)/255) - 60 + neutralangle; //scale the angle back into range, and add neutralangle to calibrate to dxls
   fb_msg.buf[5] = encoded_angle;
 }
 
 void read_ENC() { //read the encoder and write angle to DXL (if new one has been recv'd)
   volatile float enc_angle_read = ((90 * (float) analogRead(Encoder_pin) / 1024) - 45) * -1;
+  pmw.read_motion(xyvelocity);
+  xyvelocity[0] = convTwosComp(xyvelocity[0]);
+  xyvelocity[1] = convTwosComp(xyvelocity[1]);
+  
+  //take the lowest 16 bits of x velocity and y velocity
+  unsigned char xv1 = xyvelocity[0] & 0xFF;
+  unsigned char xv2 = (xyvelocity[0] >> 8) & 0xFF;
+  unsigned char yv1 = xyvelocity[1] & 0xFF;
+  unsigned char yv2 = (xyvelocity[1] >> 8) & 0xFF;
+  
   //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of information)
   unsigned short enc_angle_mapped = (unsigned short) ((enc_angle_read + 60) * (65535)/120);
   unsigned char c1 = enc_angle_mapped & 0xFF;
@@ -97,14 +117,16 @@ void write_DXL(){
 
 
 void read_DXL() { //read dynamixel angle
-  dxl_angle_read = ((float) dxl.getPresentPosition(DXL_ID, UNIT_DEGREE)) - 150; //PRESENT POSITION OF DXL
+  dxl_angle_read = ((float) dxl.getPresentPosition(DXL_ID, UNIT_DEGREE)) - neutralangle; //PRESENT POSITION OF DXL manually offset by 4 deg
+  //dxl_velocity_read = ((float) dxl.getPresentVelocity(DXL_ID, UNIT_RAW));
+  
   //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of info)
   unsigned short dxl_angle_mapped = (unsigned short) ((dxl_angle_read + 60) * (65535)/120);
   unsigned char c1 = dxl_angle_mapped & 0xFF;
   unsigned char c2 = dxl_angle_mapped >> 8;
+  
   fb_msg.buf[3] = c1;
   fb_msg.buf[4] = c2;
-  
 
 }
 

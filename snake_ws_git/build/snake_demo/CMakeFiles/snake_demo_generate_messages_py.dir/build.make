@@ -55,6 +55,7 @@ include snake_demo/CMakeFiles/snake_demo_generate_messages_py.dir/progress.make
 
 snake_demo/CMakeFiles/snake_demo_generate_messages_py: /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/_cmd_angles.py
 snake_demo/CMakeFiles/snake_demo_generate_messages_py: /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/_feedback_angles.py
+snake_demo/CMakeFiles/snake_demo_generate_messages_py: /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/_calculations.py
 snake_demo/CMakeFiles/snake_demo_generate_messages_py: /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/__init__.py
 
 
@@ -68,15 +69,22 @@ snake_demo/CMakeFiles/snake_demo_generate_messages_py: /home/user2021/LandSnake/
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/user2021/LandSnake/snake_ws_git/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Python from MSG snake_demo/feedback_angles"
 	cd /home/user2021/LandSnake/snake_ws_git/build/snake_demo && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg -Isnake_demo:/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p snake_demo -o /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg
 
+/home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/_calculations.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
+/home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/_calculations.py: /home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/user2021/LandSnake/snake_ws_git/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Python from MSG snake_demo/calculations"
+	cd /home/user2021/LandSnake/snake_ws_git/build/snake_demo && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py /home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg -Isnake_demo:/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p snake_demo -o /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg
+
 /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/__init__.py: /opt/ros/noetic/lib/genpy/genmsg_py.py
 /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/__init__.py: /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/_cmd_angles.py
 /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/__init__.py: /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/_feedback_angles.py
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/user2021/LandSnake/snake_ws_git/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Python msg __init__.py for snake_demo"
+/home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/__init__.py: /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/_calculations.py
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/user2021/LandSnake/snake_ws_git/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating Python msg __init__.py for snake_demo"
 	cd /home/user2021/LandSnake/snake_ws_git/build/snake_demo && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/genpy/cmake/../../../lib/genpy/genmsg_py.py -o /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg --initpy
 
 snake_demo_generate_messages_py: snake_demo/CMakeFiles/snake_demo_generate_messages_py
 snake_demo_generate_messages_py: /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/_cmd_angles.py
 snake_demo_generate_messages_py: /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/_feedback_angles.py
+snake_demo_generate_messages_py: /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/_calculations.py
 snake_demo_generate_messages_py: /home/user2021/LandSnake/snake_ws_git/devel/lib/python3/dist-packages/snake_demo/msg/__init__.py
 snake_demo_generate_messages_py: snake_demo/CMakeFiles/snake_demo_generate_messages_py.dir/build.make
 

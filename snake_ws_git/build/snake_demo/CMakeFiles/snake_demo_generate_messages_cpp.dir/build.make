@@ -55,6 +55,7 @@ include snake_demo/CMakeFiles/snake_demo_generate_messages_cpp.dir/progress.make
 
 snake_demo/CMakeFiles/snake_demo_generate_messages_cpp: /home/user2021/LandSnake/snake_ws_git/devel/include/snake_demo/cmd_angles.h
 snake_demo/CMakeFiles/snake_demo_generate_messages_cpp: /home/user2021/LandSnake/snake_ws_git/devel/include/snake_demo/feedback_angles.h
+snake_demo/CMakeFiles/snake_demo_generate_messages_cpp: /home/user2021/LandSnake/snake_ws_git/devel/include/snake_demo/calculations.h
 
 
 /home/user2021/LandSnake/snake_ws_git/devel/include/snake_demo/cmd_angles.h: /opt/ros/noetic/lib/gencpp/gen_cpp.py
@@ -69,9 +70,16 @@ snake_demo/CMakeFiles/snake_demo_generate_messages_cpp: /home/user2021/LandSnake
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/user2021/LandSnake/snake_ws_git/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating C++ code from snake_demo/feedback_angles.msg"
 	cd /home/user2021/LandSnake/snake_ws_git/src/snake_demo && /home/user2021/LandSnake/snake_ws_git/build/catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg -Isnake_demo:/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p snake_demo -o /home/user2021/LandSnake/snake_ws_git/devel/include/snake_demo -e /opt/ros/noetic/share/gencpp/cmake/..
 
+/home/user2021/LandSnake/snake_ws_git/devel/include/snake_demo/calculations.h: /opt/ros/noetic/lib/gencpp/gen_cpp.py
+/home/user2021/LandSnake/snake_ws_git/devel/include/snake_demo/calculations.h: /home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg
+/home/user2021/LandSnake/snake_ws_git/devel/include/snake_demo/calculations.h: /opt/ros/noetic/share/gencpp/msg.h.template
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/user2021/LandSnake/snake_ws_git/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating C++ code from snake_demo/calculations.msg"
+	cd /home/user2021/LandSnake/snake_ws_git/src/snake_demo && /home/user2021/LandSnake/snake_ws_git/build/catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py /home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg -Isnake_demo:/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p snake_demo -o /home/user2021/LandSnake/snake_ws_git/devel/include/snake_demo -e /opt/ros/noetic/share/gencpp/cmake/..
+
 snake_demo_generate_messages_cpp: snake_demo/CMakeFiles/snake_demo_generate_messages_cpp
 snake_demo_generate_messages_cpp: /home/user2021/LandSnake/snake_ws_git/devel/include/snake_demo/cmd_angles.h
 snake_demo_generate_messages_cpp: /home/user2021/LandSnake/snake_ws_git/devel/include/snake_demo/feedback_angles.h
+snake_demo_generate_messages_cpp: /home/user2021/LandSnake/snake_ws_git/devel/include/snake_demo/calculations.h
 snake_demo_generate_messages_cpp: snake_demo/CMakeFiles/snake_demo_generate_messages_cpp.dir/build.make
 
 .PHONY : snake_demo_generate_messages_cpp

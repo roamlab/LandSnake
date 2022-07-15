@@ -27,6 +27,7 @@ float32 cmd_angle2
 float32 cmd_angle3
 float32 cmd_angle4
 float32 cmd_angle5
+
 """
   __slots__ = ['timestamp','enc_angle1','enc_angle2','enc_angle3','enc_angle4','enc_angle5','dxl_angle1','dxl_angle2','dxl_angle3','dxl_angle4','dxl_angle5','cmd_angle1','cmd_angle2','cmd_angle3','cmd_angle4','cmd_angle5']
   _slot_types = ['uint64','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32','float32']

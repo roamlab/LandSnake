@@ -55,6 +55,7 @@ include snake_demo/CMakeFiles/snake_demo_generate_messages_eus.dir/progress.make
 
 snake_demo/CMakeFiles/snake_demo_generate_messages_eus: /home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/msg/cmd_angles.l
 snake_demo/CMakeFiles/snake_demo_generate_messages_eus: /home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/msg/feedback_angles.l
+snake_demo/CMakeFiles/snake_demo_generate_messages_eus: /home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/msg/calculations.l
 snake_demo/CMakeFiles/snake_demo_generate_messages_eus: /home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/manifest.l
 
 
@@ -68,13 +69,19 @@ snake_demo/CMakeFiles/snake_demo_generate_messages_eus: /home/user2021/LandSnake
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/user2021/LandSnake/snake_ws_git/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating EusLisp code from snake_demo/feedback_angles.msg"
 	cd /home/user2021/LandSnake/snake_ws_git/build/snake_demo && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg -Isnake_demo:/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p snake_demo -o /home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/msg
 
+/home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/msg/calculations.l: /opt/ros/noetic/lib/geneus/gen_eus.py
+/home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/msg/calculations.l: /home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/user2021/LandSnake/snake_ws_git/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating EusLisp code from snake_demo/calculations.msg"
+	cd /home/user2021/LandSnake/snake_ws_git/build/snake_demo && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py /home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg -Isnake_demo:/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p snake_demo -o /home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/msg
+
 /home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/manifest.l: /opt/ros/noetic/lib/geneus/gen_eus.py
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/user2021/LandSnake/snake_ws_git/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating EusLisp manifest code for snake_demo"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/user2021/LandSnake/snake_ws_git/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Generating EusLisp manifest code for snake_demo"
 	cd /home/user2021/LandSnake/snake_ws_git/build/snake_demo && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/geneus/cmake/../../../lib/geneus/gen_eus.py -m -o /home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo snake_demo std_msgs
 
 snake_demo_generate_messages_eus: snake_demo/CMakeFiles/snake_demo_generate_messages_eus
 snake_demo_generate_messages_eus: /home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/msg/cmd_angles.l
 snake_demo_generate_messages_eus: /home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/msg/feedback_angles.l
+snake_demo_generate_messages_eus: /home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/msg/calculations.l
 snake_demo_generate_messages_eus: /home/user2021/LandSnake/snake_ws_git/devel/share/roseus/ros/snake_demo/manifest.l
 snake_demo_generate_messages_eus: snake_demo/CMakeFiles/snake_demo_generate_messages_eus.dir/build.make
 

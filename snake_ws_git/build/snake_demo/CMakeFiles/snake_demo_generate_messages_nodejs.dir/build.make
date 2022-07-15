@@ -55,6 +55,7 @@ include snake_demo/CMakeFiles/snake_demo_generate_messages_nodejs.dir/progress.m
 
 snake_demo/CMakeFiles/snake_demo_generate_messages_nodejs: /home/user2021/LandSnake/snake_ws_git/devel/share/gennodejs/ros/snake_demo/msg/cmd_angles.js
 snake_demo/CMakeFiles/snake_demo_generate_messages_nodejs: /home/user2021/LandSnake/snake_ws_git/devel/share/gennodejs/ros/snake_demo/msg/feedback_angles.js
+snake_demo/CMakeFiles/snake_demo_generate_messages_nodejs: /home/user2021/LandSnake/snake_ws_git/devel/share/gennodejs/ros/snake_demo/msg/calculations.js
 
 
 /home/user2021/LandSnake/snake_ws_git/devel/share/gennodejs/ros/snake_demo/msg/cmd_angles.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
@@ -67,9 +68,15 @@ snake_demo/CMakeFiles/snake_demo_generate_messages_nodejs: /home/user2021/LandSn
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/user2021/LandSnake/snake_ws_git/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Generating Javascript code from snake_demo/feedback_angles.msg"
 	cd /home/user2021/LandSnake/snake_ws_git/build/snake_demo && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/feedback_angles.msg -Isnake_demo:/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p snake_demo -o /home/user2021/LandSnake/snake_ws_git/devel/share/gennodejs/ros/snake_demo/msg
 
+/home/user2021/LandSnake/snake_ws_git/devel/share/gennodejs/ros/snake_demo/msg/calculations.js: /opt/ros/noetic/lib/gennodejs/gen_nodejs.py
+/home/user2021/LandSnake/snake_ws_git/devel/share/gennodejs/ros/snake_demo/msg/calculations.js: /home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/user2021/LandSnake/snake_ws_git/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Generating Javascript code from snake_demo/calculations.msg"
+	cd /home/user2021/LandSnake/snake_ws_git/build/snake_demo && ../catkin_generated/env_cached.sh /usr/bin/python3 /opt/ros/noetic/share/gennodejs/cmake/../../../lib/gennodejs/gen_nodejs.py /home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg/calculations.msg -Isnake_demo:/home/user2021/LandSnake/snake_ws_git/src/snake_demo/msg -Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg -p snake_demo -o /home/user2021/LandSnake/snake_ws_git/devel/share/gennodejs/ros/snake_demo/msg
+
 snake_demo_generate_messages_nodejs: snake_demo/CMakeFiles/snake_demo_generate_messages_nodejs
 snake_demo_generate_messages_nodejs: /home/user2021/LandSnake/snake_ws_git/devel/share/gennodejs/ros/snake_demo/msg/cmd_angles.js
 snake_demo_generate_messages_nodejs: /home/user2021/LandSnake/snake_ws_git/devel/share/gennodejs/ros/snake_demo/msg/feedback_angles.js
+snake_demo_generate_messages_nodejs: /home/user2021/LandSnake/snake_ws_git/devel/share/gennodejs/ros/snake_demo/msg/calculations.js
 snake_demo_generate_messages_nodejs: snake_demo/CMakeFiles/snake_demo_generate_messages_nodejs.dir/build.make
 
 .PHONY : snake_demo_generate_messages_nodejs

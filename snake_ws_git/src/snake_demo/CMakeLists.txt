@@ -54,6 +54,7 @@ find_package(catkin REQUIRED COMPONENTS
    FILES
    cmd_angles.msg
    feedback_angles.msg
+   calculations.msg
  )
 
 ## Generate services in the 'srv' folder

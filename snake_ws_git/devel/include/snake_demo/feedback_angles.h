@@ -252,6 +252,7 @@ struct Definition< ::snake_demo::feedback_angles_<ContainerAllocator> >
 "float32 cmd_angle3\n"
 "float32 cmd_angle4\n"
 "float32 cmd_angle5\n"
+"\n"
 ;
   }
 

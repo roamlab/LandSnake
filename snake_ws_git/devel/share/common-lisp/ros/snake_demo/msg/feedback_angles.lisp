@@ -378,10 +378,10 @@
   "de147108c73c5ee162b8e21c32f2c9e6")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<feedback_angles>)))
   "Returns full string definition for message of type '<feedback_angles>"
-  (cl:format cl:nil "uint64 timestamp~%float32 enc_angle1~%float32 enc_angle2~%float32 enc_angle3~%float32 enc_angle4~%float32 enc_angle5~%float32 dxl_angle1~%float32 dxl_angle2~%float32 dxl_angle3~%float32 dxl_angle4~%float32 dxl_angle5~%float32 cmd_angle1~%float32 cmd_angle2~%float32 cmd_angle3~%float32 cmd_angle4~%float32 cmd_angle5~%~%~%"))
+  (cl:format cl:nil "uint64 timestamp~%float32 enc_angle1~%float32 enc_angle2~%float32 enc_angle3~%float32 enc_angle4~%float32 enc_angle5~%float32 dxl_angle1~%float32 dxl_angle2~%float32 dxl_angle3~%float32 dxl_angle4~%float32 dxl_angle5~%float32 cmd_angle1~%float32 cmd_angle2~%float32 cmd_angle3~%float32 cmd_angle4~%float32 cmd_angle5~%~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'feedback_angles)))
   "Returns full string definition for message of type 'feedback_angles"
-  (cl:format cl:nil "uint64 timestamp~%float32 enc_angle1~%float32 enc_angle2~%float32 enc_angle3~%float32 enc_angle4~%float32 enc_angle5~%float32 dxl_angle1~%float32 dxl_angle2~%float32 dxl_angle3~%float32 dxl_angle4~%float32 dxl_angle5~%float32 cmd_angle1~%float32 cmd_angle2~%float32 cmd_angle3~%float32 cmd_angle4~%float32 cmd_angle5~%~%~%"))
+  (cl:format cl:nil "uint64 timestamp~%float32 enc_angle1~%float32 enc_angle2~%float32 enc_angle3~%float32 enc_angle4~%float32 enc_angle5~%float32 dxl_angle1~%float32 dxl_angle2~%float32 dxl_angle3~%float32 dxl_angle4~%float32 dxl_angle5~%float32 cmd_angle1~%float32 cmd_angle2~%float32 cmd_angle3~%float32 cmd_angle4~%float32 cmd_angle5~%~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <feedback_angles>))
   (cl:+ 0
      8
