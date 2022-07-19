@@ -1,6 +1,5 @@
 #include<Dynamixel2Arduino.h> // DXL COMMS HEADER FILE
 #include<TeensyThreads.h>
-#include "PMW.h"
 const uint8_t DXL_ID = 1, DXL_DIR_PIN = 2; // DXL MOTOR ID AND DIRECTION
 const float DXL_PROTOCOL_VERSION = 1.0; // DXL COMM PROTOCOL
 using namespace ControlTableItem; // DXL CONTROL TABLE
@@ -27,8 +26,6 @@ IntervalTimer SendFeedback;
 IntervalTimer WriteAngle;
 IntervalTimer CANTimer;
 
-PMW pmw;
-
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0; // INIT CAN COMMUNICATION
 CAN_message_t fb_msg;
 Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN); // DXL MOTOR OBJECT
@@ -40,14 +37,9 @@ unsigned int READ_ENC = 1400; //~700 Hz
 unsigned int WRITE_DXL = 1400; //~700 Hz
 unsigned int FBTOCENTRAL = 1400; //~700 Hz
 
-int xyvelocity[2];
-
 void setup() {
   
   updated = false;
-
-  pmw.set_firmware(PMW3360_firmware_length, PMW3360_firmware_data);
-  pmw.startup();
 
   pinMode(6, OUTPUT); digitalWrite(6, LOW); // CAN TRANSCEIVER ENABLE
   dxl.begin(1000000); // BEGIN DYNAMIXEL AT BAUD RATE
@@ -89,15 +81,6 @@ void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
 
 void read_ENC() { //read the encoder and write angle to DXL (if new one has been recv'd)
   volatile float enc_angle_read = ((90 * (float) analogRead(Encoder_pin) / 1024) - 45) * -1;
-  pmw.read_motion(xyvelocity);
-  xyvelocity[0] = convTwosComp(xyvelocity[0]);
-  xyvelocity[1] = convTwosComp(xyvelocity[1]);
-  
-  //take the lowest 16 bits of x velocity and y velocity
-  unsigned char xv1 = xyvelocity[0] & 0xFF;
-  unsigned char xv2 = (xyvelocity[0] >> 8) & 0xFF;
-  unsigned char yv1 = xyvelocity[1] & 0xFF;
-  unsigned char yv2 = (xyvelocity[1] >> 8) & 0xFF;
   
   //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of information)
   unsigned short enc_angle_mapped = (unsigned short) ((enc_angle_read + 60) * (65535)/120);
