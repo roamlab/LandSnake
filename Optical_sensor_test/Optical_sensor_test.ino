@@ -8,8 +8,8 @@ Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN); // DXL MOTOR OBJECT
 
 IntervalTimer WriteAngle;
 IntervalTimer ReadEnc;
-unsigned int WRITE_DXL = 10000; 
-unsigned int READ_ENC = 10000;
+unsigned int WRITE_DXL = 1400; 
+unsigned int READ_ENC = 1400;
 int starttime;
 int angle = 150;
 int increment = 1;
