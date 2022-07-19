@@ -118,8 +118,8 @@ void UpdateFeedbackArray(const CAN_message_t &fb_msg) { //update feedback angle 
     volatile int i = (int) fb_msg.buf[0];
     
     unsigned short decoded_enc = ((unsigned short)fb_msg.buf[2]<<8)|fb_msg.buf[1];
-    signed short decoded_xvel = (signed short) (fb_msg.buf[4]<<8|fb_msg.buf[3]);
-    signed short decoded_yvel = (signed short) (fb_msg.buf[6]<<8|fb_msg.buf[5]);
+    signed short decoded_xvel = ((signed short) fb_msg.buf[4]<<8)|fb_msg.buf[3];
+    signed short decoded_yvel = ((signed short) fb_msg.buf[6]<<8)|fb_msg.buf[5];
     
     float enc_angle = (((float)decoded_enc*120)/65535) - 60 + offsetarr[2*(i-1) + 1]; //add adjustment
 

@@ -24,16 +24,6 @@ class feedback_angles {
       this.enc_angle3 = null;
       this.enc_angle4 = null;
       this.enc_angle5 = null;
-      this.dxl_angle1 = null;
-      this.dxl_angle2 = null;
-      this.dxl_angle3 = null;
-      this.dxl_angle4 = null;
-      this.dxl_angle5 = null;
-      this.cmd_angle1 = null;
-      this.cmd_angle2 = null;
-      this.cmd_angle3 = null;
-      this.cmd_angle4 = null;
-      this.cmd_angle5 = null;
       this.xvel1 = null;
       this.yvel1 = null;
       this.xvel2 = null;
@@ -81,66 +71,6 @@ class feedback_angles {
       }
       else {
         this.enc_angle5 = 0.0;
-      }
-      if (initObj.hasOwnProperty('dxl_angle1')) {
-        this.dxl_angle1 = initObj.dxl_angle1
-      }
-      else {
-        this.dxl_angle1 = 0.0;
-      }
-      if (initObj.hasOwnProperty('dxl_angle2')) {
-        this.dxl_angle2 = initObj.dxl_angle2
-      }
-      else {
-        this.dxl_angle2 = 0.0;
-      }
-      if (initObj.hasOwnProperty('dxl_angle3')) {
-        this.dxl_angle3 = initObj.dxl_angle3
-      }
-      else {
-        this.dxl_angle3 = 0.0;
-      }
-      if (initObj.hasOwnProperty('dxl_angle4')) {
-        this.dxl_angle4 = initObj.dxl_angle4
-      }
-      else {
-        this.dxl_angle4 = 0.0;
-      }
-      if (initObj.hasOwnProperty('dxl_angle5')) {
-        this.dxl_angle5 = initObj.dxl_angle5
-      }
-      else {
-        this.dxl_angle5 = 0.0;
-      }
-      if (initObj.hasOwnProperty('cmd_angle1')) {
-        this.cmd_angle1 = initObj.cmd_angle1
-      }
-      else {
-        this.cmd_angle1 = 0.0;
-      }
-      if (initObj.hasOwnProperty('cmd_angle2')) {
-        this.cmd_angle2 = initObj.cmd_angle2
-      }
-      else {
-        this.cmd_angle2 = 0.0;
-      }
-      if (initObj.hasOwnProperty('cmd_angle3')) {
-        this.cmd_angle3 = initObj.cmd_angle3
-      }
-      else {
-        this.cmd_angle3 = 0.0;
-      }
-      if (initObj.hasOwnProperty('cmd_angle4')) {
-        this.cmd_angle4 = initObj.cmd_angle4
-      }
-      else {
-        this.cmd_angle4 = 0.0;
-      }
-      if (initObj.hasOwnProperty('cmd_angle5')) {
-        this.cmd_angle5 = initObj.cmd_angle5
-      }
-      else {
-        this.cmd_angle5 = 0.0;
       }
       if (initObj.hasOwnProperty('xvel1')) {
         this.xvel1 = initObj.xvel1
@@ -219,26 +149,6 @@ class feedback_angles {
     bufferOffset = _serializer.float32(obj.enc_angle4, buffer, bufferOffset);
     // Serialize message field [enc_angle5]
     bufferOffset = _serializer.float32(obj.enc_angle5, buffer, bufferOffset);
-    // Serialize message field [dxl_angle1]
-    bufferOffset = _serializer.float32(obj.dxl_angle1, buffer, bufferOffset);
-    // Serialize message field [dxl_angle2]
-    bufferOffset = _serializer.float32(obj.dxl_angle2, buffer, bufferOffset);
-    // Serialize message field [dxl_angle3]
-    bufferOffset = _serializer.float32(obj.dxl_angle3, buffer, bufferOffset);
-    // Serialize message field [dxl_angle4]
-    bufferOffset = _serializer.float32(obj.dxl_angle4, buffer, bufferOffset);
-    // Serialize message field [dxl_angle5]
-    bufferOffset = _serializer.float32(obj.dxl_angle5, buffer, bufferOffset);
-    // Serialize message field [cmd_angle1]
-    bufferOffset = _serializer.float32(obj.cmd_angle1, buffer, bufferOffset);
-    // Serialize message field [cmd_angle2]
-    bufferOffset = _serializer.float32(obj.cmd_angle2, buffer, bufferOffset);
-    // Serialize message field [cmd_angle3]
-    bufferOffset = _serializer.float32(obj.cmd_angle3, buffer, bufferOffset);
-    // Serialize message field [cmd_angle4]
-    bufferOffset = _serializer.float32(obj.cmd_angle4, buffer, bufferOffset);
-    // Serialize message field [cmd_angle5]
-    bufferOffset = _serializer.float32(obj.cmd_angle5, buffer, bufferOffset);
     // Serialize message field [xvel1]
     bufferOffset = _serializer.int16(obj.xvel1, buffer, bufferOffset);
     // Serialize message field [yvel1]
@@ -278,26 +188,6 @@ class feedback_angles {
     data.enc_angle4 = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [enc_angle5]
     data.enc_angle5 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [dxl_angle1]
-    data.dxl_angle1 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [dxl_angle2]
-    data.dxl_angle2 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [dxl_angle3]
-    data.dxl_angle3 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [dxl_angle4]
-    data.dxl_angle4 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [dxl_angle5]
-    data.dxl_angle5 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [cmd_angle1]
-    data.cmd_angle1 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [cmd_angle2]
-    data.cmd_angle2 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [cmd_angle3]
-    data.cmd_angle3 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [cmd_angle4]
-    data.cmd_angle4 = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [cmd_angle5]
-    data.cmd_angle5 = _deserializer.float32(buffer, bufferOffset);
     // Deserialize message field [xvel1]
     data.xvel1 = _deserializer.int16(buffer, bufferOffset);
     // Deserialize message field [yvel1]
@@ -322,7 +212,7 @@ class feedback_angles {
   }
 
   static getMessageSize(object) {
-    return 88;
+    return 48;
   }
 
   static datatype() {
@@ -332,7 +222,7 @@ class feedback_angles {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '398a4320accb356b44c73b5b07d88507';
+    return 'efca087178a4608ce59813f65425d68e';
   }
 
   static messageDefinition() {
@@ -344,16 +234,6 @@ class feedback_angles {
     float32 enc_angle3
     float32 enc_angle4
     float32 enc_angle5
-    float32 dxl_angle1
-    float32 dxl_angle2
-    float32 dxl_angle3
-    float32 dxl_angle4
-    float32 dxl_angle5
-    float32 cmd_angle1
-    float32 cmd_angle2
-    float32 cmd_angle3
-    float32 cmd_angle4
-    float32 cmd_angle5
     int16 xvel1
     int16 yvel1
     int16 xvel2
@@ -414,76 +294,6 @@ class feedback_angles {
     }
     else {
       resolved.enc_angle5 = 0.0
-    }
-
-    if (msg.dxl_angle1 !== undefined) {
-      resolved.dxl_angle1 = msg.dxl_angle1;
-    }
-    else {
-      resolved.dxl_angle1 = 0.0
-    }
-
-    if (msg.dxl_angle2 !== undefined) {
-      resolved.dxl_angle2 = msg.dxl_angle2;
-    }
-    else {
-      resolved.dxl_angle2 = 0.0
-    }
-
-    if (msg.dxl_angle3 !== undefined) {
-      resolved.dxl_angle3 = msg.dxl_angle3;
-    }
-    else {
-      resolved.dxl_angle3 = 0.0
-    }
-
-    if (msg.dxl_angle4 !== undefined) {
-      resolved.dxl_angle4 = msg.dxl_angle4;
-    }
-    else {
-      resolved.dxl_angle4 = 0.0
-    }
-
-    if (msg.dxl_angle5 !== undefined) {
-      resolved.dxl_angle5 = msg.dxl_angle5;
-    }
-    else {
-      resolved.dxl_angle5 = 0.0
-    }
-
-    if (msg.cmd_angle1 !== undefined) {
-      resolved.cmd_angle1 = msg.cmd_angle1;
-    }
-    else {
-      resolved.cmd_angle1 = 0.0
-    }
-
-    if (msg.cmd_angle2 !== undefined) {
-      resolved.cmd_angle2 = msg.cmd_angle2;
-    }
-    else {
-      resolved.cmd_angle2 = 0.0
-    }
-
-    if (msg.cmd_angle3 !== undefined) {
-      resolved.cmd_angle3 = msg.cmd_angle3;
-    }
-    else {
-      resolved.cmd_angle3 = 0.0
-    }
-
-    if (msg.cmd_angle4 !== undefined) {
-      resolved.cmd_angle4 = msg.cmd_angle4;
-    }
-    else {
-      resolved.cmd_angle4 = 0.0
-    }
-
-    if (msg.cmd_angle5 !== undefined) {
-      resolved.cmd_angle5 = msg.cmd_angle5;
-    }
-    else {
-      resolved.cmd_angle5 = 0.0
     }
 
     if (msg.xvel1 !== undefined) {

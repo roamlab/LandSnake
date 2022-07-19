@@ -36,7 +36,7 @@ Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN); // DXL MOTOR OBJECT
 void UpdateSetPoint(const CAN_message_t &cmd); // READS COMMAND FROM CAN, UPDATES SET POINT
 
 unsigned int READ_DXL = 1400; //~700 Hz
-unsigned int READ_ENC = 1400; //~700 Hz
+unsigned int READ_ENC = 10000; //~700 Hz
 unsigned int WRITE_DXL = 1400; //~700 Hz
 unsigned int FBTOCENTRAL = 1400; //~700 Hz
 
@@ -45,9 +45,6 @@ int xyvelocity[2];
 void setup() {
   
   updated = false;
-
-  pmw.set_firmware(PMW3360_firmware_length, PMW3360_firmware_data);
-  pmw.startup();
 
   pinMode(6, OUTPUT); digitalWrite(6, LOW); // CAN TRANSCEIVER ENABLE
   dxl.begin(1000000); // BEGIN DYNAMIXEL AT BAUD RATE
@@ -73,6 +70,9 @@ void setup() {
   FeedbackTimerEnc.begin(read_ENC, READ_ENC); 
   WriteAngle.begin(write_DXL, WRITE_DXL);
   SendFeedback.begin(sendFeedback, FBTOCENTRAL);
+  SPI.begin();
+  pmw.set_firmware(PMW3360_firmware_length, PMW3360_firmware_data);
+  pmw.startup();
   
 }
 
@@ -89,6 +89,7 @@ void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
 
 void read_ENC() { //read the encoder and write angle to DXL (if new one has been recv'd)
   volatile float enc_angle_read = ((90 * (float) analogRead(Encoder_pin) / 1024) - 45) * -1;
+  
   pmw.read_motion(xyvelocity);
   xyvelocity[0] = convTwosComp(xyvelocity[0]);
   xyvelocity[1] = convTwosComp(xyvelocity[1]);
