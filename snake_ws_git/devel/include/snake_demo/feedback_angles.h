@@ -30,6 +30,11 @@ struct feedback_angles_
     , enc_angle3(0.0)
     , enc_angle4(0.0)
     , enc_angle5(0.0)
+    , dxl_angle1(0.0)
+    , dxl_angle2(0.0)
+    , dxl_angle3(0.0)
+    , dxl_angle4(0.0)
+    , dxl_angle5(0.0)
     , xvel1(0)
     , yvel1(0)
     , xvel2(0)
@@ -48,6 +53,11 @@ struct feedback_angles_
     , enc_angle3(0.0)
     , enc_angle4(0.0)
     , enc_angle5(0.0)
+    , dxl_angle1(0.0)
+    , dxl_angle2(0.0)
+    , dxl_angle3(0.0)
+    , dxl_angle4(0.0)
+    , dxl_angle5(0.0)
     , xvel1(0)
     , yvel1(0)
     , xvel2(0)
@@ -80,6 +90,21 @@ struct feedback_angles_
 
    typedef float _enc_angle5_type;
   _enc_angle5_type enc_angle5;
+
+   typedef float _dxl_angle1_type;
+  _dxl_angle1_type dxl_angle1;
+
+   typedef float _dxl_angle2_type;
+  _dxl_angle2_type dxl_angle2;
+
+   typedef float _dxl_angle3_type;
+  _dxl_angle3_type dxl_angle3;
+
+   typedef float _dxl_angle4_type;
+  _dxl_angle4_type dxl_angle4;
+
+   typedef float _dxl_angle5_type;
+  _dxl_angle5_type dxl_angle5;
 
    typedef int16_t _xvel1_type;
   _xvel1_type xvel1;
@@ -146,6 +171,11 @@ bool operator==(const ::snake_demo::feedback_angles_<ContainerAllocator1> & lhs,
     lhs.enc_angle3 == rhs.enc_angle3 &&
     lhs.enc_angle4 == rhs.enc_angle4 &&
     lhs.enc_angle5 == rhs.enc_angle5 &&
+    lhs.dxl_angle1 == rhs.dxl_angle1 &&
+    lhs.dxl_angle2 == rhs.dxl_angle2 &&
+    lhs.dxl_angle3 == rhs.dxl_angle3 &&
+    lhs.dxl_angle4 == rhs.dxl_angle4 &&
+    lhs.dxl_angle5 == rhs.dxl_angle5 &&
     lhs.xvel1 == rhs.xvel1 &&
     lhs.yvel1 == rhs.yvel1 &&
     lhs.xvel2 == rhs.xvel2 &&
@@ -212,12 +242,12 @@ struct MD5Sum< ::snake_demo::feedback_angles_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "efca087178a4608ce59813f65425d68e";
+    return "e45a7bfdc52410005bcbadd9129efd68";
   }
 
   static const char* value(const ::snake_demo::feedback_angles_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0xefca087178a4608cULL;
-  static const uint64_t static_value2 = 0xe59813f65425d68eULL;
+  static const uint64_t static_value1 = 0xe45a7bfdc5241000ULL;
+  static const uint64_t static_value2 = 0x5bcbadd9129efd68ULL;
 };
 
 template<class ContainerAllocator>
@@ -242,6 +272,11 @@ struct Definition< ::snake_demo::feedback_angles_<ContainerAllocator> >
 "float32 enc_angle3\n"
 "float32 enc_angle4\n"
 "float32 enc_angle5\n"
+"float32 dxl_angle1\n"
+"float32 dxl_angle2\n"
+"float32 dxl_angle3\n"
+"float32 dxl_angle4\n"
+"float32 dxl_angle5\n"
 "int16 xvel1\n"
 "int16 yvel1\n"
 "int16 xvel2\n"
@@ -276,6 +311,11 @@ namespace serialization
       stream.next(m.enc_angle3);
       stream.next(m.enc_angle4);
       stream.next(m.enc_angle5);
+      stream.next(m.dxl_angle1);
+      stream.next(m.dxl_angle2);
+      stream.next(m.dxl_angle3);
+      stream.next(m.dxl_angle4);
+      stream.next(m.dxl_angle5);
       stream.next(m.xvel1);
       stream.next(m.yvel1);
       stream.next(m.xvel2);
@@ -316,6 +356,16 @@ struct Printer< ::snake_demo::feedback_angles_<ContainerAllocator> >
     Printer<float>::stream(s, indent + "  ", v.enc_angle4);
     s << indent << "enc_angle5: ";
     Printer<float>::stream(s, indent + "  ", v.enc_angle5);
+    s << indent << "dxl_angle1: ";
+    Printer<float>::stream(s, indent + "  ", v.dxl_angle1);
+    s << indent << "dxl_angle2: ";
+    Printer<float>::stream(s, indent + "  ", v.dxl_angle2);
+    s << indent << "dxl_angle3: ";
+    Printer<float>::stream(s, indent + "  ", v.dxl_angle3);
+    s << indent << "dxl_angle4: ";
+    Printer<float>::stream(s, indent + "  ", v.dxl_angle4);
+    s << indent << "dxl_angle5: ";
+    Printer<float>::stream(s, indent + "  ", v.dxl_angle5);
     s << indent << "xvel1: ";
     Printer<int16_t>::stream(s, indent + "  ", v.xvel1);
     s << indent << "yvel1: ";

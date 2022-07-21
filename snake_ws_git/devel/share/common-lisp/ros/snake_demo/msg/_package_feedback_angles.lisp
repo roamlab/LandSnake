@@ -11,6 +11,16 @@
           ENC_ANGLE4
           ENC_ANGLE5-VAL
           ENC_ANGLE5
+          DXL_ANGLE1-VAL
+          DXL_ANGLE1
+          DXL_ANGLE2-VAL
+          DXL_ANGLE2
+          DXL_ANGLE3-VAL
+          DXL_ANGLE3
+          DXL_ANGLE4-VAL
+          DXL_ANGLE4
+          DXL_ANGLE5-VAL
+          DXL_ANGLE5
           XVEL1-VAL
           XVEL1
           YVEL1-VAL

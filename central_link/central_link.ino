@@ -116,35 +116,59 @@ void spinOnce(){ //refresh ROS
 void UpdateFeedbackArray(const CAN_message_t &fb_msg) { //update feedback angle array
   if (fb_msg.id == 0) {
     volatile int i = (int) fb_msg.buf[0];
-    
+    int msg_type = (int) fb_msg.buf[7];
+
+    //encoder data
     unsigned short decoded_enc = ((unsigned short)fb_msg.buf[2]<<8)|fb_msg.buf[1];
     signed short decoded_xvel = ((signed short) fb_msg.buf[4]<<8)|fb_msg.buf[3];
     signed short decoded_yvel = ((signed short) fb_msg.buf[6]<<8)|fb_msg.buf[5];
-    
     float enc_angle = (((float)decoded_enc*120)/65535) - 60 + offsetarr[2*(i-1) + 1]; //add adjustment
 
+    //dynamixel data
+    unsigned short decoded_dxl = ((unsigned short)fb_msg.buf[2]<<8)|fb_msg.buf[1];
+    float dxl_angle = (((float)decoded_dxl*120)/65535) - 60 + offsetarr[2*(i-1)]; //add adjustment
+    
     switch (i) {
       case 1:
-        feedback_angles.enc_angle1 = enc_angle;
-        feedback_angles.xvel1 = decoded_xvel;
-        feedback_angles.yvel1 = decoded_yvel;
+        if(msg_type == 0){
+          feedback_angles.enc_angle1 = enc_angle;
+          feedback_angles.xvel1 = decoded_xvel;
+          feedback_angles.yvel1 = decoded_yvel;
+        } else if(msg_type == 1){
+          feedback_angles.dxl_angle1 = dxl_angle;
+        }
         break;
+        
       case 2:
-        feedback_angles.enc_angle2 = enc_angle;
-        feedback_angles.xvel2 = decoded_xvel;
-        feedback_angles.yvel2 = decoded_yvel;
-
+        if(msg_type == 0){
+          feedback_angles.enc_angle2 = enc_angle;
+          feedback_angles.xvel2 = decoded_xvel;
+          feedback_angles.yvel2 = decoded_yvel;
+        } else if(msg_type == 1){
+          feedback_angles.dxl_angle2 = dxl_angle;
+        }
         break;
+        
       case 3:
-        feedback_angles.enc_angle3 = enc_angle;
-        feedback_angles.xvel3 = decoded_xvel;
-        feedback_angles.yvel3 = decoded_yvel;
+        if(msg_type == 0){
+          feedback_angles.enc_angle3 = enc_angle;
+          feedback_angles.xvel3 = decoded_xvel;
+          feedback_angles.yvel3 = decoded_yvel;
+        } else if(msg_type == 1){
+          feedback_angles.dxl_angle3 = dxl_angle;
+        }
         break;
+        
       case 4:
-        feedback_angles.enc_angle4 = enc_angle;
-        feedback_angles.xvel4 = decoded_xvel;
-        feedback_angles.yvel4 = decoded_yvel;
+        if(msg_type == 0){
+          feedback_angles.enc_angle4 = enc_angle;
+          feedback_angles.xvel4 = decoded_xvel;
+          feedback_angles.yvel4 = decoded_yvel;
+        } else if(msg_type == 1){
+          feedback_angles.dxl_angle4 = dxl_angle;
+        }
         break;
+        
     }
 
   }

@@ -30,13 +30,14 @@ IntervalTimer CANTimer;
 PMW pmw;
 
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0; // INIT CAN COMMUNICATION
-CAN_message_t fb_msg;
+CAN_message_t fb_msg_enc;
+CAN_message_t fb_msg_dxl;
 Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN); // DXL MOTOR OBJECT
 
 void UpdateSetPoint(const CAN_message_t &cmd); // READS COMMAND FROM CAN, UPDATES SET POINT
 
 unsigned int READ_DXL = 1400; //~700 Hz
-unsigned int READ_ENC = 10000; //~700 Hz
+unsigned int READ_ENC = 1400; //~700 Hz
 unsigned int WRITE_DXL = 1400; //~700 Hz
 unsigned int FBTOCENTRAL = 1400; //~700 Hz
 
@@ -66,7 +67,7 @@ void setup() {
   Can0.enableMBInterrupts(); // ENABLE CAN INTERRUPT ON
   Can0.setClock(CLK_60MHz);
   Can0.onReceive(MB0,rxAngle);
-  //FeedbackTimerDxl.begin(read_DXL, READ_DXL);
+  FeedbackTimerDxl.begin(read_DXL, READ_DXL);
   FeedbackTimerEnc.begin(read_ENC, READ_ENC); 
   WriteAngle.begin(write_DXL, WRITE_DXL);
   SendFeedback.begin(sendFeedback, FBTOCENTRAL);
@@ -84,7 +85,6 @@ void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
   updated = true;
   encoded_angle = (int) cmd.buf[LINKID];
   dxlangle = (((float) encoded_angle * 120)/255) - 60 + neutralangle; //scale the angle back into range, and add neutralangle to calibrate to dxls
-  //fb_msg.buf[5] = encoded_angle;
 }
 
 void read_ENC() { //read the encoder and write angle to DXL (if new one has been recv'd)
@@ -100,17 +100,17 @@ void read_ENC() { //read the encoder and write angle to DXL (if new one has been
   unsigned char yv1 = xyvelocity[1] & 0xFF;
   unsigned char yv2 = (xyvelocity[1] >> 8) & 0xFF;
 
-  fb_msg.buf[3] = xv1;
-  fb_msg.buf[4] = xv2;
-  fb_msg.buf[5] = yv1;
-  fb_msg.buf[6] = yv2;
+  fb_msg_enc.buf[3] = xv1;
+  fb_msg_enc.buf[4] = xv2;
+  fb_msg_enc.buf[5] = yv1;
+  fb_msg_enc.buf[6] = yv2;
   
   //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of information)
   unsigned short enc_angle_mapped = (unsigned short) ((enc_angle_read + 60) * (65535)/120);
   unsigned char c1 = enc_angle_mapped & 0xFF;
   unsigned char c2 = enc_angle_mapped >> 8;
-  fb_msg.buf[1] = c1;
-  fb_msg.buf[2] = c2;
+  fb_msg_enc.buf[1] = c1;
+  fb_msg_enc.buf[2] = c2;
 
 }
 
@@ -130,15 +130,22 @@ void read_DXL() { //read dynamixel angle
   unsigned char c1 = dxl_angle_mapped & 0xFF;
   unsigned char c2 = dxl_angle_mapped >> 8;
   
-  fb_msg.buf[3] = c1;
-  fb_msg.buf[4] = c2;
+  fb_msg_dxl.buf[1] = c1;
+  fb_msg_dxl.buf[2] = c2;
 
 }
 
 void sendFeedback(){ //send feedback angles over CAN to central
-  fb_msg.id = 0;
-  fb_msg.buf[0] = LINKID;
-  Can0.write(fb_msg);
+  fb_msg_enc.id = 0;
+  fb_msg_enc.buf[0] = LINKID;
+  fb_msg_enc.buf[7] = 0; //8th byte indicates which message (encoders or dynamixel)
+  
+  fb_msg_dxl.id = 0;
+  fb_msg_dxl.buf[0] = LINKID;
+  fb_msg_dxl.buf[7] = 1; //8th byte indicates which message (encoders or dynamixel)
+  
+  Can0.write(fb_msg_enc);
+  Can0.write(fb_msg_dxl);
 }
 
 

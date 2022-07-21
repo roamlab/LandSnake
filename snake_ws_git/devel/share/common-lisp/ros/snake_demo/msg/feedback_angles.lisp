@@ -37,6 +37,31 @@
     :initarg :enc_angle5
     :type cl:float
     :initform 0.0)
+   (dxl_angle1
+    :reader dxl_angle1
+    :initarg :dxl_angle1
+    :type cl:float
+    :initform 0.0)
+   (dxl_angle2
+    :reader dxl_angle2
+    :initarg :dxl_angle2
+    :type cl:float
+    :initform 0.0)
+   (dxl_angle3
+    :reader dxl_angle3
+    :initarg :dxl_angle3
+    :type cl:float
+    :initform 0.0)
+   (dxl_angle4
+    :reader dxl_angle4
+    :initarg :dxl_angle4
+    :type cl:float
+    :initform 0.0)
+   (dxl_angle5
+    :reader dxl_angle5
+    :initarg :dxl_angle5
+    :type cl:float
+    :initform 0.0)
    (xvel1
     :reader xvel1
     :initarg :xvel1
@@ -127,6 +152,31 @@
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader snake_demo-msg:enc_angle5-val is deprecated.  Use snake_demo-msg:enc_angle5 instead.")
   (enc_angle5 m))
 
+(cl:ensure-generic-function 'dxl_angle1-val :lambda-list '(m))
+(cl:defmethod dxl_angle1-val ((m <feedback_angles>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader snake_demo-msg:dxl_angle1-val is deprecated.  Use snake_demo-msg:dxl_angle1 instead.")
+  (dxl_angle1 m))
+
+(cl:ensure-generic-function 'dxl_angle2-val :lambda-list '(m))
+(cl:defmethod dxl_angle2-val ((m <feedback_angles>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader snake_demo-msg:dxl_angle2-val is deprecated.  Use snake_demo-msg:dxl_angle2 instead.")
+  (dxl_angle2 m))
+
+(cl:ensure-generic-function 'dxl_angle3-val :lambda-list '(m))
+(cl:defmethod dxl_angle3-val ((m <feedback_angles>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader snake_demo-msg:dxl_angle3-val is deprecated.  Use snake_demo-msg:dxl_angle3 instead.")
+  (dxl_angle3 m))
+
+(cl:ensure-generic-function 'dxl_angle4-val :lambda-list '(m))
+(cl:defmethod dxl_angle4-val ((m <feedback_angles>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader snake_demo-msg:dxl_angle4-val is deprecated.  Use snake_demo-msg:dxl_angle4 instead.")
+  (dxl_angle4 m))
+
+(cl:ensure-generic-function 'dxl_angle5-val :lambda-list '(m))
+(cl:defmethod dxl_angle5-val ((m <feedback_angles>))
+  (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader snake_demo-msg:dxl_angle5-val is deprecated.  Use snake_demo-msg:dxl_angle5 instead.")
+  (dxl_angle5 m))
+
 (cl:ensure-generic-function 'xvel1-val :lambda-list '(m))
 (cl:defmethod xvel1-val ((m <feedback_angles>))
   (roslisp-msg-protocol:msg-deprecation-warning "Using old-style slot reader snake_demo-msg:xvel1-val is deprecated.  Use snake_demo-msg:xvel1 instead.")
@@ -207,6 +257,31 @@
     (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream))
   (cl:let ((bits (roslisp-utils:encode-single-float-bits (cl:slot-value msg 'enc_angle5))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream))
+  (cl:let ((bits (roslisp-utils:encode-single-float-bits (cl:slot-value msg 'dxl_angle1))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream))
+  (cl:let ((bits (roslisp-utils:encode-single-float-bits (cl:slot-value msg 'dxl_angle2))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream))
+  (cl:let ((bits (roslisp-utils:encode-single-float-bits (cl:slot-value msg 'dxl_angle3))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream))
+  (cl:let ((bits (roslisp-utils:encode-single-float-bits (cl:slot-value msg 'dxl_angle4))))
+    (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
+    (cl:write-byte (cl:ldb (cl:byte 8 24) bits) ostream))
+  (cl:let ((bits (roslisp-utils:encode-single-float-bits (cl:slot-value msg 'dxl_angle5))))
     (cl:write-byte (cl:ldb (cl:byte 8 0) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 8) bits) ostream)
     (cl:write-byte (cl:ldb (cl:byte 8 16) bits) ostream)
@@ -292,6 +367,36 @@
       (cl:setf (cl:ldb (cl:byte 8 16) bits) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
     (cl:setf (cl:slot-value msg 'enc_angle5) (roslisp-utils:decode-single-float-bits bits)))
+    (cl:let ((bits 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
+    (cl:setf (cl:slot-value msg 'dxl_angle1) (roslisp-utils:decode-single-float-bits bits)))
+    (cl:let ((bits 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
+    (cl:setf (cl:slot-value msg 'dxl_angle2) (roslisp-utils:decode-single-float-bits bits)))
+    (cl:let ((bits 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
+    (cl:setf (cl:slot-value msg 'dxl_angle3) (roslisp-utils:decode-single-float-bits bits)))
+    (cl:let ((bits 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
+    (cl:setf (cl:slot-value msg 'dxl_angle4) (roslisp-utils:decode-single-float-bits bits)))
+    (cl:let ((bits 0))
+      (cl:setf (cl:ldb (cl:byte 8 0) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 8) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 16) bits) (cl:read-byte istream))
+      (cl:setf (cl:ldb (cl:byte 8 24) bits) (cl:read-byte istream))
+    (cl:setf (cl:slot-value msg 'dxl_angle5) (roslisp-utils:decode-single-float-bits bits)))
     (cl:let ((unsigned 0))
       (cl:setf (cl:ldb (cl:byte 8 0) unsigned) (cl:read-byte istream))
       (cl:setf (cl:ldb (cl:byte 8 8) unsigned) (cl:read-byte istream))
@@ -342,19 +447,24 @@
   "snake_demo/feedback_angles")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql '<feedback_angles>)))
   "Returns md5sum for a message object of type '<feedback_angles>"
-  "efca087178a4608ce59813f65425d68e")
+  "e45a7bfdc52410005bcbadd9129efd68")
 (cl:defmethod roslisp-msg-protocol:md5sum ((type (cl:eql 'feedback_angles)))
   "Returns md5sum for a message object of type 'feedback_angles"
-  "efca087178a4608ce59813f65425d68e")
+  "e45a7bfdc52410005bcbadd9129efd68")
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql '<feedback_angles>)))
   "Returns full string definition for message of type '<feedback_angles>"
-  (cl:format cl:nil "uint64 timestamp~%float32 enc_angle1~%float32 enc_angle2~%float32 enc_angle3~%float32 enc_angle4~%float32 enc_angle5~%int16 xvel1~%int16 yvel1~%int16 xvel2~%int16 yvel2~%int16 xvel3~%int16 yvel3~%int16 xvel4~%int16 yvel4~%int16 xvel5~%int16 yvel5~%~%~%"))
+  (cl:format cl:nil "uint64 timestamp~%float32 enc_angle1~%float32 enc_angle2~%float32 enc_angle3~%float32 enc_angle4~%float32 enc_angle5~%float32 dxl_angle1~%float32 dxl_angle2~%float32 dxl_angle3~%float32 dxl_angle4~%float32 dxl_angle5~%int16 xvel1~%int16 yvel1~%int16 xvel2~%int16 yvel2~%int16 xvel3~%int16 yvel3~%int16 xvel4~%int16 yvel4~%int16 xvel5~%int16 yvel5~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:message-definition ((type (cl:eql 'feedback_angles)))
   "Returns full string definition for message of type 'feedback_angles"
-  (cl:format cl:nil "uint64 timestamp~%float32 enc_angle1~%float32 enc_angle2~%float32 enc_angle3~%float32 enc_angle4~%float32 enc_angle5~%int16 xvel1~%int16 yvel1~%int16 xvel2~%int16 yvel2~%int16 xvel3~%int16 yvel3~%int16 xvel4~%int16 yvel4~%int16 xvel5~%int16 yvel5~%~%~%"))
+  (cl:format cl:nil "uint64 timestamp~%float32 enc_angle1~%float32 enc_angle2~%float32 enc_angle3~%float32 enc_angle4~%float32 enc_angle5~%float32 dxl_angle1~%float32 dxl_angle2~%float32 dxl_angle3~%float32 dxl_angle4~%float32 dxl_angle5~%int16 xvel1~%int16 yvel1~%int16 xvel2~%int16 yvel2~%int16 xvel3~%int16 yvel3~%int16 xvel4~%int16 yvel4~%int16 xvel5~%int16 yvel5~%~%~%"))
 (cl:defmethod roslisp-msg-protocol:serialization-length ((msg <feedback_angles>))
   (cl:+ 0
      8
+     4
+     4
+     4
+     4
+     4
      4
      4
      4
@@ -380,6 +490,11 @@
     (cl:cons ':enc_angle3 (enc_angle3 msg))
     (cl:cons ':enc_angle4 (enc_angle4 msg))
     (cl:cons ':enc_angle5 (enc_angle5 msg))
+    (cl:cons ':dxl_angle1 (dxl_angle1 msg))
+    (cl:cons ':dxl_angle2 (dxl_angle2 msg))
+    (cl:cons ':dxl_angle3 (dxl_angle3 msg))
+    (cl:cons ':dxl_angle4 (dxl_angle4 msg))
+    (cl:cons ':dxl_angle5 (dxl_angle5 msg))
     (cl:cons ':xvel1 (xvel1 msg))
     (cl:cons ':yvel1 (yvel1 msg))
     (cl:cons ':xvel2 (xvel2 msg))

@@ -4,6 +4,11 @@ float32 enc_angle2
 float32 enc_angle3
 float32 enc_angle4
 float32 enc_angle5
+float32 dxl_angle1
+float32 dxl_angle2
+float32 dxl_angle3
+float32 dxl_angle4
+float32 dxl_angle5
 int16 xvel1
 int16 yvel1
 int16 xvel2
