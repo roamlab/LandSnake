@@ -13,7 +13,7 @@ using namespace ControlTableItem; // DXL CONTROL TABLE
 
 // HARDWARE RELATED
 const uint Encoder_pin = 19; // ENCODER PINOUT
-const uint LINKID = 1; // LINK ID
+const uint LINKID = 3; // LINK ID
 unsigned int encoded_angle;
 volatile float neutralangle = 150;
 volatile float dxlangle = neutralangle;
