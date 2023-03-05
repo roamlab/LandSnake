@@ -3,6 +3,7 @@ import rospy
 import numpy as np
 from snake_demo.msg import feedback_angles
 from snake_demo.msg import calculations
+from snake_demo.msg import torques
 
 k = 3550 # UNITS: N/m
 r = 0.023622 #distance from spring to center, UNITS: m
@@ -37,6 +38,7 @@ def callback(data):
     
     t.torque1 = calculate_torque(enc_angle1, dxl_angle1)
     t.torque2 = calculate_torque(enc_angle2, dxl_angle2)
+    t.torque2 = 0
     t.torque3 = calculate_torque(enc_angle3, dxl_angle3)
     t.torque4 = calculate_torque(enc_angle4, dxl_angle4)
     t.torque5 = calculate_torque(enc_angle5, dxl_angle5)
@@ -50,7 +52,9 @@ def callback(data):
     calculate_velocities()
     
     t.angvel1 = np.mean(velocity_matrix[0,:])
+    t.angvel1 = 0
     t.angvel2 = np.mean(velocity_matrix[1,:])
+    t.angvel2 = 0
     t.angvel3 = np.mean(velocity_matrix[2,:])
     t.angvel4 = np.mean(velocity_matrix[3,:])
     t.angvel5 = np.mean(velocity_matrix[4,:])

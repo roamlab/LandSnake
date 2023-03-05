@@ -25,7 +25,7 @@ beta = 2.2
 '''
 
 alpha = 55
-frequency = 0.25 
+frequency = 0.4 
 beta = 2
 
 

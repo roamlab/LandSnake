@@ -124,7 +124,6 @@ void write_DXL(){
 
 void read_DXL() { //read dynamixel angle
   dxl_angle_read = ((float) dxl.getPresentPosition(DXL_ID, UNIT_DEGREE)) - neutralangle; //PRESENT POSITION OF DXL manually offset by 4 deg
-  
   //map angles between 0 and 65535 for angles -60 to 60 deg (2 bytes worth of info)
   unsigned short dxl_angle_mapped = (unsigned short) ((dxl_angle_read + 60) * (65535)/120);
   unsigned char c1 = dxl_angle_mapped & 0xFF;
