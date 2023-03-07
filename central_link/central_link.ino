@@ -7,13 +7,8 @@
 */
 
 // ******************************************GLOBAL VARIABLES***************************************************************************
-
-float angle1;
-float angle2;
-float angle3;
-float angle4;
-float angle5;
-int anglecount;
+#define NLINKS 5
+float[NLINKS] angles;
 
 unsigned long ZERO_TIME = 0;
 const uint LEDPIN = 13; // ONBOARD LED PIN FOR DEBUGGING
@@ -54,29 +49,33 @@ IntervalTimer CANTimer;
 IntervalTimer ROSFeedbackTimer;
 IntervalTimer SpinOnceTimer;
 
-
-
+int angletimerflag;
+int CANtimerflag;
+int ROSFeedbackTimerflag;
+int spinOnceTimerflag;
+int rosCallbackflag;
+int UpdateFeedbackArrayflag;
 
 float offsetarr[10] = {0.9402618408203125,-0.35,0.6509513854980469,-1.55,0.9402618408203125,0}; //angle offsets for feedback
 
 void rosCallback(const snake_demo::cmd_angles& cmd_angles) { //update command angle array
-  angle1 = cmd_angles.angle1;
-  angle2 = cmd_angles.angle2;
-  angle3 = cmd_angles.angle3;
-  angle4 = cmd_angles.angle4;
-  angle5 = cmd_angles.angle5;
+  angles[0] = cmd_angles.angle1;
+  angles[1] = cmd_angles.angle2;
+  angles[2] = cmd_angles.angle3;
+  angles[3] = cmd_angles.angle4;
+  angles[4] = cmd_angles.angle5;
 }
 
 void setup()
 {
-
-  angle1 = 0; //start dynamixel pointing forward
-  angle2 = 0;
-  angle3 = 0;
-  angle4 = 0;
-  angle5 = 0;
+  //start dynamixel pointing forward
   
-  anglecount = 0;
+  angletimerflag = 0;
+  CANtimerflag = 0;
+  ROSFeedbackTimerflag = 0;
+  spinOnceTimerflag = 0;
+  rosCallbackflag = 0;
+  UpdateFeedbackArrayflag = 0;
 
   central.getHardware()->setBaud(57600); // SET BAUD RATE
   central.initNode(); // INITS NODE
@@ -106,16 +105,63 @@ void setup()
 }
 
 void CAN() { //update CAN
-  Can0.events();
+  CANtimerflag = 1;
 }
 
 void spinOnce(){ //refresh ROS
-  central.spinOnce();
+  spinOnceTimerflag = 1;
 }
 
 void UpdateFeedbackArray(const CAN_message_t &fb_msg) { //update feedback angle array
-  if (fb_msg.id == 0) {
-    volatile int i = (int) fb_msg.buf[0];
+  UpdateFeedbackArrayflag = 1;
+}
+
+void SendFeedbackToROS() { //send feedback angles over ROSSERIAL
+  ROSFeedbackTimerflag = 1;
+}
+
+void setnextAngle() { //set flag to broadcast angles to all teensys
+    angletimerflag = 1;
+}
+
+unsigned char convert_to_char(float angle){
+  unsigned char angle_char = (char)((angle + 60)*255/120);
+  return angle_char;
+}
+
+void send_command(){
+  // convert commanded angles range of 0-256
+  cmd_msg.id = 1;
+  cmd_msg.buf[1] = (unsigned char) convert_to_char(angle[0]);
+  cmd_msg.buf[2] = (unsigned char) convert_to_char(angle[1]);
+  cmd_msg.buf[3] = (unsigned char) convert_to_char(angle[2]);
+  cmd_msg.buf[4] = (unsigned char) convert_to_char(angle[3]);
+  cmd_msg.buf[5] = (unsigned char) convert_to_char(angle[4]);
+  // broadcast message
+  Can0.write(cmd_msg);
+}
+
+void loop() {
+  if(angletimerflag){
+    // send command angles
+    send_command();
+    angletimerflag = 0;
+  }
+  if(CANtimerflag){
+    Can0.events();
+    CANtimerflag = 0;
+  }
+  if(ROSFeedbackTimerflag){
+    feedback_angles.timestamp = float(micros() - ZERO_TIME); // TIMESTAMPING DATA
+    feedback_angle_topic.publish(&feedback_angles);
+    ROSFeedbackTimerflag = 0;
+  }
+  if(spinOnceTimerflag){
+    central.spinOnce();
+    spinOnceTimerflag = 0;
+  }
+  if(UpdateFeedbackArrayflag){
+    int i = (int) fb_msg.buf[0];
     int msg_type = (int) fb_msg.buf[7];
 
     //encoder data
@@ -168,36 +214,8 @@ void UpdateFeedbackArray(const CAN_message_t &fb_msg) { //update feedback angle 
           feedback_angles.dxl_angle4 = dxl_angle;
         }
         break;
-        
     }
-
+    
+    UpdateFeedbackArrayflag = 0;
   }
-
-}
-
-void SendFeedbackToROS() { //send feedback angles over ROSSERIAL
-  feedback_angles.timestamp = float(micros() - ZERO_TIME); // TIMESTAMPING DATA
-  feedback_angle_topic.publish(&feedback_angles);
-}
-
-void setnextAngle() { //broadcast angles to all teensys
-
-    unsigned char angle1_char = (char)((angle1 + 60)*255/120);
-    unsigned char angle2_char = (char)((angle2 + 60)*255/120);
-    unsigned char angle3_char = (char)((angle3 + 60)*255/120);
-    unsigned char angle4_char = (char)((angle4 + 60)*255/120);
-    unsigned char angle5_char = (char)((angle5 + 60)*255/120);
-
-    cmd_msg.id = 1;
-    cmd_msg.buf[1] = angle1_char;
-    cmd_msg.buf[2] = angle2_char;
-    cmd_msg.buf[3] = angle3_char;
-    cmd_msg.buf[4] = angle4_char;
-    cmd_msg.buf[5] = angle5_char;
-    Can0.write(cmd_msg);
-      
-}
-
-void loop() {
-
 }
