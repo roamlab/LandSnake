@@ -35,6 +35,7 @@ int rxAngleflag;
 PMW pmw;
 
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0; // INIT CAN COMMUNICATION
+CAN_message_t cmd;
 CAN_message_t fb_msg_enc;
 CAN_message_t fb_msg_dxl;
 Dynamixel2Arduino dxl(DXL_SERIAL, DXL_DIR_PIN); // DXL MOTOR OBJECT
@@ -86,7 +87,8 @@ void setup() {
 
 }
 
-void rxAngle(const CAN_message_t &cmd) { //recieved angle from central over CAN
+void rxAngle(const CAN_message_t &cmd_msg) { //recieved angle from central over CAN
+  memcpy(&cmd, &cmd_msg, sizeof(struct CAN_message_t));
   rxAngleflag = 1;
 }
 

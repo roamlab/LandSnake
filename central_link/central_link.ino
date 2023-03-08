@@ -8,7 +8,7 @@
 
 // ******************************************GLOBAL VARIABLES***************************************************************************
 #define NLINKS 5
-float[NLINKS] angles;
+float angles[NLINKS];
 
 unsigned long ZERO_TIME = 0;
 const uint LEDPIN = 13; // ONBOARD LED PIN FOR DEBUGGING
@@ -34,8 +34,7 @@ ros::Publisher feedback_angle_topic("feedback_angle_topic", &feedback_angles); /
 FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0; // CREATING CAN0 FOR USE
 
 CAN_message_t cmd_msg;
-
-
+CAN_message_t fb_msg;
 // ******************************************INTERRUPT PREPROCESSING***************************************************************************
 
 
@@ -112,7 +111,8 @@ void spinOnce(){ //refresh ROS
   spinOnceTimerflag = 1;
 }
 
-void UpdateFeedbackArray(const CAN_message_t &fb_msg) { //update feedback angle array
+void UpdateFeedbackArray(const CAN_message_t &feedback) { //update feedback angle array
+  memcpy(&fb_msg, &feedback, (int) sizeof(struct CAN_message_t));
   UpdateFeedbackArrayflag = 1;
 }
 
@@ -132,11 +132,11 @@ unsigned char convert_to_char(float angle){
 void send_command(){
   // convert commanded angles range of 0-256
   cmd_msg.id = 1;
-  cmd_msg.buf[1] = (unsigned char) convert_to_char(angle[0]);
-  cmd_msg.buf[2] = (unsigned char) convert_to_char(angle[1]);
-  cmd_msg.buf[3] = (unsigned char) convert_to_char(angle[2]);
-  cmd_msg.buf[4] = (unsigned char) convert_to_char(angle[3]);
-  cmd_msg.buf[5] = (unsigned char) convert_to_char(angle[4]);
+  cmd_msg.buf[1] = (unsigned char) convert_to_char(angles[0]);
+  cmd_msg.buf[2] = (unsigned char) convert_to_char(angles[1]);
+  cmd_msg.buf[3] = (unsigned char) convert_to_char(angles[2]);
+  cmd_msg.buf[4] = (unsigned char) convert_to_char(angles[3]);
+  cmd_msg.buf[5] = (unsigned char) convert_to_char(angles[4]);
   // broadcast message
   Can0.write(cmd_msg);
 }
