@@ -9,7 +9,8 @@ void setup(void) {
   Can0.setBaudRate(125000); // Set baudrate
   Can0.setMaxMB(16); // Set Max Mailbox Size
   Can0.enableMBInterrupts(); // Enable Interrupt
-  Can0.onReceive(MB1,reply); // Declare Interrupt
+  Can0.onReceive(MB1,reply); // Declare Interrupt, minor change
+  
 }
 
 /* 
